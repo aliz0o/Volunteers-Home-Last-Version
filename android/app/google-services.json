@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1062028489517",
+    "project_id": "volunteers-home-a109d",
+    "storage_bucket": "volunteers-home-a109d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062028489517:android:9f124aeef6186bcfa099a4",
+        "android_client_info": {
+          "package_name": "aliz0o.volunteering"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062028489517-2v0n7ucd2pfhpsdlp8j2ska2q3if5jac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5qLTf4Re-5zTMVEhPiXRqP-yivEMvN80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062028489517-2v0n7ucd2pfhpsdlp8j2ska2q3if5jac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

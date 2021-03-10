@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         '/registration_screen': (context) => RegisterScreen(),
         '/events_screen': (context) => EventsScreen(),
         '/create_event_screen': (context) => CreateEvent(),
+        '/profile_screen': (context) => ProfileScreen(),
       },
     );
   }

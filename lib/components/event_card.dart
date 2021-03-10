@@ -14,6 +14,9 @@ class EventCard extends StatefulWidget {
     @required this.details,
     @required this.imageURL,
     @required this.createdOn,
+    @required this.eventID,
+    @required this.volunteersCounter,
+    @required this.attendanceCounter,
   });
 
   final String eventClass;
@@ -25,6 +28,9 @@ class EventCard extends StatefulWidget {
   final String details;
   final String imageURL;
   final String createdOn;
+  final String eventID;
+  final int volunteersCounter;
+  final int attendanceCounter;
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -69,6 +75,11 @@ class _EventCardState extends State<EventCard> {
                 ),
                 trailing: EventCardButton(
                   eventClass: widget.eventClass,
+                  eventID: widget.eventID,
+                  noOfVolunteers: widget.noOfVolunteers,
+                  noOfAttendance: widget.noOfAttendees,
+                  volunteersCounter: widget.volunteersCounter,
+                  attendanceCounter: widget.attendanceCounter,
                 )),
             Visibility(
               visible: imageVisibility,

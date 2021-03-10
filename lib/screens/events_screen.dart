@@ -42,7 +42,7 @@ class _EventsScreenState extends State<EventsScreen> {
             IconButton(
                 icon: Icon(Icons.person),
                 onPressed: () {
-                  //Navigator.pushNamed(context, '/profile');
+                  Navigator.pushNamed(context, '/profile_screen');
                 })
           ],
           bottom: TabBar(

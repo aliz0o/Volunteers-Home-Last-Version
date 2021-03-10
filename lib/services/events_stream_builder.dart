@@ -43,6 +43,10 @@ class _EventStreamState extends State<EventStream> {
             final city = event['city'];
             final details = event['details'];
             final imageURL = event['images'];
+            final eventID = event.id;
+            final volunteersCounter = event['volunteersCounter'];
+            final attendanceCounter = event['attendanceCounter'];
+
             DateTime formattedDate = createdOn.toDate();
             String stringDate =
                 DateFormat('kk:mm:ss  EEE d MMM').format(formattedDate);
@@ -56,6 +60,9 @@ class _EventStreamState extends State<EventStream> {
               details: details,
               imageURL: imageURL,
               createdOn: stringDate,
+              eventID: eventID,
+              volunteersCounter: volunteersCounter,
+              attendanceCounter: attendanceCounter,
             );
             if (eventClass == 'All') {
               eventsCard.add(eventCard);

@@ -5,6 +5,11 @@ import 'package:volunteering/constants.dart';
 import 'package:volunteering/components/label.dart';
 import 'package:volunteering/components/sub_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+
+final _fireStore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
 
 const inactiveColor = Colors.white;
 const activeColor = Color(0xff0962ff);
@@ -37,13 +42,17 @@ class MyStateFull extends StatefulWidget {
 }
 
 class _MyStateFullState extends State<MyStateFull> {
-  Gender selectedGender;
   var _currentCitySelected = 'Amman';
 
-  final _auth = FirebaseAuth.instance;
   String email;
   String password;
   bool showSpinner = false;
+
+  String name;
+  int phoneNumber;
+  int age;
+  String gender;
+  String city = 'Amman';
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +64,13 @@ class _MyStateFullState extends State<MyStateFull> {
           Padding(
             padding: textFieldPadding,
             child: TextFormField(
-              keyboardType: TextInputType.phone,
+              onChanged: (value) {
+                name = value;
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s")),
+              ],
+              keyboardType: TextInputType.text,
               style: kTextFieldStyle,
               decoration: kTextFieldDecoration.copyWith(hintText: 'Your Name'),
             ),
@@ -65,6 +80,13 @@ class _MyStateFullState extends State<MyStateFull> {
           Padding(
             padding: textFieldPadding,
             child: TextFormField(
+              onChanged: (value) {
+                phoneNumber = int.parse(value);
+              },
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(10),
+                FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+              ],
               keyboardType: TextInputType.phone,
               style: kTextFieldStyle,
               decoration: kTextFieldDecoration.copyWith(hintText: '0781234567'),
@@ -75,6 +97,13 @@ class _MyStateFullState extends State<MyStateFull> {
           Padding(
             padding: textFieldPadding,
             child: TextFormField(
+              onChanged: (value) {
+                age = int.parse(value);
+              },
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(2),
+                FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+              ],
               keyboardType: TextInputType.number,
               style: kTextFieldStyle,
               decoration: kTextFieldDecoration.copyWith(hintText: 'Your Age'),
@@ -87,24 +116,24 @@ class _MyStateFullState extends State<MyStateFull> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    selectedGender = Gender.male;
+                    gender = Gender.male.toString();
                   });
                 },
                 child: RadioButton(
                     selected: 'male',
-                    colour: selectedGender == Gender.male
+                    colour: gender == Gender.male.toString()
                         ? activeColor.withOpacity(0.17)
                         : inactiveColor.withOpacity(0.06)),
               ),
               GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedGender = Gender.female;
+                      gender = Gender.female.toString();
                     });
                   },
                   child: RadioButton(
                       selected: 'female',
-                      colour: selectedGender == Gender.female
+                      colour: gender == Gender.female.toString()
                           ? activeColor.withOpacity(0.17)
                           : inactiveColor.withOpacity(0.06))),
             ],
@@ -123,8 +152,8 @@ class _MyStateFullState extends State<MyStateFull> {
                         child: Text(dropDownStringItem),
                         value: dropDownStringItem);
                   }).toList(),
-                  onChanged: (String newValueSelected) {
-                    //city = newValueSelected;
+                  onChanged: (value) {
+                    city = value;
                   },
                   value: _currentCitySelected,
                 ),
@@ -171,7 +200,16 @@ class _MyStateFullState extends State<MyStateFull> {
                 final newUser = await _auth.createUserWithEmailAndPassword(
                     email: email, password: password);
                 if (newUser != null) {
-                  //Navigator.pushNamed(context, ChatScreen.id);
+                  await _fireStore.collection('users').add({
+                    'email': email,
+                    'name': name,
+                    'phoneNumber': phoneNumber,
+                    'age': age,
+                    'gender': gender,
+                    'city': city,
+                    'createdOn': FieldValue.serverTimestamp(),
+                  });
+                  Navigator.pushNamed(context, '/events_screen');
                 }
                 setState(() {
                   showSpinner = false;

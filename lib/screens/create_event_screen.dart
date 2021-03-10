@@ -13,6 +13,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'dart:io';
 
 final _fireStore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
 DocumentReference ref = FirebaseFirestore.instance.collection('images').doc();
 User loggedInUser;
 
@@ -54,7 +55,7 @@ class _MyStateFullState extends State<MyStateFull> {
   bool _imageUploadedVisibility = false;
   bool _timeDateAlertVisibility = false;
   bool _eventClassVisibility = false;
-  final _auth = FirebaseAuth.instance;
+
   String eventClass;
   int noOfAttendees = 0;
   int noOfVolunteers = 0;
@@ -147,6 +148,10 @@ class _MyStateFullState extends State<MyStateFull> {
       'details': details,
       'createdOn': FieldValue.serverTimestamp(),
       "images": imageURL,
+      'volunteersCounter': 0,
+      'attendanceCounter': 0,
+      'volunteers': FieldValue.arrayUnion([]),
+      'attendance': FieldValue.arrayUnion([]),
     });
     setState(() {
       showSpinner = false;

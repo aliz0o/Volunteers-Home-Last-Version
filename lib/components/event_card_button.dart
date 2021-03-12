@@ -110,7 +110,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                               style: kEventCardButtonTextStyle,
                             )
                           : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'Volunteer',
@@ -131,7 +131,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                               style: kEventCardButtonTextStyle,
                             )
                           : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'Attend',
@@ -178,7 +178,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                                 )
                               : Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Volunteer',
@@ -224,7 +224,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                                 )
                               : Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Attend',

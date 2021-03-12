@@ -47,6 +47,37 @@ class _EventCardButtonState extends State<EventCardButton> {
     }
   }
 
+  void addRemoveEvent(value) {
+    getArrayData();
+    if (value == 'Volunteer' &&
+        widget.volunteersCounter <= widget.noOfVolunteers) {
+      _fireStore.collection('events').doc(widget.eventID).update({
+        'volunteers': FieldValue.arrayUnion([loggedInUser.email]),
+        'volunteersCounter': widget.volunteersCounter + 1,
+        'noOfVolunteers': widget.noOfVolunteers - 1,
+      });
+    } else if (value == 'volunteerCanceled') {
+      _fireStore.collection('events').doc(widget.eventID).update({
+        'volunteers': FieldValue.arrayRemove([loggedInUser.email]),
+        'volunteersCounter': widget.volunteersCounter - 1,
+        'noOfVolunteers': widget.noOfVolunteers + 1,
+      });
+    } else if (value == 'Attend' &&
+        widget.attendanceCounter <= widget.noOfAttendance) {
+      _fireStore.collection('events').doc(widget.eventID).update({
+        'attendance': FieldValue.arrayUnion([loggedInUser.email]),
+        'attendanceCounter': widget.attendanceCounter + 1,
+        'noOfAttendees': widget.noOfAttendance - 1,
+      });
+    } else if (value == 'attendCanceled') {
+      _fireStore.collection('events').doc(widget.eventID).update({
+        'attendance': FieldValue.arrayRemove([loggedInUser.email]),
+        'attendanceCounter': widget.attendanceCounter - 1,
+        'noOfAttendees': widget.noOfAttendance + 1,
+      });
+    }
+  }
+
   void getArrayData() async {
     DocumentReference document =
         _fireStore.collection('events').doc(widget.eventID);
@@ -65,34 +96,7 @@ class _EventCardButtonState extends State<EventCardButton> {
     return widget.eventClass == 'All'
         ? PopupMenuButton(
             onSelected: (value) {
-              getArrayData();
-              if (value == 'Volunteer' &&
-                  widget.volunteersCounter <= widget.noOfVolunteers) {
-                _fireStore.collection('events').doc(widget.eventID).update({
-                  'volunteers': FieldValue.arrayUnion([loggedInUser.email]),
-                  'volunteersCounter': widget.volunteersCounter + 1,
-                  'noOfVolunteers': widget.noOfVolunteers - 1,
-                });
-              } else if (value == 'volunteerCanceled') {
-                _fireStore.collection('events').doc(widget.eventID).update({
-                  'volunteers': FieldValue.arrayRemove([loggedInUser.email]),
-                  'volunteersCounter': widget.volunteersCounter - 1,
-                  'noOfVolunteers': widget.noOfVolunteers + 1,
-                });
-              } else if (value == 'Attend' &&
-                  widget.attendanceCounter <= widget.noOfAttendance) {
-                _fireStore.collection('events').doc(widget.eventID).update({
-                  'attendance': FieldValue.arrayUnion([loggedInUser.email]),
-                  'attendanceCounter': widget.attendanceCounter + 1,
-                  'noOfAttendees': widget.noOfAttendance - 1,
-                });
-              } else if (value == 'attendCanceled') {
-                _fireStore.collection('events').doc(widget.eventID).update({
-                  'attendance': FieldValue.arrayRemove([loggedInUser.email]),
-                  'attendanceCounter': widget.attendanceCounter - 1,
-                  'noOfAttendees': widget.noOfAttendance + 1,
-                });
-              }
+              addRemoveEvent(value);
             },
             icon: Icon(Icons.adaptive.more, color: Colors.white),
             elevation: 5,
@@ -144,22 +148,7 @@ class _EventCardButtonState extends State<EventCardButton> {
         : widget.eventClass == 'Volunteering'
             ? PopupMenuButton(
                 onSelected: (value) {
-                  getArrayData();
-                  if (value == 'Volunteer' &&
-                      widget.volunteersCounter <= widget.noOfVolunteers) {
-                    _fireStore.collection('events').doc(widget.eventID).update({
-                      'volunteers': FieldValue.arrayUnion([loggedInUser.email]),
-                      'volunteersCounter': widget.volunteersCounter + 1,
-                      'noOfVolunteers': widget.noOfVolunteers - 1,
-                    });
-                  } else if (value == 'volunteerCanceled') {
-                    _fireStore.collection('events').doc(widget.eventID).update({
-                      'volunteers':
-                          FieldValue.arrayRemove([loggedInUser.email]),
-                      'volunteersCounter': widget.volunteersCounter - 1,
-                      'noOfVolunteers': widget.noOfVolunteers + 1,
-                    });
-                  }
+                  addRemoveEvent(value);
                 },
                 icon: Icon(Icons.adaptive.more, color: Colors.white),
                 elevation: 5,
@@ -190,22 +179,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                     ])
             : PopupMenuButton(
                 onSelected: (value) {
-                  getArrayData();
-                  if (value == 'Attend' &&
-                      widget.attendanceCounter <= widget.noOfAttendance) {
-                    _fireStore.collection('events').doc(widget.eventID).update({
-                      'attendance': FieldValue.arrayUnion([loggedInUser.email]),
-                      'attendanceCounter': widget.attendanceCounter + 1,
-                      'noOfAttendees': widget.noOfAttendance - 1,
-                    });
-                  } else if (value == 'attendCanceled') {
-                    _fireStore.collection('events').doc(widget.eventID).update({
-                      'attendance':
-                          FieldValue.arrayRemove([loggedInUser.email]),
-                      'attendanceCounter': widget.attendanceCounter - 1,
-                      'noOfAttendees': widget.noOfAttendance + 1,
-                    });
-                  }
+                  addRemoveEvent(value);
                 },
                 icon: Icon(Icons.adaptive.more, color: Colors.white),
                 elevation: 5,

@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 final _fireStore = FirebaseFirestore.instance;
-final _auth = FirebaseAuth.instance;
 
 class EventStream extends StatefulWidget {
   EventStream({@required this.eventTapClass, @required this.loggedInUser});
@@ -28,7 +27,6 @@ class _EventStreamState extends State<EventStream> {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
-          final currentUser = widget.loggedInUser.email;
           final documents = snapshot.data.docs;
           List<EventCard> eventsCard = [];
           List<EventCard> volunteeringCard = [];

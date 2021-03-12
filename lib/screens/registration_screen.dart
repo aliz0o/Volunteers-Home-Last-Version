@@ -200,7 +200,10 @@ class _MyStateFullState extends State<MyStateFull> {
                 final newUser = await _auth.createUserWithEmailAndPassword(
                     email: email, password: password);
                 if (newUser != null) {
-                  await _fireStore.collection('users').add({
+                  await _fireStore
+                      .collection('users')
+                      .doc(newUser.user.uid)
+                      .set({
                     'email': email,
                     'name': name,
                     'phoneNumber': phoneNumber,

@@ -21,71 +21,76 @@ class _EventStreamState extends State<EventStream> {
     return StreamBuilder<QuerySnapshot>(
         stream: _fireStore
             .collection('events')
+            .where('approved', isEqualTo: true)
             .orderBy('createdOn', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
-          final documents = snapshot.data.docs;
-          List<EventCard> eventsCard = [];
-          List<EventCard> volunteeringCard = [];
-          List<EventCard> attendingCard = [];
-          for (var event in documents) {
-            final createdOn = event['createdOn'];
-            final eventClass = event['eventClass'];
-            final noOfVolunteers = event['noOfVolunteers'];
-            final noOfAttendees = event['noOfAttendees'];
-            final eventDateTime = event['eventDateTime'];
-            final eventType = event['eventType'];
-            final city = event['city'];
-            final details = event['details'];
-            final imageURL = event['images'];
-            final eventID = event.id;
-            final volunteersCounter = event['volunteersCounter'];
-            final attendanceCounter = event['attendanceCounter'];
+          if (snapshot.hasData) {
+            //return Center(child: CircularProgressIndicator());
 
-            DateTime formattedDate = createdOn.toDate();
-            String stringDate =
-                DateFormat('kk:mm:ss  EEE d MMM').format(formattedDate);
-            final eventCard = EventCard(
-              eventClass: eventClass,
-              noOfVolunteers: noOfVolunteers,
-              noOfAttendees: noOfAttendees,
-              eventDateTime: eventDateTime,
-              eventType: eventType,
-              city: city,
-              details: details,
-              imageURL: imageURL,
-              createdOn: stringDate,
-              eventID: eventID,
-              volunteersCounter: volunteersCounter,
-              attendanceCounter: attendanceCounter,
-            );
-            if (eventClass == 'All') {
-              eventsCard.add(eventCard);
-            } else if (eventClass == 'Volunteering') {
-              volunteeringCard.add(eventCard);
-            } else if (eventClass == 'Attending') {
-              attendingCard.add(eventCard);
+            final documents = snapshot.data.docs;
+            List<EventCard> eventsCard = [];
+            List<EventCard> volunteeringCard = [];
+            List<EventCard> attendingCard = [];
+            for (var event in documents) {
+              final createdOn = event['createdOn'];
+              final eventClass = event['eventClass'];
+              final noOfVolunteers = event['noOfVolunteers'];
+              final noOfAttendees = event['noOfAttendees'];
+              final eventDateTime = event['eventDateTime'];
+              final eventType = event['eventType'];
+              final city = event['city'];
+              final details = event['details'];
+              final imageURL = event['images'];
+              final eventID = event.id;
+              final volunteersCounter = event['volunteersCounter'];
+              final attendanceCounter = event['attendanceCounter'];
+              final userID = event['userID'];
+              DateTime formattedDate = createdOn.toDate();
+              String stringDate =
+                  DateFormat('kk:mm:ss  EEE d MMM').format(formattedDate);
+              final eventCard = EventCard(
+                eventClass: eventClass,
+                noOfVolunteers: noOfVolunteers,
+                noOfAttendees: noOfAttendees,
+                eventDateTime: eventDateTime,
+                eventType: eventType,
+                city: city,
+                details: details,
+                imageURL: imageURL,
+                createdOn: stringDate,
+                eventID: eventID,
+                volunteersCounter: volunteersCounter,
+                attendanceCounter: attendanceCounter,
+                userID: userID,
+              );
+              if (eventClass == 'All') {
+                eventsCard.add(eventCard);
+              } else if (eventClass == 'Volunteering') {
+                volunteeringCard.add(eventCard);
+              } else if (eventClass == 'Attending') {
+                attendingCard.add(eventCard);
+              }
             }
-          }
-          return widget.eventTapClass == 'All'
-              ? ListView(
-                  padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 3.0),
-                  children: eventsCard,
-                )
-              : widget.eventTapClass == 'Volunteering'
-                  ? ListView(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 3.0, vertical: 3.0),
-                      children: volunteeringCard,
-                    )
-                  : ListView(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 3.0, vertical: 3.0),
-                      children: attendingCard,
-                    );
+            return widget.eventTapClass == 'All'
+                ? ListView(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 3.0, vertical: 3.0),
+                    children: eventsCard,
+                  )
+                : widget.eventTapClass == 'Volunteering'
+                    ? ListView(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 3.0, vertical: 3.0),
+                        children: volunteeringCard,
+                      )
+                    : ListView(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 3.0, vertical: 3.0),
+                        children: attendingCard,
+                      );
+          } else
+            return Center(child: CircularProgressIndicator());
         });
   }
 }

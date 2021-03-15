@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
             toolbarHeight: 180,
-            title: GetUser(loggedInUser: loggedInUser),
+            title: GetUser(user: loggedInUser.uid),
             automaticallyImplyLeading: false,
             bottom: TabBar(
               labelPadding: EdgeInsets.symmetric(horizontal: 0),

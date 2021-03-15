@@ -7,7 +7,9 @@ const TextStyle kAppBarTextStyle = TextStyle(
 
 const TextStyle kTapControllerTextStyle =
     TextStyle(fontSize: 16, fontFamily: 'Aclonica');
-const TextStyle proto = TextStyle(fontSize: 14, fontFamily: 'Aclonica');
+
+const TextStyle kUserInfoTextStyle =
+    TextStyle(fontSize: 14, fontFamily: 'Aclonica');
 
 const TextStyle kEventInfoTextStyle = TextStyle(
   color: Colors.white,

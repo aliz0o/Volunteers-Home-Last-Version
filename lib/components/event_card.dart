@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:volunteering/components/event_card_button.dart';
 import 'package:volunteering/constants.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+final _fireStore = FirebaseFirestore.instance;
+String name = '';
+String gender = '';
 
 class EventCard extends StatefulWidget {
   const EventCard({
@@ -17,6 +22,7 @@ class EventCard extends StatefulWidget {
     @required this.eventID,
     @required this.volunteersCounter,
     @required this.attendanceCounter,
+    @required this.userID,
   });
 
   final String eventClass;
@@ -31,14 +37,31 @@ class EventCard extends StatefulWidget {
   final String eventID;
   final int volunteersCounter;
   final int attendanceCounter;
+  final String userID;
 
   @override
   _EventCardState createState() => _EventCardState();
 }
 
 class _EventCardState extends State<EventCard> {
+  void eventCreator() async {
+    DocumentReference document =
+        _fireStore.collection('users').doc(widget.userID);
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      if (snapshot == null) {
+        return Center(child: CircularProgressIndicator());
+      }
+      setState(() {
+        Map<String, dynamic> data = snapshot.data();
+        name = data['name'];
+        gender = data['gender'];
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    eventCreator();
     bool imageVisibility = false;
     bool textVisibility = false;
     if (widget.imageURL != '') {
@@ -59,10 +82,12 @@ class _EventCardState extends State<EventCard> {
           children: [
             ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage('images/2.jpg'),
+                  backgroundImage: gender == 'Male'
+                      ? AssetImage('images/male.png')
+                      : AssetImage('images/female.png'),
                 ),
                 title: Text(
-                  'Ali Mustafa',
+                  name,
                   style: TextStyle(
                       fontSize: 14,
                       fontFamily: 'Aclonica',

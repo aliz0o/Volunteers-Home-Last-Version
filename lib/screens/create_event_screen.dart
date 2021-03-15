@@ -152,6 +152,8 @@ class _MyStateFullState extends State<MyStateFull> {
       'attendanceCounter': 0,
       'volunteers': FieldValue.arrayUnion([]),
       'attendance': FieldValue.arrayUnion([]),
+      'userID': loggedInUser.uid,
+      'approved': false,
     });
     setState(() {
       showSpinner = false;

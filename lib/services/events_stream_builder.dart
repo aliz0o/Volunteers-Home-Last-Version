@@ -3,13 +3,18 @@ import 'package:volunteering/components/event_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:volunteering/components/event_card_button.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 
 class EventStream extends StatefulWidget {
-  EventStream({@required this.eventTapClass, @required this.loggedInUser});
+  EventStream(
+      {@required this.eventTapClass,
+      @required this.loggedInUser,
+      @required this.tap});
   final String eventTapClass;
   final User loggedInUser;
+  final String tap;
 
   @override
   _EventStreamState createState() => _EventStreamState();
@@ -19,15 +24,35 @@ class _EventStreamState extends State<EventStream> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _fireStore
-            .collection('events')
-            .where('approved', isEqualTo: true)
-            .orderBy('createdOn', descending: true)
-            .snapshots(),
+        stream: widget.tap == 'events'
+            ? _fireStore
+                .collection('events')
+                .where('approved', isEqualTo: true)
+                .orderBy('createdOn', descending: true)
+                .snapshots()
+            : widget.tap == 'myEvents'
+                ? _fireStore
+                    .collection('events')
+                    .where('approved', isEqualTo: true)
+                    .where('all', arrayContains: loggedInUser.email)
+                    .where('eventDateTime',
+                        isGreaterThan: DateFormat('kk:mm:ss\n  EEE d MMM')
+                            .format(DateTime.now())
+                            .toString())
+                    .orderBy('eventDateTime', descending: true)
+                    .snapshots()
+                : _fireStore
+                    .collection('events')
+                    .where('approved', isEqualTo: true)
+                    .where('all', arrayContains: loggedInUser.email)
+                    .where('eventDateTime',
+                        isLessThanOrEqualTo: DateFormat('kk:mm:ss\n  EEE d MMM')
+                            .format(DateTime.now())
+                            .toString())
+                    .orderBy('eventDateTime', descending: true)
+                    .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            //return Center(child: CircularProgressIndicator());
-
             final documents = snapshot.data.docs;
             List<EventCard> eventsCard = [];
             List<EventCard> volunteeringCard = [];

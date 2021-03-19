@@ -71,10 +71,18 @@ class _EventsScreenState extends State<EventsScreen> {
         ),
         body: TabBarView(
           children: [
-            EventStream(eventTapClass: 'All', loggedInUser: loggedInUser),
             EventStream(
-                eventTapClass: 'Volunteering', loggedInUser: loggedInUser),
-            EventStream(eventTapClass: 'Attending', loggedInUser: loggedInUser),
+                eventTapClass: 'All',
+                loggedInUser: loggedInUser,
+                tap: 'events'),
+            EventStream(
+                eventTapClass: 'Volunteering',
+                loggedInUser: loggedInUser,
+                tap: 'events'),
+            EventStream(
+                eventTapClass: 'Attending',
+                loggedInUser: loggedInUser,
+                tap: 'events'),
           ],
         ),
       ),

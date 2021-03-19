@@ -53,12 +53,14 @@ class _EventCardButtonState extends State<EventCardButton> {
         widget.volunteersCounter <= widget.noOfVolunteers) {
       _fireStore.collection('events').doc(widget.eventID).update({
         'volunteers': FieldValue.arrayUnion([loggedInUser.email]),
+        'all': FieldValue.arrayUnion([loggedInUser.email]),
         'volunteersCounter': widget.volunteersCounter + 1,
         'noOfVolunteers': widget.noOfVolunteers - 1,
       });
     } else if (value == 'volunteerCanceled') {
       _fireStore.collection('events').doc(widget.eventID).update({
         'volunteers': FieldValue.arrayRemove([loggedInUser.email]),
+        'all': FieldValue.arrayRemove([loggedInUser.email]),
         'volunteersCounter': widget.volunteersCounter - 1,
         'noOfVolunteers': widget.noOfVolunteers + 1,
       });
@@ -66,12 +68,14 @@ class _EventCardButtonState extends State<EventCardButton> {
         widget.attendanceCounter <= widget.noOfAttendance) {
       _fireStore.collection('events').doc(widget.eventID).update({
         'attendance': FieldValue.arrayUnion([loggedInUser.email]),
+        'all': FieldValue.arrayUnion([loggedInUser.email]),
         'attendanceCounter': widget.attendanceCounter + 1,
         'noOfAttendees': widget.noOfAttendance - 1,
       });
     } else if (value == 'attendCanceled') {
       _fireStore.collection('events').doc(widget.eventID).update({
         'attendance': FieldValue.arrayRemove([loggedInUser.email]),
+        'all': FieldValue.arrayRemove([loggedInUser.email]),
         'attendanceCounter': widget.attendanceCounter - 1,
         'noOfAttendees': widget.noOfAttendance + 1,
       });

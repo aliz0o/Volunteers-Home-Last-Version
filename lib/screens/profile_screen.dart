@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:volunteering/services/events_stream_builder.dart';
 import 'package:volunteering/services/get_user_info.dart';
 
 final _auth = FirebaseAuth.instance;
@@ -59,6 +60,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             label: Text('Events', style: kTapControllerTextStyle),
             icon: Icon(Icons.arrow_back_ios_outlined),
             backgroundColor: Color.fromRGBO(20, 21, 22, 1),
+          ),
+          body: TabBarView(
+            children: [
+              EventStream(
+                  eventTapClass: 'All',
+                  loggedInUser: loggedInUser,
+                  tap: 'myEvents'),
+              EventStream(
+                  eventTapClass: 'All',
+                  loggedInUser: loggedInUser,
+                  tap: 'calender'),
+            ],
           ),
         ),
       ),

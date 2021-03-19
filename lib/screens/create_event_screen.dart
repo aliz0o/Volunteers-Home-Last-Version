@@ -51,7 +51,7 @@ class _MyStateFullState extends State<MyStateFull> {
   var _currentCitySelected = 'Amman';
   var _currentTypeSelected = 'Medical';
   bool _volunteeringVisible = false;
-  bool _attendinVisible = false;
+  bool _attendingVisible = false;
   bool _imageUploadedVisibility = false;
   bool _timeDateAlertVisibility = false;
   bool _eventClassVisibility = false;
@@ -85,17 +85,17 @@ class _MyStateFullState extends State<MyStateFull> {
   }
 
   void setEventClass() {
-    if ((_volunteeringVisible && _attendinVisible) == true) {
+    if ((_volunteeringVisible && _attendingVisible) == true) {
       setState(() {
         eventClass = 'All';
         _eventClassVisibility = false;
       });
-    } else if ((_volunteeringVisible == true) && (_attendinVisible == false)) {
+    } else if ((_volunteeringVisible == true) && (_attendingVisible == false)) {
       setState(() {
         eventClass = 'Volunteering';
         _eventClassVisibility = false;
       });
-    } else if ((_volunteeringVisible == false) && (_attendinVisible == true)) {
+    } else if ((_volunteeringVisible == false) && (_attendingVisible == true)) {
       eventClass = 'Attending';
       setState(() {
         eventClass = 'Attending';
@@ -152,6 +152,7 @@ class _MyStateFullState extends State<MyStateFull> {
       'attendanceCounter': 0,
       'volunteers': FieldValue.arrayUnion([]),
       'attendance': FieldValue.arrayUnion([]),
+      'all': FieldValue.arrayUnion([]),
       'userID': loggedInUser.uid,
       'approved': false,
     });
@@ -255,13 +256,13 @@ class _MyStateFullState extends State<MyStateFull> {
                 GestureDetector(
                     onTap: () {
                       setState(() {
-                        _attendinVisible = !_attendinVisible;
+                        _attendingVisible = !_attendingVisible;
                       });
                       setEventClass();
                     },
                     child: RadioButton(
                         selected: 'Attending',
-                        colour: _attendinVisible == true
+                        colour: _attendingVisible == true
                             ? activeColor.withOpacity(0.17)
                             : inactiveColor.withOpacity(0.06))),
               ],
@@ -303,15 +304,15 @@ class _MyStateFullState extends State<MyStateFull> {
                   ),
                   Visibility(
                     child: SizedBox(width: 16),
-                    visible: (_volunteeringVisible && _attendinVisible),
+                    visible: (_volunteeringVisible && _attendingVisible),
                   ),
                   Visibility(
-                    visible: _attendinVisible,
+                    visible: _attendingVisible,
                     child: Text('Number Of\nAttendees    ',
                         style: kNumberTextStyle),
                   ),
                   Visibility(
-                    visible: _attendinVisible,
+                    visible: _attendingVisible,
                     child: Flexible(
                       child: TextFormField(
                         keyboardType: TextInputType.number,
@@ -327,7 +328,7 @@ class _MyStateFullState extends State<MyStateFull> {
               ),
             ),
             Visibility(
-                visible: _volunteeringVisible || _attendinVisible,
+                visible: _volunteeringVisible || _attendingVisible,
                 child: SizedBox(height: 13)),
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),

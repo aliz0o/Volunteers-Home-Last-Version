@@ -5,6 +5,7 @@ import 'package:volunteering/components/label.dart';
 import 'package:volunteering/components/sub_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LogIn extends StatelessWidget {
   @override
@@ -34,6 +35,7 @@ class _MyStateFullState extends State<MyStateFull> {
   String email;
   String password;
   bool showSpinner = false;
+  String errorMessage;
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -94,8 +96,39 @@ class _MyStateFullState extends State<MyStateFull> {
                 setState(() {
                   showSpinner = false;
                 });
-              } catch (e) {
-                print(e);
+              } on FirebaseAuthException catch (e) {
+                setState(() {
+                  showSpinner = false;
+                });
+                print('Failed with error code: ${e.code}');
+                print(e.message);
+                return Alert(
+                  context: context,
+                  //type: AlertType.error,
+                  title: e.code + ' Error',
+                  desc: e.message,
+                  buttons: [
+                    DialogButton(
+                      child: Text(
+                        "Try Again",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      width: 120,
+                    )
+                  ],
+                  style: AlertStyle(
+                    descStyle: TextStyle(
+                      fontFamily: 'Product Sans',
+                      fontSize: 15,
+                    ),
+                    titleStyle: TextStyle(
+                      fontFamily: 'Aclonica',
+                      color: Colors.red,
+                      fontSize: 25,
+                    ),
+                  ),
+                ).show();
               }
             },
           ),

@@ -59,7 +59,7 @@ class _MyStateFullState extends State<MyStateFull> {
   String eventClass;
   int noOfAttendees = 0;
   int noOfVolunteers = 0;
-  String eventDateTime;
+  Timestamp eventDateTime;
   String city = 'Amman';
   String eventType = 'Medical';
   String details = '';
@@ -335,9 +335,10 @@ class _MyStateFullState extends State<MyStateFull> {
               child: DateTimeField(
                 onChanged: (value) {
                   setState(() {
-                    var temp =
-                        DateFormat('kk:mm:ss\n  EEE d MMM').format(value);
-                    eventDateTime = temp.toString();
+                    eventDateTime = Timestamp.fromDate(value);
+                    // var temp =
+                    //     DateFormat('kk:mm:ss\n  EEE d MMM').format(value);
+                    // eventDateTime = temp.toString();
                     _timeDateAlertVisibility = false;
                   });
                 },

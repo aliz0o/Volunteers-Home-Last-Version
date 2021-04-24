@@ -64,13 +64,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           body: TabBarView(
             children: [
               EventStream(
-                  eventTapClass: 'All',
+                  eventTapClass: 'MyEvent',
                   loggedInUser: loggedInUser,
-                  tap: 'myEvents'),
+                  tap: 'profile'),
               EventStream(
-                  eventTapClass: 'All',
+                  eventTapClass: 'Calender',
                   loggedInUser: loggedInUser,
-                  tap: 'calender'),
+                  tap: 'profile'),
             ],
           ),
         ),

@@ -30,33 +30,20 @@ class _EventStreamState extends State<EventStream> {
                 .where('approved', isEqualTo: true)
                 .orderBy('createdOn', descending: true)
                 .snapshots()
-            : widget.tap == 'myEvents'
-                ? _fireStore
-                    .collection('events')
-                    .where('approved', isEqualTo: true)
-                    .where('all', arrayContains: loggedInUser.email)
-                    .where('eventDateTime',
-                        isGreaterThan: DateFormat('kk:mm:ss\n  EEE d MMM')
-                            .format(DateTime.now())
-                            .toString())
-                    .orderBy('eventDateTime', descending: true)
-                    .snapshots()
-                : _fireStore
-                    .collection('events')
-                    .where('approved', isEqualTo: true)
-                    .where('all', arrayContains: loggedInUser.email)
-                    .where('eventDateTime',
-                        isLessThanOrEqualTo: DateFormat('kk:mm:ss\n  EEE d MMM')
-                            .format(DateTime.now())
-                            .toString())
-                    .orderBy('eventDateTime', descending: true)
-                    .snapshots(),
+            : _fireStore
+                .collection('events')
+                .where('approved', isEqualTo: true)
+                .where('all', arrayContains: loggedInUser.email)
+                .orderBy('eventDateTime', descending: false)
+                .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final documents = snapshot.data.docs;
             List<EventCard> eventsCard = [];
             List<EventCard> volunteeringCard = [];
             List<EventCard> attendingCard = [];
+            List<EventCard> myEventCard = [];
+            List<EventCard> calenderCard = [];
             for (var event in documents) {
               final createdOn = event['createdOn'];
               final eventClass = event['eventClass'];
@@ -71,19 +58,23 @@ class _EventStreamState extends State<EventStream> {
               final volunteersCounter = event['volunteersCounter'];
               final attendanceCounter = event['attendanceCounter'];
               final userID = event['userID'];
-              DateTime formattedDate = createdOn.toDate();
-              String stringDate =
-                  DateFormat('kk:mm:ss  EEE d MMM').format(formattedDate);
+              DateTime formattedCreatedOn = createdOn.toDate();
+              String stringCreatedOn =
+                  DateFormat('kk:mm:ss  EEE d MMM').format(formattedCreatedOn);
+              DateTime formattedDateTime = eventDateTime.toDate();
+              String stringDateTime =
+                  DateFormat('kk:mm:ss  EEE d MMM').format(formattedDateTime);
+
               final eventCard = EventCard(
                 eventClass: eventClass,
                 noOfVolunteers: noOfVolunteers,
                 noOfAttendees: noOfAttendees,
-                eventDateTime: eventDateTime,
+                eventDateTime: stringDateTime,
                 eventType: eventType,
                 city: city,
                 details: details,
                 imageURL: imageURL,
-                createdOn: stringDate,
+                createdOn: stringCreatedOn,
                 eventID: eventID,
                 volunteersCounter: volunteersCounter,
                 attendanceCounter: attendanceCounter,
@@ -95,6 +86,12 @@ class _EventStreamState extends State<EventStream> {
                 volunteeringCard.add(eventCard);
               } else if (eventClass == 'Attending') {
                 attendingCard.add(eventCard);
+              }
+              if (widget.tap == 'profile') {
+                if (formattedDateTime.compareTo(DateTime.now()) < 0) {
+                  myEventCard.add(eventCard);
+                } else
+                  calenderCard.add(eventCard);
               }
             }
             return widget.eventTapClass == 'All'
@@ -109,11 +106,23 @@ class _EventStreamState extends State<EventStream> {
                             horizontal: 3.0, vertical: 3.0),
                         children: volunteeringCard,
                       )
-                    : ListView(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 3.0),
-                        children: attendingCard,
-                      );
+                    : widget.eventTapClass == 'Attending'
+                        ? ListView(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 3.0, vertical: 3.0),
+                            children: attendingCard,
+                          )
+                        : widget.eventTapClass == 'MyEvent'
+                            ? ListView(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 3.0, vertical: 3.0),
+                                children: myEventCard,
+                              )
+                            : ListView(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 3.0, vertical: 3.0),
+                                children: calenderCard,
+                              );
           } else
             return Center(child: CircularProgressIndicator());
         });

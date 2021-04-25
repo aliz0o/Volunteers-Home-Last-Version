@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:volunteering/components/radio_button.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteering/components/rounded_button.dart';
@@ -12,6 +13,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'dart:io';
 
+final snackBar = SnackBar(
+  content: Text('Successfully Added... Waiting For Admin Approval.',
+      style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
+  elevation: 5,
+  backgroundColor: Color(0xff0962ff),
+);
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 DocumentReference ref = FirebaseFirestore.instance.collection('images').doc();
@@ -158,8 +165,9 @@ class _MyStateFullState extends State<MyStateFull> {
     });
     setState(() {
       showSpinner = false;
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.pop(context);
     });
-    Navigator.pop(context);
   }
 
   Future<String> uploadFile(File _image) async {

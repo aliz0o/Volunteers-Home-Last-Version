@@ -66,11 +66,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               EventStream(
                   eventTapClass: 'MyEvent',
                   loggedInUser: loggedInUser,
-                  tap: 'profile'),
+                  tap: 'MyEvent'),
               EventStream(
                   eventTapClass: 'Calender',
                   loggedInUser: loggedInUser,
-                  tap: 'profile'),
+                  tap: 'Calender'),
             ],
           ),
         ),

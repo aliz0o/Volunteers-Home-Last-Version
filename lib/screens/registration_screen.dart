@@ -228,30 +228,19 @@ class _MyStateFullState extends State<MyStateFull> {
                   print(e.message);
                   return Alert(
                     context: context,
-                    //type: AlertType.error,
                     title: e.code + ' Error',
                     desc: e.message,
                     buttons: [
                       DialogButton(
                         child: Text(
                           "Try Again",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          style: kAlertButtonStyle,
                         ),
                         onPressed: () => Navigator.pop(context),
                         width: 120,
                       )
                     ],
-                    style: AlertStyle(
-                      descStyle: TextStyle(
-                        fontFamily: 'Product Sans',
-                        fontSize: 15,
-                      ),
-                      titleStyle: TextStyle(
-                        fontFamily: 'Aclonica',
-                        color: Colors.red,
-                        fontSize: 25,
-                      ),
-                    ),
+                    style: kAlertStyle,
                   ).show();
                 }
               },

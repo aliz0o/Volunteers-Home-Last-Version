@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 const TextStyle kAppBarTextStyle = TextStyle(
   fontFamily: 'Aclonica',
@@ -168,3 +169,20 @@ InputDecoration kDropDownInputDecoration = InputDecoration(
 
 const TextStyle kEventCardButtonTextStyle =
     TextStyle(color: Colors.white, fontFamily: 'Aclonica', fontSize: 15);
+
+const AlertStyle kAlertStyle = AlertStyle(
+  alertElevation: 5,
+  isCloseButton: false,
+  descStyle: TextStyle(
+    fontFamily: 'Product Sans',
+    fontSize: 15,
+  ),
+  titleStyle: TextStyle(
+    fontFamily: 'Aclonica',
+    color: Colors.red,
+    fontSize: 20,
+  ),
+);
+
+TextStyle kAlertButtonStyle =
+    TextStyle(color: Colors.white, fontSize: 15, fontFamily: 'Aclonica');

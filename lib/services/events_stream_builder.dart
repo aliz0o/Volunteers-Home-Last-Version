@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteering/components/event_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:volunteering/components/event_card_button.dart';
 
@@ -30,12 +30,19 @@ class _EventStreamState extends State<EventStream> {
                 .where('approved', isEqualTo: true)
                 .orderBy('createdOn', descending: true)
                 .snapshots()
-            : _fireStore
-                .collection('events')
-                .where('approved', isEqualTo: true)
-                .where('all', arrayContains: loggedInUser.email)
-                .orderBy('eventDateTime', descending: false)
-                .snapshots(),
+            : widget.tap == 'Calender'
+                ? _fireStore
+                    .collection('events')
+                    .where('approved', isEqualTo: true)
+                    .where('all', arrayContains: loggedInUser.email)
+                    .orderBy('eventDateTime', descending: false)
+                    .snapshots()
+                : _fireStore
+                    .collection('events')
+                    .where('approved', isEqualTo: true)
+                    .where('email', isEqualTo: loggedInUser.email)
+                    .orderBy('eventDateTime', descending: true)
+                    .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final documents = snapshot.data.docs;
@@ -87,11 +94,12 @@ class _EventStreamState extends State<EventStream> {
               } else if (eventClass == 'Attending') {
                 attendingCard.add(eventCard);
               }
-              if (widget.tap == 'profile') {
-                if (formattedDateTime.compareTo(DateTime.now()) < 0) {
-                  myEventCard.add(eventCard);
-                } else
+              if (widget.tap == 'Calender') {
+                if (formattedDateTime.compareTo(DateTime.now()) >= 0) {
                   calenderCard.add(eventCard);
+                }
+              } else if (widget.tap == 'MyEvent') {
+                myEventCard.add(eventCard);
               }
             }
             return widget.eventTapClass == 'All'

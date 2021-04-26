@@ -86,13 +86,11 @@ class _EventCardButtonState extends State<EventCardButton> {
     DocumentReference document =
         _fireStore.collection('events').doc(widget.eventID);
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
-      if (mounted) {
-        setState(() {
-          Map<String, dynamic> data = snapshot.data();
-          volunteersList = data['volunteers'];
-          attendanceList = data['attendance'];
-        });
-      }
+      setState(() {
+        Map<String, dynamic> data = snapshot.data();
+        volunteersList = data['volunteers'];
+        attendanceList = data['attendance'];
+      });
     });
   }
 

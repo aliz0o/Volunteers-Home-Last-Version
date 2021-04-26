@@ -51,32 +51,36 @@ class _EventCardState extends State<EventCard> {
       if (snapshot == null) {
         return Center(child: CircularProgressIndicator());
       }
-      setState(() {
-        Map<String, dynamic> data = snapshot.data();
-        name = data['name'];
-        gender = data['gender'];
-      });
+      Map<String, dynamic> data = snapshot.data();
+      if (data != null) {
+        setState(() {
+          name = data['name'];
+          gender = data['gender'];
+        });
+      }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     eventCreator();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     bool imageVisibility = false;
     bool textVisibility = false;
     if (widget.imageURL != '') {
-      if (mounted) {
-        setState(() {
-          imageVisibility = true;
-        });
-      }
+      setState(() {
+        imageVisibility = true;
+      });
     }
     if (widget.details != '') {
-      if (mounted) {
-        setState(() {
-          textVisibility = true;
-        });
-      }
+      setState(() {
+        textVisibility = true;
+      });
     }
     double scrWidth = MediaQuery.of(context).size.width;
     return Card(

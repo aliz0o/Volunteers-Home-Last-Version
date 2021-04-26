@@ -325,6 +325,7 @@ class _MyStateFullState extends State<MyStateFull> {
                             'gender': gender,
                             'city': city,
                             'createdOn': FieldValue.serverTimestamp(),
+                            'eventCount': 0,
                           });
                           Navigator.pushNamed(context, '/events_screen');
                         }

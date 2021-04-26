@@ -163,6 +163,11 @@ class _MyStateFullState extends State<MyStateFull> {
       'userID': loggedInUser.uid,
       'approved': false,
     });
+
+    await _fireStore.collection('users').doc(loggedInUser.uid).update({
+      'eventCount': FieldValue.increment(1),
+    });
+
     setState(() {
       showSpinner = false;
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

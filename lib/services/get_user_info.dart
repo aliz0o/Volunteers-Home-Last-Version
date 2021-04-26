@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteering/constants.dart';
@@ -20,7 +21,7 @@ class GetUser extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
           return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CircleAvatar(
                   backgroundImage: data['gender'] == 'Male'
@@ -33,43 +34,41 @@ class GetUser extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(data['name'], style: kAppBarTextStyle),
-                    Text('Software Engineering', style: kUserInfoTextStyle),
-                    Text(data['city'], style: kUserInfoTextStyle),
+                    Text(data['name'],
+                        style: kAppBarTextStyle.copyWith(fontSize: 20)),
+                    Text(data['age'].toString() + ' Year Old',
+                        style: kTextFieldStyle),
+                    Text(data['city'], style: kTextFieldStyle),
                   ],
                 ),
-                SizedBox(width: 20),
+                Expanded(child: SizedBox(width: 20)),
+                // Container(
+                //   color: Colors.white.withOpacity(0.70),
+                //   height: 70,
+                //   width: 0.4,
+                // ),
+                //Expanded(child: SizedBox(width: 15)),
                 Container(
-                  color: Colors.white.withOpacity(0.70),
-                  height: 70,
-                  width: 0.4,
-                ),
-                SizedBox(width: 15),
-                Column(
-                  children: [
-                    Text(
-                      '72',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 3),
-                    Text('Events', style: kTapControllerTextStyle),
-                    SizedBox(height: 2),
-                    Row(
-                      children: [
-                        Icon(Icons.star, size: 12),
-                        Icon(Icons.star, size: 12),
-                        Icon(Icons.star, size: 12),
-                        Icon(Icons.star, size: 12),
-                        Icon(Icons.star, size: 12),
-                      ],
-                    )
-                  ],
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: Color(0xff0962ff),
+                      borderRadius: BorderRadius.all(Radius.circular(7))),
+                  child: Column(
+                    children: [
+                      Text(
+                        data['eventCount'].toString(),
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 3),
+                      Text('Events', style: kTapControllerTextStyle),
+                    ],
+                  ),
                 )
               ]);
         }
 
-        return Text("loading");
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

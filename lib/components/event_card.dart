@@ -65,14 +65,18 @@ class _EventCardState extends State<EventCard> {
     bool imageVisibility = false;
     bool textVisibility = false;
     if (widget.imageURL != '') {
-      setState(() {
-        imageVisibility = true;
-      });
+      if (mounted) {
+        setState(() {
+          imageVisibility = true;
+        });
+      }
     }
     if (widget.details != '') {
-      setState(() {
-        textVisibility = true;
-      });
+      if (mounted) {
+        setState(() {
+          textVisibility = true;
+        });
+      }
     }
     double scrWidth = MediaQuery.of(context).size.width;
     return Card(

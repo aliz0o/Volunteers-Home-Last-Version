@@ -52,6 +52,49 @@ class _MyStateFullState extends State<MyStateFull> {
   int age;
   String gender;
   String city = 'Amman';
+  bool _nameVisibility = false;
+  bool _phoneNumberVisibility = false;
+  bool _ageVisibility = false;
+  bool _genderVisibility = false;
+
+  void checkNullValue() {
+    if (name == null || name == "") {
+      setState(() {
+        _nameVisibility = true;
+      });
+    } else
+      setState(() {
+        _nameVisibility = false;
+      });
+
+    if (phoneNumber.toString().length < 9) {
+      print(phoneNumber.toString().length);
+      setState(() {
+        _phoneNumberVisibility = true;
+      });
+    } else
+      setState(() {
+        _phoneNumberVisibility = false;
+      });
+
+    if (age == null || age <= 12) {
+      setState(() {
+        _ageVisibility = true;
+      });
+    } else
+      setState(() {
+        _ageVisibility = false;
+      });
+
+    if (gender == null) {
+      setState(() {
+        _genderVisibility = true;
+      });
+    } else
+      setState(() {
+        _genderVisibility = false;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +110,13 @@ class _MyStateFullState extends State<MyStateFull> {
               child: TextFormField(
                 onChanged: (value) {
                   name = value;
+                  setState(() {
+                    _nameVisibility = false;
+                  });
                 },
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s")),
+                  LengthLimitingTextInputFormatter(15),
                 ],
                 keyboardType: TextInputType.text,
                 style: kTextFieldStyle,
@@ -78,12 +125,27 @@ class _MyStateFullState extends State<MyStateFull> {
               ),
             ),
             SizedBox(height: 10),
+            Visibility(
+              child: Text(
+                'You Should Enter Your Name',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontFamily: 'Aclonica',
+                  fontSize: 10,
+                ),
+              ),
+              visible: _nameVisibility,
+            ),
+            Visibility(child: SizedBox(height: 10), visible: _nameVisibility),
             Label(label: 'Phone Number'),
             Padding(
               padding: textFieldPadding,
               child: TextFormField(
                 onChanged: (value) {
                   phoneNumber = int.parse(value);
+                  setState(() {
+                    _phoneNumberVisibility = false;
+                  });
                 },
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(10),
@@ -96,12 +158,28 @@ class _MyStateFullState extends State<MyStateFull> {
               ),
             ),
             SizedBox(height: 10),
+            Visibility(
+              child: Text(
+                'You Should Enter Enter A Valid 10-Digit Phone Number',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontFamily: 'Aclonica',
+                  fontSize: 10,
+                ),
+              ),
+              visible: _phoneNumberVisibility,
+            ),
+            Visibility(
+                child: SizedBox(height: 10), visible: _phoneNumberVisibility),
             Label(label: 'Age'),
             Padding(
               padding: textFieldPadding,
               child: TextFormField(
                 onChanged: (value) {
                   age = int.parse(value);
+                  setState(() {
+                    _ageVisibility = false;
+                  });
                 },
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(2),
@@ -113,6 +191,17 @@ class _MyStateFullState extends State<MyStateFull> {
               ),
             ),
             SizedBox(height: 10),
+            Visibility(
+              child: Text(
+                'You Must Be At Least 13 Years Old',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontFamily: 'Aclonica',
+                  fontSize: 10,
+                ),
+              ),
+              visible: _ageVisibility,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -120,6 +209,7 @@ class _MyStateFullState extends State<MyStateFull> {
                   onTap: () {
                     setState(() {
                       gender = 'Male';
+                      _genderVisibility = false;
                     });
                   },
                   child: RadioButton(
@@ -132,6 +222,7 @@ class _MyStateFullState extends State<MyStateFull> {
                     onTap: () {
                       setState(() {
                         gender = 'Female';
+                        _genderVisibility = false;
                       });
                     },
                     child: RadioButton(
@@ -142,6 +233,18 @@ class _MyStateFullState extends State<MyStateFull> {
               ],
             ),
             SizedBox(height: 10),
+            Visibility(
+              child: Text(
+                'You Should Enter Your Gender',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontFamily: 'Aclonica',
+                  fontSize: 10,
+                ),
+              ),
+              visible: _genderVisibility,
+            ),
+            Visibility(child: SizedBox(height: 10), visible: _genderVisibility),
             Container(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
@@ -195,55 +298,63 @@ class _MyStateFullState extends State<MyStateFull> {
             RoundedButton(
               text: 'sign up',
               color: Color(0xff0962ff),
-              function: () async {
-                setState(() {
-                  showSpinner = true;
-                });
-                try {
-                  final newUser = await _auth.createUserWithEmailAndPassword(
-                      email: email, password: password);
-                  if (newUser != null) {
-                    await _fireStore
-                        .collection('users')
-                        .doc(newUser.user.uid)
-                        .set({
-                      'email': email,
-                      'name': name,
-                      'phoneNumber': phoneNumber,
-                      'age': age,
-                      'gender': gender,
-                      'city': city,
-                      'createdOn': FieldValue.serverTimestamp(),
-                    });
-                    Navigator.pushNamed(context, '/events_screen');
-                  }
-                  setState(() {
-                    showSpinner = false;
-                  });
-                } on FirebaseAuthException catch (e) {
-                  setState(() {
-                    showSpinner = false;
-                  });
-                  print('Failed with error code: ${e.code}');
-                  print(e.message);
-                  return Alert(
-                    context: context,
-                    title: e.code + ' Error',
-                    desc: e.message,
-                    buttons: [
-                      DialogButton(
-                        child: Text(
-                          "Try Again",
-                          style: kAlertButtonStyle,
-                        ),
-                        onPressed: () => Navigator.pop(context),
-                        width: 120,
-                      )
-                    ],
-                    style: kAlertStyle,
-                  ).show();
-                }
-              },
+              function: ((name == null || name == "") ||
+                      (phoneNumber.toString().length < 9) ||
+                      (age == null || age <= 12) ||
+                      (gender == null))
+                  ? () {
+                      checkNullValue();
+                    }
+                  : () async {
+                      setState(() {
+                        showSpinner = true;
+                      });
+                      try {
+                        final newUser =
+                            await _auth.createUserWithEmailAndPassword(
+                                email: email, password: password);
+                        if (newUser != null) {
+                          await _fireStore
+                              .collection('users')
+                              .doc(newUser.user.uid)
+                              .set({
+                            'email': email,
+                            'name': name,
+                            'phoneNumber': phoneNumber,
+                            'age': age,
+                            'gender': gender,
+                            'city': city,
+                            'createdOn': FieldValue.serverTimestamp(),
+                          });
+                          Navigator.pushNamed(context, '/events_screen');
+                        }
+                        setState(() {
+                          showSpinner = false;
+                        });
+                      } on FirebaseAuthException catch (e) {
+                        setState(() {
+                          showSpinner = false;
+                        });
+                        print('Failed with error code: ${e.code}');
+                        print(e.message);
+                        return Alert(
+                          context: context,
+                          title: e.code + ' Error',
+                          desc: e.message,
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Try Again",
+                                style: kAlertButtonStyle,
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
+                          style: kAlertStyle,
+                        ).show();
+                      }
+                    },
             ),
             GestureDetector(
               onTap: () {

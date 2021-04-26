@@ -67,13 +67,6 @@ const TextStyle kTextFieldStyle = TextStyle(
   fontSize: 13,
   color: Colors.white,
 );
-
-const TextStyle kNumberFieldLabel = TextStyle(
-  fontFamily: 'Product Sans',
-  fontSize: 13,
-  color: Colors.white,
-);
-
 EdgeInsets textFieldPadding = EdgeInsets.fromLTRB(30, 0, 30, 0);
 
 const kCityList = [

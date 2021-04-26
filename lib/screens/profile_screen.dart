@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:volunteering/services/events_stream_builder.dart';
 import 'package:volunteering/services/get_user_info.dart';
-
-final _auth = FirebaseAuth.instance;
-User loggedInUser;
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -13,22 +9,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  void initState() {
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,7 +18,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
             toolbarHeight: 180,
-            title: GetUser(user: loggedInUser.uid),
+            title: GetUser(user: loggedInUser.uid, screen: 'profile'),
             automaticallyImplyLeading: false,
             bottom: TabBar(
               labelPadding: EdgeInsets.symmetric(horizontal: 0),
@@ -63,14 +43,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           body: TabBarView(
             children: [
-              EventStream(
-                  eventTapClass: 'MyEvent',
-                  loggedInUser: loggedInUser,
-                  tap: 'MyEvent'),
-              EventStream(
-                  eventTapClass: 'Calender',
-                  loggedInUser: loggedInUser,
-                  tap: 'Calender'),
+              EventStream(eventTapClass: 'MyEvent', tap: 'MyEvent'),
+              EventStream(eventTapClass: 'Calender', tap: 'Calender'),
             ],
           ),
         ),

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:volunteering/services/events_stream_builder.dart';
-
-final _auth = FirebaseAuth.instance;
-User loggedInUser;
 
 class EventsScreen extends StatefulWidget {
   @override
@@ -12,23 +8,6 @@ class EventsScreen extends StatefulWidget {
 }
 
 class _EventsScreenState extends State<EventsScreen> {
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -71,18 +50,9 @@ class _EventsScreenState extends State<EventsScreen> {
         ),
         body: TabBarView(
           children: [
-            EventStream(
-                eventTapClass: 'All',
-                loggedInUser: loggedInUser,
-                tap: 'events'),
-            EventStream(
-                eventTapClass: 'Volunteering',
-                loggedInUser: loggedInUser,
-                tap: 'events'),
-            EventStream(
-                eventTapClass: 'Attending',
-                loggedInUser: loggedInUser,
-                tap: 'events'),
+            EventStream(eventTapClass: 'All', tap: 'events'),
+            EventStream(eventTapClass: 'Volunteering', tap: 'events'),
+            EventStream(eventTapClass: 'Attending', tap: 'events'),
           ],
         ),
       ),

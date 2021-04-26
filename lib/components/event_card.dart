@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:volunteering/components/event_card_button.dart';
 import 'package:volunteering/constants.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-final _fireStore = FirebaseFirestore.instance;
-String name = '';
-String gender = '';
+import 'package:volunteering/services/get_user_info.dart';
 
 class EventCard extends StatefulWidget {
   const EventCard({
@@ -44,30 +39,6 @@ class EventCard extends StatefulWidget {
 }
 
 class _EventCardState extends State<EventCard> {
-  void eventCreator() async {
-    DocumentReference document =
-        _fireStore.collection('users').doc(widget.userID);
-    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
-      if (snapshot == null) {
-        return Center(child: CircularProgressIndicator());
-      }
-      Map<String, dynamic> data = snapshot.data();
-      if (data != null) {
-        setState(() {
-          name = data['name'];
-          gender = data['gender'];
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    eventCreator();
-  }
-
   @override
   Widget build(BuildContext context) {
     bool imageVisibility = false;
@@ -88,32 +59,10 @@ class _EventCardState extends State<EventCard> {
         decoration: BoxDecoration(color: Color(0xFF1B222E)),
         child: Column(
           children: [
-            ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: gender == 'Male'
-                      ? AssetImage('images/male.png')
-                      : AssetImage('images/female.png'),
-                ),
-                title: Text(
-                  name,
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Aclonica',
-                      color: Colors.white),
-                ),
-                subtitle: Text(
-                  widget.createdOn,
-                  style: TextStyle(
-                      fontSize: 11.5, color: Colors.white.withOpacity(0.50)),
-                ),
-                trailing: EventCardButton(
-                  eventClass: widget.eventClass,
-                  eventID: widget.eventID,
-                  noOfVolunteers: widget.noOfVolunteers,
-                  noOfAttendance: widget.noOfAttendees,
-                  volunteersCounter: widget.volunteersCounter,
-                  attendanceCounter: widget.attendanceCounter,
-                )),
+            GetUser(
+                user: widget.userID,
+                screen: 'events',
+                createdOn: widget.createdOn),
             Visibility(
               visible: imageVisibility,
               child: Container(

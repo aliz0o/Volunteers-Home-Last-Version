@@ -310,7 +310,7 @@ class _MyStateFullState extends State<MyStateFull> {
                         onChanged: (value) {
                           noOfVolunteers = int.parse(value);
                         },
-                        style: kNumberFieldLabel,
+                        style: kTextFieldStyle,
                         decoration: kNumberFieldDecoration,
                       ),
                     ),
@@ -332,7 +332,7 @@ class _MyStateFullState extends State<MyStateFull> {
                         onChanged: (value) {
                           noOfAttendees = int.parse(value);
                         },
-                        style: kNumberFieldLabel,
+                        style: kTextFieldStyle,
                         decoration: kNumberFieldDecoration,
                       ),
                     ),

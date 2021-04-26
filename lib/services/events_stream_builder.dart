@@ -3,17 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:volunteering/components/event_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:volunteering/components/event_card_button.dart';
 
 final _fireStore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
+User loggedInUser;
 
 class EventStream extends StatefulWidget {
-  EventStream(
-      {@required this.eventTapClass,
-      @required this.loggedInUser,
-      @required this.tap});
+  EventStream({@required this.eventTapClass, @required this.tap});
   final String eventTapClass;
-  final User loggedInUser;
+
   final String tap;
 
   @override
@@ -21,6 +19,19 @@ class EventStream extends StatefulWidget {
 }
 
 class _EventStreamState extends State<EventStream> {
+  @override
+  void initState() {
+    super.initState();
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -67,10 +78,10 @@ class _EventStreamState extends State<EventStream> {
               final userID = event['userID'];
               DateTime formattedCreatedOn = createdOn.toDate();
               String stringCreatedOn =
-                  DateFormat('kk:mm:ss  EEE d MMM').format(formattedCreatedOn);
+                  DateFormat('kk:mm  EEE d MMM').format(formattedCreatedOn);
               DateTime formattedDateTime = eventDateTime.toDate();
               String stringDateTime =
-                  DateFormat('kk:mm:ss  EEE d MMM').format(formattedDateTime);
+                  DateFormat('kk:mm  EEE d MMM').format(formattedDateTime);
 
               final eventCard = EventCard(
                 eventClass: eventClass,

@@ -18,6 +18,7 @@ class EventCard extends StatefulWidget {
     @required this.volunteersCounter,
     @required this.attendanceCounter,
     @required this.userID,
+    @required this.userEmail,
   });
 
   final String eventClass;
@@ -33,6 +34,7 @@ class EventCard extends StatefulWidget {
   final int volunteersCounter;
   final int attendanceCounter;
   final String userID;
+  final String userEmail;
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -60,9 +62,11 @@ class _EventCardState extends State<EventCard> {
         child: Column(
           children: [
             GetUser(
-                user: widget.userID,
-                screen: 'events',
-                createdOn: widget.createdOn),
+              userID: widget.userID,
+              screen: 'events',
+              createdOn: widget.createdOn,
+              //userEmail: widget.userEmail,
+            ),
             Visibility(
               visible: imageVisibility,
               child: Container(

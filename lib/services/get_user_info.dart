@@ -2,19 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteering/constants.dart';
+import 'package:volunteering/screens/profile_screen.dart';
 
 class GetUser extends StatelessWidget {
-  final String user;
+  final String userID;
+  final String userEmail;
   final String screen;
   final String createdOn;
-  GetUser({@required this.user, @required this.screen, this.createdOn});
+  GetUser(
+      {@required this.userID,
+      this.userEmail,
+      @required this.screen,
+      this.createdOn});
 
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
 
     return FutureBuilder<DocumentSnapshot>(
-      future: users.doc(this.user).get(),
+      future: users.doc(this.userID).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -45,14 +51,9 @@ class GetUser extends StatelessWidget {
                         ],
                       ),
                       Expanded(child: SizedBox(width: 20)),
-                      // Container(
-                      //   color: Colors.white.withOpacity(0.70),
-                      //   height: 70,
-                      //   width: 0.4,
-                      // ),
-                      //Expanded(child: SizedBox(width: 15)),
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                         decoration: BoxDecoration(
                             color: Color(0xff0962ff),
                             borderRadius: BorderRadius.all(Radius.circular(7))),
@@ -69,32 +70,44 @@ class GetUser extends StatelessWidget {
                         ),
                       )
                     ])
-              : ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: data['gender'] == 'Male'
-                        ? AssetImage('images/male.png')
-                        : AssetImage('images/female.png'),
+              : GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileScreen(
+                            userID: userID, userEmail: data['email']),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: data['gender'] == 'Male'
+                          ? AssetImage('images/male.png')
+                          : AssetImage('images/female.png'),
+                    ),
+                    title: Text(
+                      data['name'],
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Aclonica',
+                          color: Colors.white),
+                    ),
+                    subtitle: Text(
+                      this.createdOn,
+                      style: TextStyle(
+                          fontSize: 11.5,
+                          color: Colors.white.withOpacity(0.50)),
+                    ),
+                    // trailing: EventCardButton(
+                    //   eventClass: widget.eventClass,
+                    //   eventID: widget.eventID,
+                    //   noOfVolunteers: widget.noOfVolunteers,
+                    //   noOfAttendance: widget.noOfAttendees,
+                    //   volunteersCounter: widget.volunteersCounter,
+                    //   attendanceCounter: widget.attendanceCounter,
+                    // )
                   ),
-                  title: Text(
-                    data['name'],
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Aclonica',
-                        color: Colors.white),
-                  ),
-                  subtitle: Text(
-                    this.createdOn,
-                    style: TextStyle(
-                        fontSize: 11.5, color: Colors.white.withOpacity(0.50)),
-                  ),
-                  // trailing: EventCardButton(
-                  //   eventClass: widget.eventClass,
-                  //   eventID: widget.eventID,
-                  //   noOfVolunteers: widget.noOfVolunteers,
-                  //   noOfAttendance: widget.noOfAttendees,
-                  //   volunteersCounter: widget.volunteersCounter,
-                  //   attendanceCounter: widget.attendanceCounter,
-                  // )
                 );
         }
 

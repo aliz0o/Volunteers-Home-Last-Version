@@ -9,10 +9,11 @@ final _auth = FirebaseAuth.instance;
 User loggedInUser;
 
 class EventStream extends StatefulWidget {
-  EventStream({@required this.eventTapClass, @required this.tap});
+  EventStream(
+      {@required this.eventTapClass, @required this.tap, this.userEmail});
   final String eventTapClass;
-
   final String tap;
+  final String userEmail;
 
   @override
   _EventStreamState createState() => _EventStreamState();
@@ -45,13 +46,13 @@ class _EventStreamState extends State<EventStream> {
                 ? _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: true)
-                    .where('all', arrayContains: loggedInUser.email)
+                    .where('all', arrayContains: widget.userEmail)
                     .orderBy('eventDateTime', descending: false)
                     .snapshots()
                 : _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: true)
-                    .where('email', isEqualTo: loggedInUser.email)
+                    .where('email', isEqualTo: widget.userEmail)
                     .orderBy('eventDateTime', descending: true)
                     .snapshots(),
         builder: (context, snapshot) {
@@ -76,6 +77,7 @@ class _EventStreamState extends State<EventStream> {
               final volunteersCounter = event['volunteersCounter'];
               final attendanceCounter = event['attendanceCounter'];
               final userID = event['userID'];
+              final userEmail = event['email'];
               DateTime formattedCreatedOn = createdOn.toDate();
               String stringCreatedOn =
                   DateFormat('kk:mm  EEE d MMM').format(formattedCreatedOn);
@@ -97,6 +99,7 @@ class _EventStreamState extends State<EventStream> {
                 volunteersCounter: volunteersCounter,
                 attendanceCounter: attendanceCounter,
                 userID: userID,
+                userEmail: userEmail,
               );
               if (eventClass == 'All') {
                 eventsCard.add(eventCard);

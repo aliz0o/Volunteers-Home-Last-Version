@@ -4,6 +4,9 @@ import 'package:volunteering/services/events_stream_builder.dart';
 import 'package:volunteering/services/get_user_info.dart';
 
 class ProfileScreen extends StatefulWidget {
+  ProfileScreen({@required this.userID, @required this.userEmail});
+  final String userID;
+  final String userEmail;
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -11,6 +14,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    print(widget.userEmail);
     return MaterialApp(
       home: DefaultTabController(
         length: 2,
@@ -18,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
             toolbarHeight: 180,
-            title: GetUser(user: loggedInUser.uid, screen: 'profile'),
+            title: GetUser(userID: widget.userID, screen: 'profile'),
             automaticallyImplyLeading: false,
             bottom: TabBar(
               labelPadding: EdgeInsets.symmetric(horizontal: 0),
@@ -43,8 +47,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           body: TabBarView(
             children: [
-              EventStream(eventTapClass: 'MyEvent', tap: 'MyEvent'),
-              EventStream(eventTapClass: 'Calender', tap: 'Calender'),
+              EventStream(
+                eventTapClass: 'MyEvent',
+                tap: 'MyEvent',
+                userEmail: widget.userEmail,
+              ),
+              EventStream(
+                eventTapClass: 'Calender',
+                tap: 'Calender',
+                userEmail: widget.userEmail,
+              ),
             ],
           ),
         ),

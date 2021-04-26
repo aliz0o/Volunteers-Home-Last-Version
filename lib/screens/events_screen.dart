@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
+import 'package:volunteering/screens/profile_screen.dart';
 import 'package:volunteering/services/events_stream_builder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EventsScreen extends StatefulWidget {
   @override
@@ -19,10 +21,18 @@ class _EventsScreenState extends State<EventsScreen> {
           title: Text('Events', style: kAppBarTextStyle),
           actions: [
             IconButton(
-                icon: Icon(Icons.person),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/profile_screen');
-                })
+              icon: Icon(Icons.person),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(
+                        userID: loggedInUser.uid,
+                        userEmail: loggedInUser.email),
+                  ),
+                );
+              },
+            )
           ],
           bottom: TabBar(
             labelPadding: EdgeInsets.symmetric(horizontal: 0),
@@ -50,9 +60,18 @@ class _EventsScreenState extends State<EventsScreen> {
         ),
         body: TabBarView(
           children: [
-            EventStream(eventTapClass: 'All', tap: 'events'),
-            EventStream(eventTapClass: 'Volunteering', tap: 'events'),
-            EventStream(eventTapClass: 'Attending', tap: 'events'),
+            EventStream(
+              eventTapClass: 'All',
+              tap: 'events',
+            ),
+            EventStream(
+              eventTapClass: 'Volunteering',
+              tap: 'events',
+            ),
+            EventStream(
+              eventTapClass: 'Attending',
+              tap: 'events',
+            ),
           ],
         ),
       ),

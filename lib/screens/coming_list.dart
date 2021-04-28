@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
-import 'package:volunteering/services/events_stream_builder.dart';
-import 'package:volunteering/services/get_user_info.dart';
 
-class ProfileScreen extends StatefulWidget {
-  ProfileScreen({this.userID, this.userEmail});
-  final String userID;
-  final String userEmail;
+class ComingList extends StatefulWidget {
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _ComingListState createState() => _ComingListState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ComingListState extends State<ComingList> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,17 +15,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Scaffold(
           backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
-            toolbarHeight: 180,
-            title: GetUser(userID: widget.userID, screen: 'profile'),
+            title: Center(child: Text('Coming List', style: kAppBarTextStyle)),
             automaticallyImplyLeading: false,
             bottom: TabBar(
               labelPadding: EdgeInsets.symmetric(horizontal: 0),
               tabs: [
                 Tab(
-                  child: Text('My Events', style: kTapControllerTextStyle),
+                  child: Text('Volunteers', style: kTapControllerTextStyle),
                 ),
                 Tab(
-                  child: Text('Calender', style: kTapControllerTextStyle),
+                  child: Text('Attendance', style: kTapControllerTextStyle),
                 ),
               ],
             ),
@@ -46,18 +40,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           body: TabBarView(
             children: [
-              EventStream(
-                eventTapClass: 'MyEvent',
-                tap: 'MyEvent',
-                screen: 'comingList',
-                userEmail: widget.userEmail,
-              ),
-              EventStream(
-                eventTapClass: 'Calender',
-                tap: 'Calender',
-                screen: 'events',
-                userEmail: widget.userEmail,
-              ),
+              Center(child: Text('A')),
+              Center(child: Text('B')),
             ],
           ),
         ),

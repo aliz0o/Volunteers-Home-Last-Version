@@ -10,10 +10,14 @@ User loggedInUser;
 
 class EventStream extends StatefulWidget {
   EventStream(
-      {@required this.eventTapClass, @required this.tap, this.userEmail});
+      {@required this.eventTapClass,
+      @required this.tap,
+      this.userEmail,
+      @required this.screen});
   final String eventTapClass;
   final String tap;
   final String userEmail;
+  final String screen;
 
   @override
   _EventStreamState createState() => _EventStreamState();
@@ -78,7 +82,9 @@ class _EventStreamState extends State<EventStream> {
               final attendanceCounter = event['attendanceCounter'];
               final userID = event['userID'];
               final userEmail = event['email'];
-              DateTime formattedCreatedOn = createdOn.toDate();
+              final volunteersList = event['volunteers'];
+              final attendanceList = event['attendance'];
+              final DateTime formattedCreatedOn = createdOn.toDate();
               String stringCreatedOn =
                   DateFormat('kk:mm  EEE d MMM').format(formattedCreatedOn);
               DateTime formattedDateTime = eventDateTime.toDate();
@@ -100,6 +106,9 @@ class _EventStreamState extends State<EventStream> {
                 attendanceCounter: attendanceCounter,
                 userID: userID,
                 userEmail: userEmail,
+                volunteersList: volunteersList,
+                attendanceList: attendanceList,
+                screen: widget.screen,
               );
               if (eventClass == 'All') {
                 eventsCard.add(eventCard);
@@ -117,33 +126,47 @@ class _EventStreamState extends State<EventStream> {
               }
             }
             return widget.eventTapClass == 'All'
-                ? ListView(
+                ? ListView.builder(
                     padding:
                         EdgeInsets.symmetric(horizontal: 3.0, vertical: 3.0),
-                    children: eventsCard,
+                    itemCount: eventsCard.length,
+                    itemBuilder: (context, index) {
+                      return eventsCard[index];
+                    },
                   )
                 : widget.eventTapClass == 'Volunteering'
-                    ? ListView(
+                    ? ListView.builder(
                         padding: EdgeInsets.symmetric(
                             horizontal: 3.0, vertical: 3.0),
-                        children: volunteeringCard,
+                        itemCount: volunteeringCard.length,
+                        itemBuilder: (context, index) {
+                          return volunteeringCard[index];
+                        },
                       )
                     : widget.eventTapClass == 'Attending'
-                        ? ListView(
+                        ? ListView.builder(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 3.0, vertical: 3.0),
-                            children: attendingCard,
-                          )
+                            itemCount: attendingCard.length,
+                            itemBuilder: (context, index) {
+                              return attendingCard[index];
+                            })
                         : widget.eventTapClass == 'MyEvent'
-                            ? ListView(
+                            ? ListView.builder(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 3.0, vertical: 3.0),
-                                children: myEventCard,
+                                itemCount: myEventCard.length,
+                                itemBuilder: (context, index) {
+                                  return myEventCard[index];
+                                },
                               )
-                            : ListView(
+                            : ListView.builder(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 3.0, vertical: 3.0),
-                                children: calenderCard,
+                                itemCount: calenderCard.length,
+                                itemBuilder: (context, index) {
+                                  return calenderCard[index];
+                                },
                               );
           } else
             return Center(child: CircularProgressIndicator());

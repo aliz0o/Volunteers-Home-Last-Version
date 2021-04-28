@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:volunteering/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:volunteering/screens/coming_list.dart';
+import 'package:volunteering/services/events_stream_builder.dart';
+import 'package:volunteering/components/radio_button.dart';
 
 final _fireStore = FirebaseFirestore.instance;
-final _auth = FirebaseAuth.instance;
-User loggedInUser;
-List volunteersList = [];
-List attendanceList = [];
+
+const inactiveColor = Colors.white;
+const activeColor = Color(0xff0962ff);
 
 class EventCardButton extends StatefulWidget {
   final eventClass;
@@ -16,6 +16,10 @@ class EventCardButton extends StatefulWidget {
   final int attendanceCounter;
   final int noOfVolunteers;
   final int noOfAttendance;
+  final List volunteersList;
+  final List attendanceList;
+  final String screen;
+  final userEmail;
   EventCardButton({
     @required this.eventClass,
     @required this.eventID,
@@ -23,32 +27,17 @@ class EventCardButton extends StatefulWidget {
     @required this.attendanceCounter,
     @required this.noOfVolunteers,
     @required this.noOfAttendance,
+    @required this.volunteersList,
+    @required this.attendanceList,
+    @required this.screen,
+    @required this.userEmail,
   });
   @override
   _EventCardButtonState createState() => _EventCardButtonState();
 }
 
 class _EventCardButtonState extends State<EventCardButton> {
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-    getArrayData();
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   void addRemoveEvent(value) {
-    getArrayData();
     if (value == 'Volunteer' &&
         widget.volunteersCounter <= widget.noOfVolunteers) {
       _fireStore.collection('events').doc(widget.eventID).update({
@@ -82,135 +71,88 @@ class _EventCardButtonState extends State<EventCardButton> {
     }
   }
 
-  void getArrayData() async {
-    DocumentReference document =
-        _fireStore.collection('events').doc(widget.eventID);
-    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
-      setState(() {
-        Map<String, dynamic> data = snapshot.data();
-        volunteersList = data['volunteers'];
-        attendanceList = data['attendance'];
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    getCurrentUser();
-    return widget.eventClass == 'All'
-        ? PopupMenuButton(
-            onSelected: (value) {
-              addRemoveEvent(value);
+    return (widget.screen == 'events' && widget.userEmail != loggedInUser.email)
+        ? widget.eventClass == 'All'
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                        onTap: () => {
+                              widget.volunteersList.contains(loggedInUser.email)
+                                  ? addRemoveEvent('volunteerCanceled')
+                                  : addRemoveEvent('Volunteer'),
+                            },
+                        child: RadioButton(
+                          selected: 'Volunteer',
+                          screen: 'events',
+                          colour:
+                              widget.volunteersList.contains(loggedInUser.email)
+                                  ? activeColor.withOpacity(0.17)
+                                  : inactiveColor.withOpacity(0.06),
+                        )),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => {
+                        widget.attendanceList.contains(loggedInUser.email)
+                            ? addRemoveEvent('attendCanceled')
+                            : addRemoveEvent('Attend'),
+                      },
+                      child: RadioButton(
+                        selected: 'Attend',
+                        screen: 'events',
+                        colour:
+                            widget.attendanceList.contains(loggedInUser.email)
+                                ? activeColor.withOpacity(0.17)
+                                : inactiveColor.withOpacity(0.06),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : widget.eventClass == 'Volunteering'
+                ? GestureDetector(
+                    onTap: () => {
+                          widget.volunteersList.contains(loggedInUser.email)
+                              ? addRemoveEvent('volunteerCanceled')
+                              : addRemoveEvent('Volunteer'),
+                        },
+                    child: RadioButton(
+                      selected: 'Volunteer',
+                      screen: 'events',
+                      colour: widget.volunteersList.contains(loggedInUser.email)
+                          ? activeColor.withOpacity(0.17)
+                          : inactiveColor.withOpacity(0.06),
+                    ))
+                : GestureDetector(
+                    onTap: () => {
+                      widget.attendanceList.contains(loggedInUser.email)
+                          ? addRemoveEvent('attendCanceled')
+                          : addRemoveEvent('Attend'),
+                    },
+                    child: RadioButton(
+                      selected: 'Attend',
+                      screen: 'events',
+                      colour: widget.attendanceList.contains(loggedInUser.email)
+                          ? activeColor.withOpacity(0.17)
+                          : inactiveColor.withOpacity(0.06),
+                    ),
+                  )
+        : GestureDetector(
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ComingList()),
+              ),
             },
-            icon: Icon(Icons.adaptive.more, color: Colors.white),
-            elevation: 5,
-            color: Colors.black87,
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                  PopupMenuItem(
-                      value:
-                          volunteersList.contains(loggedInUser.email) == false
-                              ? 'Volunteer'
-                              : 'volunteerCanceled',
-                      child: volunteersList.contains(loggedInUser.email) ==
-                              false
-                          ? Text(
-                              'Volunteer',
-                              style: kEventCardButtonTextStyle,
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Volunteer',
-                                  style: kEventCardButtonTextStyle,
-                                ),
-                                Icon(Icons.check, color: Colors.greenAccent)
-                              ],
-                            )),
-                  PopupMenuItem(
-                      value:
-                          attendanceList.contains(loggedInUser.email) == false
-                              ? 'Attend'
-                              : 'attendCanceled',
-                      child: attendanceList.contains(loggedInUser.email) ==
-                              false
-                          ? Text(
-                              'Attend',
-                              style: kEventCardButtonTextStyle,
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Attend',
-                                  style: kEventCardButtonTextStyle,
-                                ),
-                                Icon(Icons.check, color: Colors.greenAccent)
-                              ],
-                            )),
-                ])
-        : widget.eventClass == 'Volunteering'
-            ? PopupMenuButton(
-                onSelected: (value) {
-                  addRemoveEvent(value);
-                },
-                icon: Icon(Icons.adaptive.more, color: Colors.white),
-                elevation: 5,
-                color: Colors.black87,
-                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                      PopupMenuItem(
-                          value: volunteersList.contains(loggedInUser.email) ==
-                                  false
-                              ? 'Volunteer'
-                              : 'volunteerCanceled',
-                          child: volunteersList.contains(loggedInUser.email) ==
-                                  false
-                              ? Text(
-                                  'Volunteer',
-                                  style: kEventCardButtonTextStyle,
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Volunteer',
-                                      style: kEventCardButtonTextStyle,
-                                    ),
-                                    Icon(Icons.check, color: Colors.greenAccent)
-                                  ],
-                                )),
-                    ])
-            : PopupMenuButton(
-                onSelected: (value) {
-                  addRemoveEvent(value);
-                },
-                icon: Icon(Icons.adaptive.more, color: Colors.white),
-                elevation: 5,
-                color: Colors.black87,
-                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                      PopupMenuItem(
-                          value: attendanceList.contains(loggedInUser.email) ==
-                                  false
-                              ? 'Attend'
-                              : 'attendCanceled',
-                          child: attendanceList.contains(loggedInUser.email) ==
-                                  false
-                              ? Text(
-                                  'Attend',
-                                  style: kEventCardButtonTextStyle,
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Attend',
-                                      style: kEventCardButtonTextStyle,
-                                    ),
-                                    Icon(Icons.check, color: Colors.greenAccent)
-                                  ],
-                                )),
-                    ]);
+            child: RadioButton(
+              selected: 'Coming List',
+              screen: 'events',
+              colour: inactiveColor.withOpacity(0.06),
+            ),
+          );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
 import 'package:volunteering/services/events_stream_builder.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class EventsScreen extends StatefulWidget {
   @override
@@ -63,14 +62,17 @@ class _EventsScreenState extends State<EventsScreen> {
             EventStream(
               eventTapClass: 'All',
               tap: 'events',
+              screen: 'events',
             ),
             EventStream(
               eventTapClass: 'Volunteering',
               tap: 'events',
+              screen: 'events',
             ),
             EventStream(
               eventTapClass: 'Attending',
               tap: 'events',
+              screen: 'events',
             ),
           ],
         ),

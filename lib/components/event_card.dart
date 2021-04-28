@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:volunteering/services/get_user_info.dart';
+import 'package:volunteering/components/event_card_button.dart';
 
 class EventCard extends StatefulWidget {
   const EventCard({
@@ -19,6 +20,9 @@ class EventCard extends StatefulWidget {
     @required this.attendanceCounter,
     @required this.userID,
     @required this.userEmail,
+    @required this.volunteersList,
+    @required this.attendanceList,
+    @required this.screen,
   });
 
   final String eventClass;
@@ -35,6 +39,9 @@ class EventCard extends StatefulWidget {
   final int attendanceCounter;
   final String userID;
   final String userEmail;
+  final List volunteersList;
+  final List attendanceList;
+  final String screen;
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -65,7 +72,6 @@ class _EventCardState extends State<EventCard> {
               userID: widget.userID,
               screen: 'events',
               createdOn: widget.createdOn,
-              //userEmail: widget.userEmail,
             ),
             Visibility(
               visible: imageVisibility,
@@ -93,7 +99,7 @@ class _EventCardState extends State<EventCard> {
                       children: [
                         Icon(Icons.date_range, color: Colors.white),
                         Text('  ' + widget.eventDateTime,
-                            style: kEventInfoTextStyle.copyWith(fontSize: 10)),
+                            style: kEventInfoTextStyle.copyWith(fontSize: 12)),
                       ],
                     ),
                     Row(
@@ -131,6 +137,21 @@ class _EventCardState extends State<EventCard> {
               ),
             ),
             //this.click,
+            Container(
+              //decoration: kEventCardBorderDecoration,
+              child: EventCardButton(
+                eventClass: widget.eventClass,
+                eventID: widget.eventID,
+                noOfVolunteers: widget.noOfVolunteers,
+                noOfAttendance: widget.noOfAttendees,
+                volunteersCounter: widget.volunteersCounter,
+                attendanceCounter: widget.attendanceCounter,
+                volunteersList: widget.volunteersList,
+                attendanceList: widget.attendanceList,
+                screen: widget.screen,
+                userEmail: widget.userEmail,
+              ),
+            )
           ],
         ),
       ),

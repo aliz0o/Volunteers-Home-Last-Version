@@ -9,22 +9,23 @@ class GetUser extends StatelessWidget {
   final String userEmail;
   final String screen;
   final String createdOn;
-  GetUser(
-      {@required this.userID,
-      this.userEmail,
-      @required this.screen,
-      this.createdOn});
+
+  GetUser({
+    @required this.userID,
+    @required this.screen,
+    this.createdOn,
+    this.userEmail,
+  });
 
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
-
     return FutureBuilder<DocumentSnapshot>(
       future: users.doc(this.userID).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text("Something went wrong");
+          return Center(child: Text("Something went wrong"));
         }
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
@@ -36,7 +37,7 @@ class GetUser extends StatelessWidget {
                         backgroundImage: data['gender'] == 'Male'
                             ? AssetImage('images/male.png')
                             : AssetImage('images/female.png'),
-                        radius: 40,
+                        radius: 35,
                       ),
                       SizedBox(width: 15),
                       Column(
@@ -45,30 +46,27 @@ class GetUser extends StatelessWidget {
                         children: [
                           Text(data['name'],
                               style: kAppBarTextStyle.copyWith(fontSize: 20)),
-                          Text(data['age'].toString() + ' Year Old',
-                              style: kTextFieldStyle),
-                          Text(data['city'], style: kTextFieldStyle),
+                          Text(data['city'], style: kUserInfoTextStyle),
                         ],
                       ),
                       Expanded(child: SizedBox(width: 20)),
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                        decoration: BoxDecoration(
-                            color: Color(0xff0962ff),
-                            borderRadius: BorderRadius.all(Radius.circular(7))),
-                        child: Column(
-                          children: [
-                            Text(
-                              data['eventCount'].toString(),
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 3),
-                            Text('Events', style: kTapControllerTextStyle),
-                          ],
-                        ),
-                      )
+                        color: Colors.white.withOpacity(0.70),
+                        height: 70,
+                        width: 0.4,
+                      ),
+                      SizedBox(width: 17.5),
+                      Column(
+                        children: [
+                          Text(
+                            data['eventCount'].toString(),
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 3),
+                          Text('Events', style: kTapControllerTextStyle),
+                        ],
+                      ),
                     ])
               : GestureDetector(
                   onTap: () {
@@ -99,19 +97,16 @@ class GetUser extends StatelessWidget {
                           fontSize: 11.5,
                           color: Colors.white.withOpacity(0.50)),
                     ),
-                    // trailing: EventCardButton(
-                    //   eventClass: widget.eventClass,
-                    //   eventID: widget.eventID,
-                    //   noOfVolunteers: widget.noOfVolunteers,
-                    //   noOfAttendance: widget.noOfAttendees,
-                    //   volunteersCounter: widget.volunteersCounter,
-                    //   attendanceCounter: widget.attendanceCounter,
-                    // )
                   ),
                 );
         }
 
-        return Center(child: Container(height: 75));
+        return Center(
+          child: Container(
+            height: 50,
+            child: Center(child: Text('Loading..', style: kNumberTextStyle)),
+          ),
+        );
       },
     );
   }

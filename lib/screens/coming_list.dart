@@ -5,7 +5,8 @@ import 'package:volunteering/services/get_user_info.dart';
 class ComingList extends StatefulWidget {
   final List volunteersList;
   final List attendanceList;
-  ComingList({this.attendanceList, this.volunteersList});
+  final String eventID;
+  ComingList({this.attendanceList, this.volunteersList, this.eventID});
   @override
   _ComingListState createState() => _ComingListState();
 }
@@ -19,7 +20,10 @@ class _ComingListState extends State<ComingList> {
         child: Scaffold(
           backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
-            title: Center(child: Text('Coming List', style: kAppBarTextStyle)),
+            title: Center(
+              child: Text('Coming List',
+                  style: kAppBarTextStyle.copyWith(fontSize: 21)),
+            ),
             automaticallyImplyLeading: false,
             bottom: TabBar(
               labelPadding: EdgeInsets.symmetric(horizontal: 0),

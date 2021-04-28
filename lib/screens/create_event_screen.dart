@@ -173,6 +173,7 @@ class _MyStateFullState extends State<MyStateFull> {
     _fireStore.collection('messages').doc(eventID.id).set({
       'sender': FieldValue.arrayUnion([]),
       'message': FieldValue.arrayUnion([]),
+      'eventId': eventID.id,
     });
     setState(() {
       showSpinner = false;

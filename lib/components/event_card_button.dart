@@ -155,8 +155,10 @@ class _EventCardButtonState extends State<EventCardButton> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ComingList(
-                        volunteersList: widget.comingVolunteerID,
-                        attendanceList: widget.comingAttendanceID)),
+                          volunteersList: widget.comingVolunteerID,
+                          attendanceList: widget.comingAttendanceID,
+                          eventID: widget.eventID,
+                        )),
               ),
             },
             child: RadioButton(

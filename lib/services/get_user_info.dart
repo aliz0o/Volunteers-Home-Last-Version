@@ -92,7 +92,9 @@ class GetUser extends StatelessWidget {
                           color: Colors.white),
                     ),
                     subtitle: Text(
-                      this.createdOn,
+                      this.screen == 'comingList'
+                          ? data['email']
+                          : this.createdOn,
                       style: TextStyle(
                           fontSize: 11.5,
                           color: Colors.white.withOpacity(0.50)),

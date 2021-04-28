@@ -27,7 +27,7 @@ class _RadioButtonState extends State<RadioButton> {
           ),
         ),
         height: (widget.screen == 'events') ? 30 : 50,
-        width: 500,
+        width: (widget.screen == 'events') ? 500 : 154,
         decoration: BoxDecoration(
           borderRadius: (widget.screen == 'events')
               ? BorderRadius.circular(3)

@@ -22,6 +22,8 @@ class EventCard extends StatefulWidget {
     @required this.userEmail,
     @required this.volunteersList,
     @required this.attendanceList,
+    @required this.comingVolunteerID,
+    @required this.comingAttendanceID,
     @required this.screen,
   });
 
@@ -41,6 +43,8 @@ class EventCard extends StatefulWidget {
   final String userEmail;
   final List volunteersList;
   final List attendanceList;
+  final List comingVolunteerID;
+  final List comingAttendanceID;
   final String screen;
 
   @override
@@ -150,6 +154,8 @@ class _EventCardState extends State<EventCard> {
                 attendanceList: widget.attendanceList,
                 screen: widget.screen,
                 userEmail: widget.userEmail,
+                comingVolunteerID: widget.comingVolunteerID,
+                comingAttendanceID: widget.comingAttendanceID,
               ),
             )
           ],

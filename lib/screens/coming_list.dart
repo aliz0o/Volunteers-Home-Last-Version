@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
+import 'package:volunteering/services/get_user_info.dart';
 
 class ComingList extends StatefulWidget {
+  final List volunteersList;
+  final List attendanceList;
+  ComingList({this.attendanceList, this.volunteersList});
   @override
   _ComingListState createState() => _ComingListState();
 }
@@ -40,8 +44,20 @@ class _ComingListState extends State<ComingList> {
           ),
           body: TabBarView(
             children: [
-              Center(child: Text('A')),
-              Center(child: Text('B')),
+              ListView.builder(
+                  itemCount: widget.volunteersList.length,
+                  itemBuilder: (context, index) {
+                    return GetUser(
+                        userID: widget.volunteersList[index],
+                        screen: 'comingList');
+                  }),
+              ListView.builder(
+                  itemCount: widget.attendanceList.length,
+                  itemBuilder: (context, index) {
+                    return GetUser(
+                        userID: widget.attendanceList[index],
+                        screen: 'comingList');
+                  }),
             ],
           ),
         ),

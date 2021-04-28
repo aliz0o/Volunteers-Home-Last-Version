@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:volunteering/screens/coming_list.dart';
 import 'screens/login_screen.dart';
 import 'screens/registration_screen.dart';
 import 'screens/events_screen.dart';
-import 'screens/profile_screen.dart';
 import 'screens/create_event_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -23,8 +21,6 @@ class MyApp extends StatelessWidget {
         '/registration_screen': (context) => RegisterScreen(),
         '/events_screen': (context) => EventsScreen(),
         '/create_event_screen': (context) => CreateEvent(),
-        '/profile_screen': (context) => ProfileScreen(),
-        '/coming_list': (context) => ComingList(),
       },
     );
   }

@@ -4,7 +4,7 @@ import 'package:volunteering/services/events_stream_builder.dart';
 import 'package:volunteering/services/get_user_info.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({this.userID, this.userEmail});
+  ProfileScreen({@required this.userID, @required this.userEmail});
   final String userID;
   final String userEmail;
   @override

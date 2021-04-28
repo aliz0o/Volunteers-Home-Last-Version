@@ -9,11 +9,12 @@ final _auth = FirebaseAuth.instance;
 User loggedInUser;
 
 class EventStream extends StatefulWidget {
-  EventStream(
-      {@required this.eventTapClass,
-      @required this.tap,
-      this.userEmail,
-      @required this.screen});
+  EventStream({
+    @required this.eventTapClass,
+    @required this.tap,
+    @required this.screen,
+    this.userEmail,
+  });
   final String eventTapClass;
   final String tap;
   final String userEmail;

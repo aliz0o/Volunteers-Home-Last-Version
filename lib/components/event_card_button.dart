@@ -157,7 +157,6 @@ class _EventCardButtonState extends State<EventCardButton> {
                     builder: (context) => ComingList(
                           volunteersList: widget.comingVolunteerID,
                           attendanceList: widget.comingAttendanceID,
-                          eventID: widget.eventID,
                         )),
               ),
             },

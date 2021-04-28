@@ -5,8 +5,7 @@ import 'package:volunteering/services/get_user_info.dart';
 class ComingList extends StatefulWidget {
   final List volunteersList;
   final List attendanceList;
-  final String eventID;
-  ComingList({this.attendanceList, this.volunteersList, this.eventID});
+  ComingList({@required this.attendanceList, @required this.volunteersList});
   @override
   _ComingListState createState() => _ComingListState();
 }

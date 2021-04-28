@@ -87,7 +87,7 @@ class GetUser extends StatelessWidget {
                     title: Text(
                       data['name'],
                       style: TextStyle(
-                          fontSize: 14,
+                          fontSize: this.screen == 'comingList' ? 20 : 14,
                           fontFamily: 'Aclonica',
                           color: Colors.white),
                     ),
@@ -96,8 +96,10 @@ class GetUser extends StatelessWidget {
                           ? data['email']
                           : this.createdOn,
                       style: TextStyle(
-                          fontSize: 11.5,
-                          color: Colors.white.withOpacity(0.50)),
+                        fontSize: 11,
+                        color: Colors.white.withOpacity(0.50),
+                        fontFamily: 'Product Sans',
+                      ),
                     ),
                   ),
                 );

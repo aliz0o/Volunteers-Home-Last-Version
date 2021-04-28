@@ -144,7 +144,7 @@ class _MyStateFullState extends State<MyStateFull> {
     if (_selectedImage != null) {
       imageURL = await uploadFile(_selectedImage);
     }
-    await _fireStore.collection('events').add({
+    final eventID = await _fireStore.collection('events').add({
       'email': loggedInUser.email,
       'eventClass': eventClass,
       'noOfVolunteers': noOfVolunteers,
@@ -170,6 +170,10 @@ class _MyStateFullState extends State<MyStateFull> {
       'eventCount': FieldValue.increment(1),
     });
 
+    _fireStore.collection('messages').doc(eventID.id).set({
+      'sender': FieldValue.arrayUnion([]),
+      'message': FieldValue.arrayUnion([]),
+    });
     setState(() {
       showSpinner = false;
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

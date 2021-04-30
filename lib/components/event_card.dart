@@ -141,10 +141,10 @@ class _EventCardState extends State<EventCard> {
                       child: Row(
                         children: [
                           Icon(Icons.comment_bank,
-                              color: Colors.white, size: 20),
+                              color: Color(0xff0962ff), size: 20),
                           Text(' Comments',
-                              style:
-                                  kEventInfoTextStyle.copyWith(fontSize: 14)),
+                              style: kEventInfoTextStyle.copyWith(
+                                  fontSize: 14, color: Color(0xff0962ff))),
                         ],
                       ),
                     ),

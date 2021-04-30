@@ -69,64 +69,88 @@ class GetUser extends StatelessWidget {
                         ],
                       ),
                     ])
-              : GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfileScreen(
-                            userID: userID, userEmail: data['email']),
+              : this.screen == 'commentScreen'
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                                userID: userID, userEmail: data['email']),
+                          ),
+                        );
+                      },
+                      child: Text(data['name'],
+                          style: kDropDownTextStyle.copyWith(fontSize: 11)),
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                                userID: userID, userEmail: data['email']),
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: data['gender'] == 'Male'
+                              ? AssetImage('images/male.png')
+                              : AssetImage('images/female.png'),
+                        ),
+                        title: Text(
+                          data['name'],
+                          style: TextStyle(
+                              fontSize: this.screen == 'comingList' ? 20 : 14,
+                              fontFamily: 'Aclonica',
+                              color: Colors.white),
+                        ),
+                        subtitle: Text(
+                          this.screen == 'comingList'
+                              ? data['email']
+                              : this.createdOn,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white.withOpacity(0.50),
+                            fontFamily: 'Product Sans',
+                          ),
+                        ),
                       ),
                     );
-                  },
+        }
+
+        return this.screen == 'commentScreen'
+            ? Shimmer.fromColors(
+                baseColor: Colors.white.withOpacity(0.5),
+                highlightColor: Colors.blueGrey.withOpacity(0.5),
+                child: Text(
+                  '________',
+                  style: TextStyle(fontSize: 15, fontFamily: 'Product Sans'),
+                ),
+              )
+            : SizedBox(
+                height: 75.0,
+                child: Shimmer.fromColors(
+                  baseColor: Colors.white.withOpacity(0.5),
+                  highlightColor: Colors.blueGrey.withOpacity(0.5),
                   child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: data['gender'] == 'Male'
-                          ? AssetImage('images/male.png')
-                          : AssetImage('images/female.png'),
-                    ),
+                    leading: CircleAvatar(),
                     title: Text(
-                      data['name'],
-                      style: TextStyle(
-                          fontSize: this.screen == 'comingList' ? 20 : 14,
-                          fontFamily: 'Aclonica',
-                          color: Colors.white),
+                      '________',
+                      style:
+                          TextStyle(fontSize: 25, fontFamily: 'Product Sans'),
                     ),
                     subtitle: Text(
-                      this.screen == 'comingList'
-                          ? data['email']
-                          : this.createdOn,
+                      '______________',
                       style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.white.withOpacity(0.50),
+                        fontSize: 20,
                         fontFamily: 'Product Sans',
                       ),
                     ),
                   ),
-                );
-        }
-
-        return SizedBox(
-          height: 75.0,
-          child: Shimmer.fromColors(
-            baseColor: Colors.white.withOpacity(0.5),
-            highlightColor: Colors.blueGrey.withOpacity(0.5),
-            child: ListTile(
-              leading: CircleAvatar(),
-              title: Text(
-                '________',
-                style: TextStyle(fontSize: 25, fontFamily: 'Product Sans'),
-              ),
-              subtitle: Text(
-                '______________',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Product Sans',
                 ),
-              ),
-            ),
-          ),
-        );
+              );
       },
     );
   }

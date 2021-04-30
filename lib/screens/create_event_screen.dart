@@ -164,10 +164,8 @@ class _MyStateFullState extends State<MyStateFull> {
       'all': FieldValue.arrayUnion([]),
       'userID': loggedInUser.uid,
       'approved': false,
-      'comments': {
-        'commentSender': FieldValue.arrayUnion([]),
-        'comment': FieldValue.arrayUnion([]),
-      }
+      'commentSender': FieldValue.arrayUnion([]),
+      'comment': FieldValue.arrayUnion([]),
     });
 
     await _fireStore.collection('users').doc(loggedInUser.uid).update({

@@ -87,7 +87,8 @@ class _EventStreamState extends State<EventStream> {
               final attendanceList = event['attendance'];
               final comingVolunteerID = event['comingVolunteerID'];
               final comingAttendanceID = event['comingAttendanceID'];
-              final comments = event['comments'];
+              final comment = event['comment'];
+              final commentSender = event['commentSender'];
               final DateTime formattedCreatedOn = createdOn.toDate();
               String stringCreatedOn =
                   DateFormat('kk:mm  EEE d MMM').format(formattedCreatedOn);
@@ -115,8 +116,8 @@ class _EventStreamState extends State<EventStream> {
                 screen: widget.screen,
                 comingVolunteerID: comingVolunteerID,
                 comingAttendanceID: comingAttendanceID,
-                comment: comments['comment'],
-                commentSender: comments['commentSender'],
+                comment: comment,
+                commentSender: commentSender,
               );
               if (eventClass == 'All') {
                 eventsCard.add(eventCard);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:volunteering/screens/comment_screen.dart';
 import 'package:volunteering/services/get_user_info.dart';
 import 'package:volunteering/components/event_card_button.dart';
 
@@ -25,6 +26,8 @@ class EventCard extends StatefulWidget {
     @required this.comingVolunteerID,
     @required this.comingAttendanceID,
     @required this.screen,
+    @required this.comment,
+    @required this.commentSender,
   });
 
   final String eventClass;
@@ -46,6 +49,8 @@ class EventCard extends StatefulWidget {
   final List comingVolunteerID;
   final List comingAttendanceID;
   final String screen;
+  final List comment;
+  final List commentSender;
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -88,6 +93,7 @@ class _EventCardState extends State<EventCard> {
                 child: FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
                   image: widget.imageURL,
+                  fadeInDuration: Duration(seconds: 2),
                 ),
               ),
             ),
@@ -101,24 +107,46 @@ class _EventCardState extends State<EventCard> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.date_range, color: Colors.white),
-                        Text('  ' + widget.eventDateTime,
-                            style: kEventInfoTextStyle.copyWith(fontSize: 12)),
+                        Icon(Icons.date_range, color: Colors.white, size: 20),
+                        Text(widget.eventDateTime,
+                            style: kEventInfoTextStyle.copyWith(fontSize: 11)),
                       ],
                     ),
                     Row(
                       children: [
-                        Icon(Icons.location_on, color: Colors.white),
+                        Icon(Icons.location_on, color: Colors.white, size: 20),
                         Text('' + widget.city,
-                            style: kEventInfoTextStyle.copyWith(fontSize: 15)),
+                            style: kEventInfoTextStyle.copyWith(fontSize: 14)),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.folder_special, color: Colors.white),
-                        Text(' ' + widget.eventType,
-                            style: kEventInfoTextStyle),
-                      ],
+                    // Row(
+                    //   children: [
+                    //     Icon(Icons.folder_special, color: Colors.white),
+                    //     Text(' ' + widget.eventType,
+                    //         style: kEventInfoTextStyle),
+                    //   ],
+                    // ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CommentScreen(
+                                    commentSender: widget.commentSender,
+                                    comment: widget.comment,
+                                    eventID: widget.eventID,
+                                  )),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.comment_bank,
+                              color: Colors.white, size: 20),
+                          Text(' Comments',
+                              style:
+                                  kEventInfoTextStyle.copyWith(fontSize: 14)),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -157,7 +185,7 @@ class _EventCardState extends State<EventCard> {
                 comingVolunteerID: widget.comingVolunteerID,
                 comingAttendanceID: widget.comingAttendanceID,
               ),
-            )
+            ),
           ],
         ),
       ),

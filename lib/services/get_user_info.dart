@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
+import 'package:shimmer/shimmer.dart';
 
 class GetUser extends StatelessWidget {
   final String userID;
@@ -105,10 +106,25 @@ class GetUser extends StatelessWidget {
                 );
         }
 
-        return Center(
-          child: Container(
-            height: 50,
-            child: Center(child: Text('Loading..', style: kNumberTextStyle)),
+        return SizedBox(
+          height: 75.0,
+          child: Shimmer.fromColors(
+            baseColor: Colors.white.withOpacity(0.5),
+            highlightColor: Colors.blueGrey.withOpacity(0.5),
+            child: ListTile(
+              leading: CircleAvatar(),
+              title: Text(
+                '________',
+                style: TextStyle(fontSize: 25, fontFamily: 'Product Sans'),
+              ),
+              subtitle: Text(
+                '______________',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Product Sans',
+                ),
+              ),
+            ),
           ),
         );
       },

@@ -164,17 +164,16 @@ class _MyStateFullState extends State<MyStateFull> {
       'all': FieldValue.arrayUnion([]),
       'userID': loggedInUser.uid,
       'approved': false,
+      'comments': {
+        'commentSender': FieldValue.arrayUnion([]),
+        'comment': FieldValue.arrayUnion([]),
+      }
     });
 
     await _fireStore.collection('users').doc(loggedInUser.uid).update({
       'eventCount': FieldValue.increment(1),
     });
 
-    _fireStore.collection('messages').doc(eventID.id).set({
-      'sender': FieldValue.arrayUnion([]),
-      'message': FieldValue.arrayUnion([]),
-      'eventId': eventID.id,
-    });
     setState(() {
       showSpinner = false;
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

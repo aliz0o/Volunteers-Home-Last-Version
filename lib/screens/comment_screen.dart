@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/services/get_user_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:volunteering/services/events_stream_builder.dart';
+import 'package:volunteering/screens/events_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 final messageTextController = TextEditingController();
@@ -36,14 +36,6 @@ class _CommentScreenState extends State<CommentScreen> {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.black,
           ),
-          // floatingActionButton: FloatingActionButton.extended(
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          //   label: Text('Events', style: kTapControllerTextStyle),
-          //   icon: Icon(Icons.arrow_back_ios_outlined),
-          //   backgroundColor: Color.fromRGBO(20, 21, 22, 1),
-          // ),
           body: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,6 +93,11 @@ class CommentStream extends StatelessWidget {
     return StreamBuilder<DocumentSnapshot>(
         stream: _fireStore.collection('events').doc(this.eventID).snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+                child: Text("Something went wrong",
+                    style: kUserInfoTextStyle.copyWith(color: Colors.white)));
+          }
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(

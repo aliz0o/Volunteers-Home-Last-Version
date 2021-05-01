@@ -26,7 +26,9 @@ class GetUser extends StatelessWidget {
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Center(child: Text("Something went wrong"));
+          return Center(
+              child: Text("Something went wrong",
+                  style: kUserInfoTextStyle.copyWith(color: Colors.white)));
         }
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
@@ -124,9 +126,12 @@ class GetUser extends StatelessWidget {
             ? Shimmer.fromColors(
                 baseColor: Colors.white.withOpacity(0.5),
                 highlightColor: Colors.blueGrey.withOpacity(0.5),
-                child: Text(
-                  '________',
-                  style: TextStyle(fontSize: 15, fontFamily: 'Product Sans'),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
+                  child: Text(
+                    '________',
+                    style: TextStyle(fontSize: 15, fontFamily: 'Product Sans'),
+                  ),
                 ),
               )
             : SizedBox(

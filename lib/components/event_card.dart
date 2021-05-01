@@ -12,7 +12,6 @@ class EventCard extends StatefulWidget {
     @required this.noOfAttendees,
     @required this.eventDateTime,
     @required this.city,
-    @required this.eventType,
     @required this.details,
     @required this.imageURL,
     @required this.createdOn,
@@ -21,8 +20,6 @@ class EventCard extends StatefulWidget {
     @required this.attendanceCounter,
     @required this.userID,
     @required this.userEmail,
-    @required this.volunteersList,
-    @required this.attendanceList,
     @required this.comingVolunteerID,
     @required this.comingAttendanceID,
     @required this.screen,
@@ -35,7 +32,6 @@ class EventCard extends StatefulWidget {
   final int noOfVolunteers;
   final String eventDateTime;
   final String city;
-  final String eventType;
   final String details;
   final String imageURL;
   final String createdOn;
@@ -44,8 +40,6 @@ class EventCard extends StatefulWidget {
   final int attendanceCounter;
   final String userID;
   final String userEmail;
-  final List volunteersList;
-  final List attendanceList;
   final List comingVolunteerID;
   final List comingAttendanceID;
   final String screen;
@@ -119,13 +113,6 @@ class _EventCardState extends State<EventCard> {
                             style: kEventInfoTextStyle.copyWith(fontSize: 14)),
                       ],
                     ),
-                    // Row(
-                    //   children: [
-                    //     Icon(Icons.folder_special, color: Colors.white),
-                    //     Text(' ' + widget.eventType,
-                    //         style: kEventInfoTextStyle),
-                    //   ],
-                    // ),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -162,7 +149,9 @@ class _EventCardState extends State<EventCard> {
                   child: Text(
                     widget.details,
                     style: TextStyle(
-                        color: Colors.white, fontFamily: 'Amiri', fontSize: 15),
+                        color: Colors.white,
+                        fontFamily: 'Lalezar',
+                        fontSize: 15),
                     textAlign: TextAlign.right,
                   ),
                 ),
@@ -170,7 +159,6 @@ class _EventCardState extends State<EventCard> {
             ),
             //this.click,
             Container(
-              //decoration: kEventCardBorderDecoration,
               child: EventCardButton(
                 eventClass: widget.eventClass,
                 eventID: widget.eventID,
@@ -178,12 +166,10 @@ class _EventCardState extends State<EventCard> {
                 noOfAttendance: widget.noOfAttendees,
                 volunteersCounter: widget.volunteersCounter,
                 attendanceCounter: widget.attendanceCounter,
-                volunteersList: widget.volunteersList,
-                attendanceList: widget.attendanceList,
                 screen: widget.screen,
-                userEmail: widget.userEmail,
                 comingVolunteerID: widget.comingVolunteerID,
                 comingAttendanceID: widget.comingAttendanceID,
+                userID: widget.userID,
               ),
             ),
           ],

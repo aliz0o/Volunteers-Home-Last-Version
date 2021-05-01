@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
 import 'package:volunteering/services/events_stream_builder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final _auth = FirebaseAuth.instance;
+User loggedInUser;
 
 class EventsScreen extends StatefulWidget {
   @override
@@ -9,6 +13,19 @@ class EventsScreen extends StatefulWidget {
 }
 
 class _EventsScreenState extends State<EventsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

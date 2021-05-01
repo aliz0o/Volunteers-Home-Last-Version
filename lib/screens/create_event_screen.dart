@@ -56,7 +56,6 @@ class MyStateFull extends StatefulWidget {
 class _MyStateFullState extends State<MyStateFull> {
   final picker = ImagePicker();
   var _currentCitySelected = 'Amman';
-  var _currentTypeSelected = 'Medical';
   bool _volunteeringVisible = false;
   bool _attendingVisible = false;
   bool _imageUploadedVisibility = false;
@@ -68,7 +67,6 @@ class _MyStateFullState extends State<MyStateFull> {
   int noOfVolunteers = 0;
   Timestamp eventDateTime;
   String city = 'Amman';
-  String eventType = 'Medical';
   String details = '';
   Timestamp createdOn;
   String imageURL = '';
@@ -144,26 +142,23 @@ class _MyStateFullState extends State<MyStateFull> {
     if (_selectedImage != null) {
       imageURL = await uploadFile(_selectedImage);
     }
-    final eventID = await _fireStore.collection('events').add({
+    await _fireStore.collection('events').add({
       'email': loggedInUser.email,
       'eventClass': eventClass,
       'noOfVolunteers': noOfVolunteers,
       'noOfAttendees': noOfAttendees,
       'eventDateTime': eventDateTime,
       'city': city,
-      'eventType': eventType,
       'details': details,
       'createdOn': FieldValue.serverTimestamp(),
       "images": imageURL,
       'volunteersCounter': 0,
       'attendanceCounter': 0,
-      'volunteers': FieldValue.arrayUnion([]),
-      'attendance': FieldValue.arrayUnion([]),
       'comingVolunteerID': FieldValue.arrayUnion([]),
       'comingAttendanceID': FieldValue.arrayUnion([]),
       'all': FieldValue.arrayUnion([]),
       'userID': loggedInUser.uid,
-      'approved': false,
+      'approved': true,
       'commentSender': FieldValue.arrayUnion([]),
       'comment': FieldValue.arrayUnion([]),
     });
@@ -353,9 +348,6 @@ class _MyStateFullState extends State<MyStateFull> {
                 onChanged: (value) {
                   setState(() {
                     eventDateTime = Timestamp.fromDate(value);
-                    // var temp =
-                    //     DateFormat('kk:mm:ss\n  EEE d MMM').format(value);
-                    // eventDateTime = temp.toString();
                     _timeDateAlertVisibility = false;
                   });
                 },
@@ -412,29 +404,6 @@ class _MyStateFullState extends State<MyStateFull> {
                       city = newValueSelected;
                     },
                     value: _currentCitySelected,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Container(
-              //height: 76,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButtonFormField<String>(
-                    style: kDropDownTextStyle,
-                    decoration: kDropDownInputDecoration,
-                    dropdownColor: Color.fromRGBO(16, 17, 18, 1),
-                    items: kEventTypeList.map((String dropDownStringItem) {
-                      return DropdownMenuItem<String>(
-                          child: Text(dropDownStringItem),
-                          value: dropDownStringItem);
-                    }).toList(),
-                    onChanged: (String newValueSelected) {
-                      eventType = newValueSelected;
-                    },
-                    value: _currentTypeSelected,
                   ),
                 ),
               ),

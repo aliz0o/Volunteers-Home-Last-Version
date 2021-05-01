@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteering/screens/coming_list.dart';
-import 'package:volunteering/services/events_stream_builder.dart';
 import 'package:volunteering/components/radio_button.dart';
+import 'package:volunteering/screens/events_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 
@@ -16,12 +16,11 @@ class EventCardButton extends StatefulWidget {
   final int attendanceCounter;
   final int noOfVolunteers;
   final int noOfAttendance;
-  final List volunteersList;
-  final List attendanceList;
   final List comingVolunteerID;
   final List comingAttendanceID;
   final String screen;
-  final userEmail;
+  //final userEmail;
+  final userID;
   EventCardButton({
     @required this.eventClass,
     @required this.eventID,
@@ -29,12 +28,11 @@ class EventCardButton extends StatefulWidget {
     @required this.attendanceCounter,
     @required this.noOfVolunteers,
     @required this.noOfAttendance,
-    @required this.volunteersList,
-    @required this.attendanceList,
     @required this.comingVolunteerID,
     @required this.comingAttendanceID,
     @required this.screen,
-    @required this.userEmail,
+    //@required this.userEmail,
+    @required this.userID,
   });
   @override
   _EventCardButtonState createState() => _EventCardButtonState();
@@ -45,34 +43,34 @@ class _EventCardButtonState extends State<EventCardButton> {
     if (value == 'Volunteer' &&
         widget.volunteersCounter <= widget.noOfVolunteers) {
       _fireStore.collection('events').doc(widget.eventID).update({
-        'volunteers': FieldValue.arrayUnion([loggedInUser.email]),
+        //'volunteers': FieldValue.arrayUnion([loggedInUser.email]),
         'comingVolunteerID': FieldValue.arrayUnion([loggedInUser.uid]),
-        'all': FieldValue.arrayUnion([loggedInUser.email]),
+        'all': FieldValue.arrayUnion([loggedInUser.uid]),
         'volunteersCounter': widget.volunteersCounter + 1,
         'noOfVolunteers': widget.noOfVolunteers - 1,
       });
     } else if (value == 'volunteerCanceled') {
       _fireStore.collection('events').doc(widget.eventID).update({
-        'volunteers': FieldValue.arrayRemove([loggedInUser.email]),
+        //'volunteers': FieldValue.arrayRemove([loggedInUser.email]),
         'comingVolunteerID': FieldValue.arrayRemove([loggedInUser.uid]),
-        'all': FieldValue.arrayRemove([loggedInUser.email]),
+        'all': FieldValue.arrayRemove([loggedInUser.uid]),
         'volunteersCounter': widget.volunteersCounter - 1,
         'noOfVolunteers': widget.noOfVolunteers + 1,
       });
     } else if (value == 'Attend' &&
         widget.attendanceCounter <= widget.noOfAttendance) {
       _fireStore.collection('events').doc(widget.eventID).update({
-        'attendance': FieldValue.arrayUnion([loggedInUser.email]),
+        //'attendance': FieldValue.arrayUnion([loggedInUser.email]),
         'comingAttendanceID': FieldValue.arrayUnion([loggedInUser.uid]),
-        'all': FieldValue.arrayUnion([loggedInUser.email]),
+        'all': FieldValue.arrayUnion([loggedInUser.uid]),
         'attendanceCounter': widget.attendanceCounter + 1,
         'noOfAttendees': widget.noOfAttendance - 1,
       });
     } else if (value == 'attendCanceled') {
       _fireStore.collection('events').doc(widget.eventID).update({
-        'attendance': FieldValue.arrayRemove([loggedInUser.email]),
+        //'attendance': FieldValue.arrayRemove([loggedInUser.email]),
         'comingAttendanceID': FieldValue.arrayRemove([loggedInUser.uid]),
-        'all': FieldValue.arrayRemove([loggedInUser.email]),
+        'all': FieldValue.arrayRemove([loggedInUser.uid]),
         'attendanceCounter': widget.attendanceCounter - 1,
         'noOfAttendees': widget.noOfAttendance + 1,
       });
@@ -81,7 +79,7 @@ class _EventCardButtonState extends State<EventCardButton> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.screen == 'events' && widget.userEmail != loggedInUser.email)
+    return (widget.screen == 'events' && widget.userID != loggedInUser.uid)
         ? widget.eventClass == 'All'
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -89,23 +87,24 @@ class _EventCardButtonState extends State<EventCardButton> {
                   Expanded(
                     child: GestureDetector(
                         onTap: () => {
-                              widget.volunteersList.contains(loggedInUser.email)
+                              widget.comingVolunteerID
+                                      .contains(loggedInUser.uid)
                                   ? addRemoveEvent('volunteerCanceled')
                                   : addRemoveEvent('Volunteer'),
                             },
                         child: RadioButton(
                           selected: 'Volunteer',
                           screen: 'events',
-                          colour:
-                              widget.volunteersList.contains(loggedInUser.email)
-                                  ? activeColor.withOpacity(0.17)
-                                  : inactiveColor.withOpacity(0.06),
+                          colour: widget.comingVolunteerID
+                                  .contains(loggedInUser.uid)
+                              ? activeColor.withOpacity(0.17)
+                              : inactiveColor.withOpacity(0.06),
                         )),
                   ),
                   Expanded(
                     child: GestureDetector(
                       onTap: () => {
-                        widget.attendanceList.contains(loggedInUser.email)
+                        widget.comingVolunteerID.contains(loggedInUser.uid)
                             ? addRemoveEvent('attendCanceled')
                             : addRemoveEvent('Attend'),
                       },
@@ -113,7 +112,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                         selected: 'Attend',
                         screen: 'events',
                         colour:
-                            widget.attendanceList.contains(loggedInUser.email)
+                            widget.comingAttendanceID.contains(loggedInUser.uid)
                                 ? activeColor.withOpacity(0.17)
                                 : inactiveColor.withOpacity(0.06),
                       ),
@@ -124,29 +123,31 @@ class _EventCardButtonState extends State<EventCardButton> {
             : widget.eventClass == 'Volunteering'
                 ? GestureDetector(
                     onTap: () => {
-                          widget.volunteersList.contains(loggedInUser.email)
+                          widget.comingVolunteerID.contains(loggedInUser.uid)
                               ? addRemoveEvent('volunteerCanceled')
                               : addRemoveEvent('Volunteer'),
                         },
                     child: RadioButton(
                       selected: 'Volunteer',
                       screen: 'events',
-                      colour: widget.volunteersList.contains(loggedInUser.email)
-                          ? activeColor.withOpacity(0.17)
-                          : inactiveColor.withOpacity(0.06),
+                      colour:
+                          widget.comingVolunteerID.contains(loggedInUser.uid)
+                              ? activeColor.withOpacity(0.17)
+                              : inactiveColor.withOpacity(0.06),
                     ))
                 : GestureDetector(
                     onTap: () => {
-                      widget.attendanceList.contains(loggedInUser.email)
+                      widget.comingVolunteerID.contains(loggedInUser.uid)
                           ? addRemoveEvent('attendCanceled')
                           : addRemoveEvent('Attend'),
                     },
                     child: RadioButton(
                       selected: 'Attend',
                       screen: 'events',
-                      colour: widget.attendanceList.contains(loggedInUser.email)
-                          ? activeColor.withOpacity(0.17)
-                          : inactiveColor.withOpacity(0.06),
+                      colour:
+                          widget.comingAttendanceID.contains(loggedInUser.uid)
+                              ? activeColor.withOpacity(0.17)
+                              : inactiveColor.withOpacity(0.06),
                     ),
                   )
         : GestureDetector(

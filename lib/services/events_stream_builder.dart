@@ -1,12 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteering/components/event_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:volunteering/constants.dart';
 
 final _fireStore = FirebaseFirestore.instance;
-final _auth = FirebaseAuth.instance;
-User loggedInUser;
 
 class EventStream extends StatefulWidget {
   EventStream({
@@ -25,19 +23,6 @@ class EventStream extends StatefulWidget {
 }
 
 class _EventStreamState extends State<EventStream> {
-  @override
-  void initState() {
-    super.initState();
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -61,6 +46,11 @@ class _EventStreamState extends State<EventStream> {
                     .orderBy('eventDateTime', descending: true)
                     .snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+                child: Text("Something went wrong..",
+                    style: kUserInfoTextStyle.copyWith(color: Colors.white)));
+          }
           if (snapshot.hasData) {
             final documents = snapshot.data.docs;
             List<EventCard> eventsCard = [];
@@ -74,7 +64,6 @@ class _EventStreamState extends State<EventStream> {
               final noOfVolunteers = event['noOfVolunteers'];
               final noOfAttendees = event['noOfAttendees'];
               final eventDateTime = event['eventDateTime'];
-              final eventType = event['eventType'];
               final city = event['city'];
               final details = event['details'];
               final imageURL = event['images'];
@@ -83,8 +72,7 @@ class _EventStreamState extends State<EventStream> {
               final attendanceCounter = event['attendanceCounter'];
               final userID = event['userID'];
               final userEmail = event['email'];
-              final volunteersList = event['volunteers'];
-              final attendanceList = event['attendance'];
+
               final comingVolunteerID = event['comingVolunteerID'];
               final comingAttendanceID = event['comingAttendanceID'];
               final comment = event['comment'];
@@ -101,7 +89,6 @@ class _EventStreamState extends State<EventStream> {
                 noOfVolunteers: noOfVolunteers,
                 noOfAttendees: noOfAttendees,
                 eventDateTime: stringDateTime,
-                eventType: eventType,
                 city: city,
                 details: details,
                 imageURL: imageURL,
@@ -111,8 +98,6 @@ class _EventStreamState extends State<EventStream> {
                 attendanceCounter: attendanceCounter,
                 userID: userID,
                 userEmail: userEmail,
-                volunteersList: volunteersList,
-                attendanceList: attendanceList,
                 screen: widget.screen,
                 comingVolunteerID: comingVolunteerID,
                 comingAttendanceID: comingAttendanceID,

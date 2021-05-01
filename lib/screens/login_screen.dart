@@ -123,9 +123,7 @@ class _MyStateFullState extends State<MyStateFull> {
           ),
           GestureDetector(
             onTap: () {
-              setState(() {
-                Navigator.pushNamed(context, '/registration_screen');
-              });
+              Navigator.pushNamed(context, '/registration_screen');
             },
             child: SubText(
               first: 'Don\'t have Account \?',

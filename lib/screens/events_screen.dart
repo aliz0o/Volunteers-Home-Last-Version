@@ -42,9 +42,8 @@ class _EventsScreenState extends State<EventsScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen(
-                        userID: loggedInUser.uid,
-                        userEmail: loggedInUser.email),
+                    builder: (context) =>
+                        ProfileScreen(userID: loggedInUser.uid),
                   ),
                 );
               },

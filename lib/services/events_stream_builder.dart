@@ -11,11 +11,11 @@ class EventStream extends StatefulWidget {
     @required this.eventTapClass,
     @required this.tap,
     @required this.screen,
-    this.userEmail,
+    this.userID,
   });
   final String eventTapClass;
   final String tap;
-  final String userEmail;
+  final String userID;
   final String screen;
 
   @override
@@ -36,13 +36,13 @@ class _EventStreamState extends State<EventStream> {
                 ? _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: true)
-                    .where('all', arrayContains: widget.userEmail)
+                    .where('all', arrayContains: widget.userID)
                     .orderBy('eventDateTime', descending: false)
                     .snapshots()
                 : _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: true)
-                    .where('email', isEqualTo: widget.userEmail)
+                    .where('userID', isEqualTo: widget.userID)
                     .orderBy('eventDateTime', descending: true)
                     .snapshots(),
         builder: (context, snapshot) {
@@ -71,8 +71,6 @@ class _EventStreamState extends State<EventStream> {
               final volunteersCounter = event['volunteersCounter'];
               final attendanceCounter = event['attendanceCounter'];
               final userID = event['userID'];
-              final userEmail = event['email'];
-
               final comingVolunteerID = event['comingVolunteerID'];
               final comingAttendanceID = event['comingAttendanceID'];
               final comment = event['comment'];
@@ -97,7 +95,6 @@ class _EventStreamState extends State<EventStream> {
                 volunteersCounter: volunteersCounter,
                 attendanceCounter: attendanceCounter,
                 userID: userID,
-                userEmail: userEmail,
                 screen: widget.screen,
                 comingVolunteerID: comingVolunteerID,
                 comingAttendanceID: comingAttendanceID,

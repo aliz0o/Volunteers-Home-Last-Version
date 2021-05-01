@@ -19,7 +19,6 @@ class EventCard extends StatefulWidget {
     @required this.volunteersCounter,
     @required this.attendanceCounter,
     @required this.userID,
-    @required this.userEmail,
     @required this.comingVolunteerID,
     @required this.comingAttendanceID,
     @required this.screen,
@@ -39,7 +38,6 @@ class EventCard extends StatefulWidget {
   final int volunteersCounter;
   final int attendanceCounter;
   final String userID;
-  final String userEmail;
   final List comingVolunteerID;
   final List comingAttendanceID;
   final String screen;

@@ -8,9 +8,10 @@ import 'package:volunteering/screens/events_screen.dart';
 final _auth = FirebaseAuth.instance;
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({@required this.userID, @required this.userEmail});
+  ProfileScreen({
+    @required this.userID,
+  });
   final String userID;
-  final String userEmail;
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -64,13 +65,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 eventTapClass: 'MyEvent',
                 tap: 'MyEvent',
                 screen: 'comingList',
-                userEmail: widget.userEmail,
+                userID: widget.userID,
               ),
               EventStream(
                 eventTapClass: 'Calender',
                 tap: 'Calender',
                 screen: 'events',
-                userEmail: widget.userEmail,
+                userID: widget.userID,
               ),
             ],
           ),

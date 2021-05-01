@@ -77,8 +77,7 @@ class GetUser extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProfileScreen(
-                                userID: userID, userEmail: data['email']),
+                            builder: (context) => ProfileScreen(userID: userID),
                           ),
                         );
                       },
@@ -91,7 +90,8 @@ class GetUser extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProfileScreen(
-                                userID: userID, userEmail: data['email']),
+                              userID: userID,
+                            ),
                           ),
                         );
                       },

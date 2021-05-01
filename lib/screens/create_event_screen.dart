@@ -143,7 +143,6 @@ class _MyStateFullState extends State<MyStateFull> {
       imageURL = await uploadFile(_selectedImage);
     }
     await _fireStore.collection('events').add({
-      'email': loggedInUser.email,
       'eventClass': eventClass,
       'noOfVolunteers': noOfVolunteers,
       'noOfAttendees': noOfAttendees,

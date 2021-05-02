@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        initialRoute: loggedInUser == null ? '/login_screen' : 'events_screen',
+        initialRoute: loggedInUser == null ? '/login_screen' : '/events_screen',
         routes: {
           '/login_screen': (context) => LogIn(),
           '/registration_screen': (context) => RegisterScreen(),
@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         },
         home: Scaffold(
           backgroundColor: Colors.black,
+          body: Center(child: CircularProgressIndicator());
         ));
   }
 }

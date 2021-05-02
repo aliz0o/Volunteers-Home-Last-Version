@@ -16,6 +16,7 @@ class LogIn extends StatelessWidget {
     return Scaffold(
         backgroundColor: Color.fromRGBO(16, 17, 18, 1),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Center(
             child: Text(
               'log in',
@@ -33,12 +34,14 @@ class MyStateFull extends StatefulWidget {
   _MyStateFullState createState() => _MyStateFullState();
 }
 
-class _MyStateFullState extends State<MyStateFull> {
+class _MyStateFullState extends State<MyStateFull>
+    with SingleTickerProviderStateMixin {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
   bool showSpinner = false;
   String errorMessage;
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(

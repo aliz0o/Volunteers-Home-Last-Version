@@ -61,10 +61,6 @@ flutter:
   - images/
 
   fonts:
-  - family: IndieFlower
-    fonts:
-      - asset: fonts/IndieFlower-Regular.ttf
-
   - family: Amiri
     fonts:
       - asset: fonts/Amiri-Regular.ttf
@@ -73,9 +69,6 @@ flutter:
     fonts:
       - asset: fonts/Lalezar-Regular.ttf
 
-  - family: Westmeath
-    fonts:
-      - asset: fonts/Westmeath.ttf
 
   - family: Product Sans
     fonts:

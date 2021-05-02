@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         },
         home: Scaffold(
           backgroundColor: Colors.black,
-          body: Center(child: CircularProgressIndicator());
+          body: Center(child: CircularProgressIndicator()),
         ));
   }
 }

@@ -46,8 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               widget.userID != loggedInUser.uid
                   ? Navigator.pop(context)
                   : _auth.signOut();
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pushNamed(context, '/login_screen');
             },
             label: Text(
                 widget.userID != loggedInUser.uid ? 'Events' : 'Log Out',

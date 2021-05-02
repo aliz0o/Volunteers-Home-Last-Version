@@ -7,6 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+final emailTextController = TextEditingController();
+final passwordTextController = TextEditingController();
+
 class LogIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -56,6 +59,7 @@ class _MyStateFullState extends State<MyStateFull> {
           Padding(
             padding: textFieldPadding,
             child: TextFormField(
+              controller: emailTextController,
               onChanged: (value) {
                 email = value;
               },
@@ -70,6 +74,7 @@ class _MyStateFullState extends State<MyStateFull> {
           Padding(
             padding: textFieldPadding,
             child: TextFormField(
+              controller: passwordTextController,
               onChanged: (value) {
                 password = value;
               },
@@ -96,6 +101,8 @@ class _MyStateFullState extends State<MyStateFull> {
                 setState(() {
                   showSpinner = false;
                 });
+                emailTextController.clear();
+                passwordTextController.clear();
               } on FirebaseAuthException catch (e) {
                 setState(() {
                   showSpinner = false;
@@ -124,6 +131,8 @@ class _MyStateFullState extends State<MyStateFull> {
           GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, '/registration_screen');
+              emailTextController.clear();
+              passwordTextController.clear();
             },
             child: SubText(
               first: 'Don\'t have Account \?',

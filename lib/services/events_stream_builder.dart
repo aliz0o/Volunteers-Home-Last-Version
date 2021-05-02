@@ -3,6 +3,7 @@ import 'package:volunteering/components/event_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:volunteering/constants.dart';
+import 'package:volunteering/screens/events_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 
@@ -27,21 +28,31 @@ class _EventStreamState extends State<EventStream> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: widget.tap == 'events'
-            ? _fireStore
-                .collection('events')
-                .where('approved', isEqualTo: true)
-                .orderBy('createdOn', descending: true)
-                .snapshots()
+            ? loggedInUser.uid == 'H8OfLNqDPyZwulzLFTh679wHyPj1'
+                ? _fireStore
+                    .collection('events')
+                    .where('approved', isEqualTo: false)
+                    .where('deleted', isEqualTo: false)
+                    .orderBy('createdOn', descending: true)
+                    .snapshots()
+                : _fireStore
+                    .collection('events')
+                    .where('approved', isEqualTo: true)
+                    .where('deleted', isEqualTo: false)
+                    .orderBy('createdOn', descending: true)
+                    .snapshots()
             : widget.tap == 'Calender'
                 ? _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: true)
+                    .where('deleted', isEqualTo: false)
                     .where('all', arrayContains: widget.userID)
                     .orderBy('eventDateTime', descending: false)
                     .snapshots()
                 : _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: true)
+                    .where('deleted', isEqualTo: false)
                     .where('userID', isEqualTo: widget.userID)
                     .orderBy('eventDateTime', descending: true)
                     .snapshots(),

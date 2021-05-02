@@ -157,13 +157,11 @@ class _MyStateFullState extends State<MyStateFull> {
       'comingAttendanceID': FieldValue.arrayUnion([]),
       'all': FieldValue.arrayUnion([]),
       'userID': loggedInUser.uid,
-      'approved': true,
+      'approved': false,
       'commentSender': FieldValue.arrayUnion([]),
       'comment': FieldValue.arrayUnion([]),
-    });
-
-    await _fireStore.collection('users').doc(loggedInUser.uid).update({
-      'eventCount': FieldValue.increment(1),
+      'deleted': false,
+      'reportedCount': 0,
     });
 
     setState(() {
@@ -416,7 +414,6 @@ class _MyStateFullState extends State<MyStateFull> {
                 },
                 textAlign: TextAlign.right,
                 maxLines: null,
-                //expands: true,
                 keyboardType: TextInputType.multiline,
                 style: kArabicTextStyle,
                 decoration: kArabicTextDecoration,

@@ -112,14 +112,15 @@ InputDecoration kDateTimeDecoration = InputDecoration(
 );
 
 const TextStyle kArabicTextStyle = TextStyle(
-  fontFamily: 'Amiri',
+  fontFamily: 'Lalezar',
   fontSize: 15,
   color: Colors.white,
 );
 
 InputDecoration kArabicTextDecoration = InputDecoration(
   hintText: 'باقي التفاصيل',
-  hintStyle: TextStyle(color: Colors.white.withOpacity(0.47), fontSize: 13),
+  hintStyle: TextStyle(
+      color: Colors.white.withOpacity(0.47), fontSize: 12, fontFamily: 'Amiri'),
   contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
   focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(10),

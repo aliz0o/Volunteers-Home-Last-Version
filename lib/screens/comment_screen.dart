@@ -48,31 +48,30 @@ class _CommentScreenState extends State<CommentScreen> {
                     onChanged: (value) {
                       commentText = value;
                     },
-                    style: kTextFieldStyle,
+                    style: kArabicTextStyle,
+                    keyboardType: TextInputType.multiline,
+                    textAlign: TextAlign.right,
                     maxLines: null,
                     decoration: kArabicTextDecoration.copyWith(
-                      hintText: 'Type your comment here...',
-                      suffixIcon: Padding(
-                        padding: EdgeInsets.all(0.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            messageTextController.clear();
+                      hintText: '..اكتب تعليقك هنا',
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          messageTextController.clear();
 
-                            widget.commentSender.add(loggedInUser.uid);
-                            widget.comment.add(commentText);
-                            _fireStore
-                                .collection('events')
-                                .doc(widget.eventID)
-                                .update({
-                              'comment': widget.comment,
-                              'commentSender': widget.commentSender,
-                            });
-                          },
-                          child: Icon(
-                            Icons.send,
-                            color: Color(0xff0962ff),
-                          ),
-                        ), // icon is 48px widget.
+                          widget.commentSender.add(loggedInUser.uid);
+                          widget.comment.add(commentText);
+                          _fireStore
+                              .collection('events')
+                              .doc(widget.eventID)
+                              .update({
+                            'comment': widget.comment,
+                            'commentSender': widget.commentSender,
+                          });
+                        },
+                        child: Icon(
+                          Icons.send,
+                          color: Color(0xff0962ff),
+                        ),
                       ),
                     ),
                   ),
@@ -129,8 +128,8 @@ class CommentStream extends StatelessWidget {
                           elevation: 5,
                           color: Color(0xff0962ff),
                           child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0),
+                            padding: EdgeInsets.only(
+                                right: 10, left: 25, top: 10, bottom: 10),
                             child: Text(
                               comment[index],
                               textAlign: TextAlign.right,

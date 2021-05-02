@@ -73,6 +73,7 @@ class _EventCardState extends State<EventCard> {
               userID: widget.userID,
               screen: 'events',
               createdOn: widget.createdOn,
+              eventID: widget.eventID,
             ),
             Visibility(
               visible: imageVisibility,
@@ -143,13 +144,10 @@ class _EventCardState extends State<EventCard> {
                 width: scrWidth,
                 decoration: kEventCardBorderDecoration,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 5, 15, 5),
+                  padding: const EdgeInsets.fromLTRB(25, 5, 13, 5),
                   child: Text(
                     widget.details,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Lalezar',
-                        fontSize: 15),
+                    style: kArabicTextStyle,
                     textAlign: TextAlign.right,
                   ),
                 ),

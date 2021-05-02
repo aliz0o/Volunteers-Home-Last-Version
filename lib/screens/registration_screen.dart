@@ -13,6 +13,12 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 
+final nameTextController = TextEditingController();
+final phoneNumberTextController = TextEditingController();
+final ageTextController = TextEditingController();
+final emailTextController = TextEditingController();
+final passwordTextController = TextEditingController();
+
 const inactiveColor = Colors.white;
 const activeColor = Color(0xff0962ff);
 
@@ -108,6 +114,7 @@ class _MyStateFullState extends State<MyStateFull> {
             Padding(
               padding: textFieldPadding,
               child: TextFormField(
+                controller: nameTextController,
                 onChanged: (value) {
                   name = value;
                   setState(() {
@@ -141,6 +148,7 @@ class _MyStateFullState extends State<MyStateFull> {
             Padding(
               padding: textFieldPadding,
               child: TextFormField(
+                controller: phoneNumberTextController,
                 onChanged: (value) {
                   phoneNumber = int.parse(value);
                   setState(() {
@@ -175,6 +183,7 @@ class _MyStateFullState extends State<MyStateFull> {
             Padding(
               padding: textFieldPadding,
               child: TextFormField(
+                controller: ageTextController,
                 onChanged: (value) {
                   age = int.parse(value);
                   setState(() {
@@ -271,6 +280,7 @@ class _MyStateFullState extends State<MyStateFull> {
             Padding(
               padding: textFieldPadding,
               child: TextFormField(
+                controller: emailTextController,
                 onChanged: (value) {
                   email = value;
                 },
@@ -285,6 +295,7 @@ class _MyStateFullState extends State<MyStateFull> {
             Padding(
               padding: textFieldPadding,
               child: TextFormField(
+                controller: passwordTextController,
                 onChanged: (value) {
                   password = value;
                 },
@@ -332,6 +343,11 @@ class _MyStateFullState extends State<MyStateFull> {
                         setState(() {
                           showSpinner = false;
                         });
+                        nameTextController.clear();
+                        phoneNumberTextController.clear();
+                        ageTextController.clear();
+                        emailTextController.clear();
+                        passwordTextController.clear();
                       } on FirebaseAuthException catch (e) {
                         setState(() {
                           showSpinner = false;
@@ -361,6 +377,11 @@ class _MyStateFullState extends State<MyStateFull> {
               onTap: () {
                 setState(() {
                   Navigator.pop(context);
+                  nameTextController.clear();
+                  phoneNumberTextController.clear();
+                  ageTextController.clear();
+                  emailTextController.clear();
+                  passwordTextController.clear();
                 });
               },
               child: SubText(

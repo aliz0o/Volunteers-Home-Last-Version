@@ -19,7 +19,6 @@ class EventCardButton extends StatefulWidget {
   final List comingVolunteerID;
   final List comingAttendanceID;
   final String screen;
-  //final userEmail;
   final userID;
   EventCardButton({
     @required this.eventClass,
@@ -31,7 +30,6 @@ class EventCardButton extends StatefulWidget {
     @required this.comingVolunteerID,
     @required this.comingAttendanceID,
     @required this.screen,
-    //@required this.userEmail,
     @required this.userID,
   });
   @override
@@ -43,7 +41,6 @@ class _EventCardButtonState extends State<EventCardButton> {
     if (value == 'Volunteer' &&
         widget.volunteersCounter <= widget.noOfVolunteers) {
       _fireStore.collection('events').doc(widget.eventID).update({
-        //'volunteers': FieldValue.arrayUnion([loggedInUser.email]),
         'comingVolunteerID': FieldValue.arrayUnion([loggedInUser.uid]),
         'all': FieldValue.arrayUnion([loggedInUser.uid]),
         'volunteersCounter': widget.volunteersCounter + 1,
@@ -51,7 +48,6 @@ class _EventCardButtonState extends State<EventCardButton> {
       });
     } else if (value == 'volunteerCanceled') {
       _fireStore.collection('events').doc(widget.eventID).update({
-        //'volunteers': FieldValue.arrayRemove([loggedInUser.email]),
         'comingVolunteerID': FieldValue.arrayRemove([loggedInUser.uid]),
         'all': FieldValue.arrayRemove([loggedInUser.uid]),
         'volunteersCounter': widget.volunteersCounter - 1,
@@ -60,7 +56,6 @@ class _EventCardButtonState extends State<EventCardButton> {
     } else if (value == 'Attend' &&
         widget.attendanceCounter <= widget.noOfAttendance) {
       _fireStore.collection('events').doc(widget.eventID).update({
-        //'attendance': FieldValue.arrayUnion([loggedInUser.email]),
         'comingAttendanceID': FieldValue.arrayUnion([loggedInUser.uid]),
         'all': FieldValue.arrayUnion([loggedInUser.uid]),
         'attendanceCounter': widget.attendanceCounter + 1,
@@ -68,7 +63,6 @@ class _EventCardButtonState extends State<EventCardButton> {
       });
     } else if (value == 'attendCanceled') {
       _fireStore.collection('events').doc(widget.eventID).update({
-        //'attendance': FieldValue.arrayRemove([loggedInUser.email]),
         'comingAttendanceID': FieldValue.arrayRemove([loggedInUser.uid]),
         'all': FieldValue.arrayRemove([loggedInUser.uid]),
         'attendanceCounter': widget.attendanceCounter - 1,
@@ -79,13 +73,66 @@ class _EventCardButtonState extends State<EventCardButton> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.screen == 'events' && widget.userID != loggedInUser.uid)
-        ? widget.eventClass == 'All'
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
+    return (widget.screen == 'events' &&
+            loggedInUser.uid == 'H8OfLNqDPyZwulzLFTh679wHyPj1')
+        ? GestureDetector(
+            onTap: () => {
+              _fireStore.collection('events').doc(widget.eventID).update({
+                'approved': true,
+              }),
+              _fireStore.collection('users').doc(widget.userID).update({
+                'eventCount': FieldValue.increment(1),
+              }),
+            },
+            child: RadioButton(
+              selected: 'Approve',
+              screen: 'events',
+              colour: inactiveColor.withOpacity(0.06),
+            ),
+          )
+        : (widget.screen == 'events' && widget.userID != loggedInUser.uid)
+            ? widget.eventClass == 'All'
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                            onTap: () => {
+                                  widget.comingVolunteerID
+                                          .contains(loggedInUser.uid)
+                                      ? addRemoveEvent('volunteerCanceled')
+                                      : addRemoveEvent('Volunteer'),
+                                },
+                            child: RadioButton(
+                              selected: 'Volunteer',
+                              screen: 'events',
+                              colour: widget.comingVolunteerID
+                                      .contains(loggedInUser.uid)
+                                  ? activeColor.withOpacity(0.17)
+                                  : inactiveColor.withOpacity(0.06),
+                            )),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => {
+                            widget.comingVolunteerID.contains(loggedInUser.uid)
+                                ? addRemoveEvent('attendCanceled')
+                                : addRemoveEvent('Attend'),
+                          },
+                          child: RadioButton(
+                            selected: 'Attend',
+                            screen: 'events',
+                            colour: widget.comingAttendanceID
+                                    .contains(loggedInUser.uid)
+                                ? activeColor.withOpacity(0.17)
+                                : inactiveColor.withOpacity(0.06),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : widget.eventClass == 'Volunteering'
+                    ? GestureDetector(
                         onTap: () => {
                               widget.comingVolunteerID
                                       .contains(loggedInUser.uid)
@@ -99,73 +146,38 @@ class _EventCardButtonState extends State<EventCardButton> {
                                   .contains(loggedInUser.uid)
                               ? activeColor.withOpacity(0.17)
                               : inactiveColor.withOpacity(0.06),
-                        )),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => {
-                        widget.comingVolunteerID.contains(loggedInUser.uid)
-                            ? addRemoveEvent('attendCanceled')
-                            : addRemoveEvent('Attend'),
-                      },
-                      child: RadioButton(
-                        selected: 'Attend',
-                        screen: 'events',
-                        colour:
-                            widget.comingAttendanceID.contains(loggedInUser.uid)
-                                ? activeColor.withOpacity(0.17)
-                                : inactiveColor.withOpacity(0.06),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : widget.eventClass == 'Volunteering'
-                ? GestureDetector(
-                    onTap: () => {
+                        ))
+                    : GestureDetector(
+                        onTap: () => {
                           widget.comingVolunteerID.contains(loggedInUser.uid)
-                              ? addRemoveEvent('volunteerCanceled')
-                              : addRemoveEvent('Volunteer'),
+                              ? addRemoveEvent('attendCanceled')
+                              : addRemoveEvent('Attend'),
                         },
-                    child: RadioButton(
-                      selected: 'Volunteer',
-                      screen: 'events',
-                      colour:
-                          widget.comingVolunteerID.contains(loggedInUser.uid)
+                        child: RadioButton(
+                          selected: 'Attend',
+                          screen: 'events',
+                          colour: widget.comingAttendanceID
+                                  .contains(loggedInUser.uid)
                               ? activeColor.withOpacity(0.17)
                               : inactiveColor.withOpacity(0.06),
-                    ))
-                : GestureDetector(
-                    onTap: () => {
-                      widget.comingVolunteerID.contains(loggedInUser.uid)
-                          ? addRemoveEvent('attendCanceled')
-                          : addRemoveEvent('Attend'),
-                    },
-                    child: RadioButton(
-                      selected: 'Attend',
-                      screen: 'events',
-                      colour:
-                          widget.comingAttendanceID.contains(loggedInUser.uid)
-                              ? activeColor.withOpacity(0.17)
-                              : inactiveColor.withOpacity(0.06),
-                    ),
-                  )
-        : GestureDetector(
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ComingList(
-                          volunteersList: widget.comingVolunteerID,
-                          attendanceList: widget.comingAttendanceID,
-                        )),
-              ),
-            },
-            child: RadioButton(
-              selected: 'Coming List',
-              screen: 'events',
-              colour: inactiveColor.withOpacity(0.06),
-            ),
-          );
+                        ),
+                      )
+            : GestureDetector(
+                onTap: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ComingList(
+                              volunteersList: widget.comingVolunteerID,
+                              attendanceList: widget.comingAttendanceID,
+                            )),
+                  ),
+                },
+                child: RadioButton(
+                  selected: 'Coming List',
+                  screen: 'events',
+                  colour: inactiveColor.withOpacity(0.06),
+                ),
+              );
   }
 }

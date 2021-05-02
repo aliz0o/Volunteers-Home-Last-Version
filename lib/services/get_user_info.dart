@@ -4,18 +4,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:volunteering/screens/events_screen.dart';
+
+final _fireStore = FirebaseFirestore.instance;
 
 class GetUser extends StatelessWidget {
   final String userID;
-  final String userEmail;
   final String screen;
   final String createdOn;
+  final String eventID;
 
   GetUser({
     @required this.userID,
     @required this.screen,
+    this.eventID,
     this.createdOn,
-    this.userEmail,
   });
 
   @override
@@ -118,8 +121,40 @@ class GetUser extends StatelessWidget {
                             fontFamily: 'Product Sans',
                           ),
                         ),
-                      ),
-                    );
+                        trailing: PopupMenuButton(
+                          onSelected: (value) {
+                            if (this.userID == loggedInUser.uid) {
+                              _fireStore
+                                  .collection('events')
+                                  .doc(this.eventID)
+                                  .update({'deleted': value});
+                              _fireStore
+                                  .collection('users')
+                                  .doc(this.userID)
+                                  .update(
+                                      {'eventCount': FieldValue.increment(-1)});
+                            } else {
+                              _fireStore
+                                  .collection('events')
+                                  .doc(this.eventID)
+                                  .update({
+                                'reportedCount': FieldValue.increment(1)
+                              });
+                            }
+                          },
+                          elevation: 5,
+                          color: Color.fromRGBO(16, 17, 18, 1),
+                          icon: Icon(Icons.more_vert, color: Colors.white),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: true,
+                              child: this.userID == loggedInUser.uid
+                                  ? Text("Delete", style: kNumberTextStyle)
+                                  : Text("Report", style: kNumberTextStyle),
+                            ),
+                          ],
+                        ),
+                      ));
         }
 
         return this.screen == 'commentScreen'

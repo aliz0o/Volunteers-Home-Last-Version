@@ -6,6 +6,20 @@ import 'package:volunteering/screens/events_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 
+final attendSnackBar = SnackBar(
+  content: Text('You have already registered as an attendance..',
+      style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
+  elevation: 5,
+  backgroundColor: Color(0xff0962ff),
+);
+
+final volunteerSnackBar = SnackBar(
+  content: Text('You have already registered as volunteer..',
+      style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
+  elevation: 5,
+  backgroundColor: Color(0xff0962ff),
+);
+
 const inactiveColor = Colors.white;
 const activeColor = Color(0xff0962ff);
 
@@ -98,10 +112,14 @@ class _EventCardButtonState extends State<EventCardButton> {
                       Expanded(
                         child: GestureDetector(
                             onTap: () => {
-                                  widget.comingVolunteerID
+                                  widget.comingAttendanceID
                                           .contains(loggedInUser.uid)
-                                      ? addRemoveEvent('volunteerCanceled')
-                                      : addRemoveEvent('Volunteer'),
+                                      ? ScaffoldMessenger.of(context)
+                                          .showSnackBar(attendSnackBar)
+                                      : widget.comingVolunteerID
+                                              .contains(loggedInUser.uid)
+                                          ? addRemoveEvent('volunteerCanceled')
+                                          : addRemoveEvent('Volunteer'),
                                 },
                             child: RadioButton(
                               selected: 'Volunteer',
@@ -116,8 +134,12 @@ class _EventCardButtonState extends State<EventCardButton> {
                         child: GestureDetector(
                           onTap: () => {
                             widget.comingVolunteerID.contains(loggedInUser.uid)
-                                ? addRemoveEvent('attendCanceled')
-                                : addRemoveEvent('Attend'),
+                                ? ScaffoldMessenger.of(context)
+                                    .showSnackBar(volunteerSnackBar)
+                                : widget.comingAttendanceID
+                                        .contains(loggedInUser.uid)
+                                    ? addRemoveEvent('attendCanceled')
+                                    : addRemoveEvent('Attend'),
                           },
                           child: RadioButton(
                             selected: 'Attend',
@@ -149,7 +171,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                         ))
                     : GestureDetector(
                         onTap: () => {
-                          widget.comingVolunteerID.contains(loggedInUser.uid)
+                          widget.comingAttendanceID.contains(loggedInUser.uid)
                               ? addRemoveEvent('attendCanceled')
                               : addRemoveEvent('Attend'),
                         },

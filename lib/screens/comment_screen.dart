@@ -110,6 +110,8 @@ class CommentStream extends StatelessWidget {
 
           return Expanded(
             child: ListView.builder(
+                reverse: true,
+                shrinkWrap: true,
                 itemCount: comment.length,
                 itemBuilder: (context, index) {
                   return Padding(
@@ -118,7 +120,7 @@ class CommentStream extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         GetUser(
-                            userID: commentSender[index],
+                            userID: commentSender[comment.length - index - 1],
                             screen: 'commentScreen'),
                         Material(
                           borderRadius: BorderRadius.only(
@@ -131,7 +133,7 @@ class CommentStream extends StatelessWidget {
                             padding: EdgeInsets.only(
                                 right: 10, left: 25, top: 10, bottom: 10),
                             child: Text(
-                              comment[index],
+                              comment[comment.length - index - 1],
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                   color: Colors.white,

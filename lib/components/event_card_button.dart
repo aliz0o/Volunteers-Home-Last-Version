@@ -20,6 +20,19 @@ final volunteerSnackBar = SnackBar(
   backgroundColor: Color(0xff0962ff),
 );
 
+final reachedVolunteersNumber = SnackBar(
+  content: Text('This event has reached the required volunteers Number..',
+      style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
+  elevation: 5,
+  backgroundColor: Color(0xff0962ff),
+);
+final reachedAttendanceNumber = SnackBar(
+  content: Text('This event has reached the required attendance Number..',
+      style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
+  elevation: 5,
+  backgroundColor: Color(0xff0962ff),
+);
+
 const inactiveColor = Colors.white;
 const activeColor = Color(0xff0962ff);
 
@@ -53,13 +66,16 @@ class EventCardButton extends StatefulWidget {
 class _EventCardButtonState extends State<EventCardButton> {
   void addRemoveEvent(value) {
     if (value == 'Volunteer' &&
-        widget.volunteersCounter <= widget.noOfVolunteers) {
+        widget.volunteersCounter < widget.noOfVolunteers) {
       _fireStore.collection('events').doc(widget.eventID).update({
         'comingVolunteerID': FieldValue.arrayUnion([loggedInUser.uid]),
         'all': FieldValue.arrayUnion([loggedInUser.uid]),
         'volunteersCounter': widget.volunteersCounter + 1,
         'noOfVolunteers': widget.noOfVolunteers - 1,
       });
+    } else if (value == 'Volunteer' &&
+        widget.volunteersCounter >= widget.noOfVolunteers) {
+      ScaffoldMessenger.of(context).showSnackBar(reachedVolunteersNumber);
     } else if (value == 'volunteerCanceled') {
       _fireStore.collection('events').doc(widget.eventID).update({
         'comingVolunteerID': FieldValue.arrayRemove([loggedInUser.uid]),
@@ -68,13 +84,16 @@ class _EventCardButtonState extends State<EventCardButton> {
         'noOfVolunteers': widget.noOfVolunteers + 1,
       });
     } else if (value == 'Attend' &&
-        widget.attendanceCounter <= widget.noOfAttendance) {
+        widget.attendanceCounter < widget.noOfAttendance) {
       _fireStore.collection('events').doc(widget.eventID).update({
         'comingAttendanceID': FieldValue.arrayUnion([loggedInUser.uid]),
         'all': FieldValue.arrayUnion([loggedInUser.uid]),
         'attendanceCounter': widget.attendanceCounter + 1,
         'noOfAttendees': widget.noOfAttendance - 1,
       });
+    } else if (value == 'Attend' &&
+        widget.attendanceCounter >= widget.noOfAttendance) {
+      ScaffoldMessenger.of(context).showSnackBar(reachedVolunteersNumber);
     } else if (value == 'attendCanceled') {
       _fireStore.collection('events').doc(widget.eventID).update({
         'comingAttendanceID': FieldValue.arrayRemove([loggedInUser.uid]),

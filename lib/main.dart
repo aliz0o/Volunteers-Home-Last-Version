@@ -21,16 +21,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        initialRoute: loggedInUser == null ? '/login_screen' : '/events_screen',
-        routes: {
-          '/login_screen': (context) => LogIn(),
-          '/registration_screen': (context) => RegisterScreen(),
-          '/events_screen': (context) => EventsScreen(),
-          '/create_event_screen': (context) => CreateEvent(),
-        },
-        home: Scaffold(
-          backgroundColor: Colors.black,
-          body: Center(child: CircularProgressIndicator()),
-        ));
+      initialRoute: loggedInUser == null ? '/login_screen' : '/events_screen',
+      routes: {
+        '/login_screen': (context) => LogIn(),
+        '/registration_screen': (context) => RegisterScreen(),
+        '/events_screen': (context) => EventsScreen(),
+        '/create_event_screen': (context) => CreateEvent(),
+      },
+    );
   }
 }

@@ -112,12 +112,14 @@ class _EventStreamState extends State<EventStream> {
                 comment: comment,
                 commentSender: commentSender,
               );
-              if (eventClass == 'All') {
-                eventsCard.add(eventCard);
-              } else if (eventClass == 'Volunteering') {
-                volunteeringCard.add(eventCard);
-              } else if (eventClass == 'Attending') {
-                attendingCard.add(eventCard);
+              if (formattedDateTime.compareTo(DateTime.now()) >= 0) {
+                if (eventClass == 'All') {
+                  eventsCard.add(eventCard);
+                } else if (eventClass == 'Volunteering') {
+                  volunteeringCard.add(eventCard);
+                } else if (eventClass == 'Attending') {
+                  attendingCard.add(eventCard);
+                }
               }
               if (widget.tap == 'Calender') {
                 if (formattedDateTime.compareTo(DateTime.now()) >= 0) {

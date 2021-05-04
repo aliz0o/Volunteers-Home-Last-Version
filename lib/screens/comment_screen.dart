@@ -42,6 +42,7 @@ class _CommentScreenState extends State<CommentScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 CommentStream(eventID: widget.eventID),
+                SizedBox(height: 7),
                 Container(
                   child: TextFormField(
                     controller: messageTextController,

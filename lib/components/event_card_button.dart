@@ -123,7 +123,9 @@ class _EventCardButtonState extends State<EventCardButton> {
               colour: inactiveColor.withOpacity(0.06),
             ),
           )
-        : (widget.screen == 'events' && widget.userID != loggedInUser.uid)
+        : ((widget.screen == 'events' && widget.userID != loggedInUser.uid) ||
+                (widget.screen == 'comingList' &&
+                    widget.userID != loggedInUser.uid))
             ? widget.eventClass == 'All'
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,

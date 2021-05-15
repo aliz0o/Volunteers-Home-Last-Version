@@ -28,7 +28,8 @@ class _EventStreamState extends State<EventStream> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: widget.tap == 'events'
-            ? loggedInUser.uid == 'H8OfLNqDPyZwulzLFTh679wHyPj1'
+            ? loggedInUser.uid == 'IySfKClR3aZIKpxEMgaZmw1TOgK2' ||
+                    loggedInUser.uid == 'Y6UJA3lnqFQkZZvLlNPVnR6eTWy1'
                 ? _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: false)

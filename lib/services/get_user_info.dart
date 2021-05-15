@@ -134,12 +134,21 @@ class GetUser extends StatelessWidget {
                                   .update(
                                       {'eventCount': FieldValue.increment(-1)});
                             } else {
-                              _fireStore
-                                  .collection('events')
-                                  .doc(this.eventID)
-                                  .update({
-                                'reportedCount': FieldValue.increment(1)
-                              });
+                              if (this.screen == 'comingList') {
+                                _fireStore
+                                    .collection('users')
+                                    .doc(this.userID)
+                                    .update({
+                                  'reportedCount': FieldValue.increment(1)
+                                });
+                              } else {
+                                _fireStore
+                                    .collection('events')
+                                    .doc(this.eventID)
+                                    .update({
+                                  'reportedCount': FieldValue.increment(1)
+                                });
+                              }
                             }
                           },
                           elevation: 5,

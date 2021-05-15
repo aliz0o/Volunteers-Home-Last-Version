@@ -95,7 +95,7 @@ class CommentStream extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
-                child: Text("Something went wrong",
+                child: Text("Something went wrong..",
                     style: kUserInfoTextStyle.copyWith(color: Colors.white)));
           }
           if (!snapshot.hasData) {

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/services/get_user_info.dart';
@@ -58,7 +59,6 @@ class _CommentScreenState extends State<CommentScreen> {
                       suffixIcon: GestureDetector(
                         onTap: () {
                           messageTextController.clear();
-
                           widget.commentSender.add(loggedInUser.uid);
                           widget.comment.add(commentText);
                           _fireStore
@@ -66,8 +66,9 @@ class _CommentScreenState extends State<CommentScreen> {
                               .doc(widget.eventID)
                               .update({
                             'comment': widget.comment,
-                            'commentSender': widget.commentSender,
+                            'commentSender': widget.commentSender
                           });
+                          Navigator.pop(context);
                         },
                         child: Icon(
                           Icons.send,

@@ -68,7 +68,8 @@ class _CommentScreenState extends State<CommentScreen> {
                             'comment': widget.comment,
                             'commentSender': widget.commentSender
                           });
-                          Navigator.pop(context);
+                          setState(() {});
+                          //Navigator.pop(context);
                         },
                         child: Icon(
                           Icons.send,

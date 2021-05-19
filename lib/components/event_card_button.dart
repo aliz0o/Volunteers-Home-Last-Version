@@ -107,8 +107,7 @@ class _EventCardButtonState extends State<EventCardButton> {
   @override
   Widget build(BuildContext context) {
     return (widget.screen == 'events' &&
-                loggedInUser.uid == 'IySfKClR3aZIKpxEMgaZmw1TOgK2' ||
-            loggedInUser.uid == 'Y6UJA3lnqFQkZZvLlNPVnR6eTWy1')
+            loggedInUser.uid == 'S3PZOd8O3jZuKN2s09Orv8tZDAz2')
         ? GestureDetector(
             onTap: () => {
               _fireStore.collection('events').doc(widget.eventID).update({

@@ -133,7 +133,7 @@ class _MyStateFullState extends State<MyStateFull>
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/registration_screen');
+              Navigator.pushNamed(context, '/register_type_screen');
               emailTextController.clear();
               passwordTextController.clear();
             },

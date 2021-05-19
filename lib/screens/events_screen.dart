@@ -3,6 +3,7 @@ import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
 import 'package:volunteering/services/events_stream_builder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:volunteering/services/get_user_info.dart';
 
 final _auth = FirebaseAuth.instance;
 User loggedInUser;
@@ -69,14 +70,8 @@ class _EventsScreenState extends State<EventsScreen> {
             ),
             backgroundColor: Colors.black,
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.pushNamed(context, '/create_event_screen');
-            },
-            label: Text('Create', style: kTapControllerTextStyle),
-            icon: Icon(Icons.add),
-            backgroundColor: Color.fromRGBO(20, 21, 22, 1),
-          ),
+          floatingActionButton:
+              GetUser(userID: loggedInUser.uid, screen: 'button'),
           body: TabBarView(
             children: [
               EventStream(

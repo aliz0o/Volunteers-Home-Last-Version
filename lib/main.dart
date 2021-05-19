@@ -5,6 +5,7 @@ import 'screens/events_screen.dart';
 import 'screens/create_event_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:volunteering/screens/register_type_screen.dart';
 
 final _auth = FirebaseAuth.instance;
 User loggedInUser;
@@ -24,9 +25,10 @@ class MyApp extends StatelessWidget {
       initialRoute: loggedInUser == null ? '/login_screen' : '/events_screen',
       routes: {
         '/login_screen': (context) => LogIn(),
-        '/registration_screen': (context) => RegisterScreen(),
+        '/registration_screen': (context) => RegistrationScreen(),
         '/events_screen': (context) => EventsScreen(),
         '/create_event_screen': (context) => CreateEvent(),
+        '/register_type_screen': (context) => RegisterType(),
       },
     );
   }

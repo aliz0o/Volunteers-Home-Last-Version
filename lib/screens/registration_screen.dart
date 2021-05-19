@@ -22,7 +22,9 @@ final passwordTextController = TextEditingController();
 const inactiveColor = Colors.white;
 const activeColor = Color(0xff0962ff);
 
-class RegisterScreen extends StatelessWidget {
+class RegistrationScreen extends StatelessWidget {
+  final String userType;
+  RegistrationScreen({@required this.userType});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +40,14 @@ class RegisterScreen extends StatelessWidget {
         //backgroundColor: Color(0xFF2C2C2C),
         backgroundColor: Colors.black,
       ),
-      body: MyStateFull(),
+      body: MyStateFull(userType: this.userType),
     );
   }
 }
 
 class MyStateFull extends StatefulWidget {
+  final String userType;
+  MyStateFull({this.userType});
   @override
   _MyStateFullState createState() => _MyStateFullState();
 }
@@ -62,7 +66,6 @@ class _MyStateFullState extends State<MyStateFull> {
   bool _phoneNumberVisibility = false;
   bool _ageVisibility = false;
   bool _genderVisibility = false;
-
   void checkNullValue() {
     if (name == null || name == "") {
       setState(() {
@@ -338,6 +341,7 @@ class _MyStateFullState extends State<MyStateFull> {
                             'createdOn': FieldValue.serverTimestamp(),
                             'eventCount': 0,
                             'reportedCount': 0,
+                            'userType': widget.userType,
                           });
                           Navigator.pushNamed(context, '/events_screen');
                         }
@@ -377,7 +381,7 @@ class _MyStateFullState extends State<MyStateFull> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/login_screen');
                   nameTextController.clear();
                   phoneNumberTextController.clear();
                   ageTextController.clear();

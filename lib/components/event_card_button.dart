@@ -48,15 +48,15 @@ class EventCardButton extends StatefulWidget {
   final String screen;
   final userID;
   EventCardButton({
-    @required this.eventClass,
+    this.eventClass,
     @required this.eventID,
-    @required this.volunteersCounter,
-    @required this.attendanceCounter,
-    @required this.noOfVolunteers,
-    @required this.noOfAttendance,
-    @required this.comingVolunteerID,
-    @required this.comingAttendanceID,
-    @required this.screen,
+    this.volunteersCounter,
+    this.attendanceCounter,
+    this.noOfVolunteers,
+    this.noOfAttendance,
+    this.comingVolunteerID,
+    this.comingAttendanceID,
+    this.screen,
     @required this.userID,
   });
   @override
@@ -106,17 +106,27 @@ class _EventCardButtonState extends State<EventCardButton> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.screen == 'events' &&
-            loggedInUser.uid == 'S3PZOd8O3jZuKN2s09Orv8tZDAz2')
+    return (widget.screen == 'events' ||
+            widget.screen == 'committeeRequest' &&
+                loggedInUser.uid == 'bcz40Yqcb1ch0OBMA6yNPvRHz5V2')
         ? GestureDetector(
-            onTap: () => {
-              _fireStore.collection('events').doc(widget.eventID).update({
-                'approved': true,
-              }),
-              _fireStore.collection('users').doc(widget.userID).update({
-                'eventCount': FieldValue.increment(1),
-              }),
-            },
+            onTap: widget.screen == 'events'
+                ? () => {
+                      _fireStore
+                          .collection('events')
+                          .doc(widget.eventID)
+                          .update({
+                        'approved': true,
+                      }),
+                      _fireStore.collection('users').doc(widget.userID).update({
+                        'eventCount': FieldValue.increment(1),
+                      }),
+                    }
+                : () {
+                    _fireStore.collection('users').doc(widget.userID).update({
+                      'verified': true,
+                    });
+                  },
             child: RadioButton(
               selected: 'Approve',
               screen: 'events',

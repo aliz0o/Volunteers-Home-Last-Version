@@ -7,7 +7,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:volunteering/screens/events_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
-
 String userType;
 
 class GetUser extends StatelessWidget {
@@ -43,11 +42,12 @@ class GetUser extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                       CircleAvatar(
-                        backgroundImage: data['gender'] == 'Male'
-                            ? AssetImage('images/male.png')
-                            : AssetImage('images/female.png'),
-                        radius: 35,
-                      ),
+                          radius: 35,
+                          backgroundImage: data['gender'] == 'Male'
+                              ? AssetImage('images/male.png')
+                              : data['gender'] == 'Female'
+                                  ? AssetImage('images/female.png')
+                                  : AssetImage('images/2.png')),
                       SizedBox(width: 15),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class GetUser extends StatelessWidget {
                           style: kDropDownTextStyle.copyWith(fontSize: 11)),
                     )
                   : this.screen == 'button'
-                      ? userType == 'committee'
+                      ? userType == 'committee' && data['verified'] == true
                           ? FloatingActionButton.extended(
                               onPressed: () {
                                 Navigator.pushNamed(
@@ -119,10 +119,11 @@ class GetUser extends StatelessWidget {
                           },
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundImage: data['gender'] == 'Male'
-                                  ? AssetImage('images/male.png')
-                                  : AssetImage('images/female.png'),
-                            ),
+                                backgroundImage: data['gender'] == 'Male'
+                                    ? AssetImage('images/male.png')
+                                    : data['gender'] == 'Female'
+                                        ? AssetImage('images/female.png')
+                                        : AssetImage('images/2.png')),
                             title: Text(
                               data['name'],
                               style: TextStyle(

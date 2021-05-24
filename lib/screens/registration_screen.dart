@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:volunteering/components/CheckBoxListTileDemo.dart';
 import 'package:volunteering/components/radio_button.dart';
 import 'package:volunteering/components/rounded_button.dart';
 import 'package:volunteering/constants.dart';
@@ -9,15 +10,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
+DocumentReference ref = FirebaseFirestore.instance.collection('images').doc();
 
 final nameTextController = TextEditingController();
 final phoneNumberTextController = TextEditingController();
 final ageTextController = TextEditingController();
 final emailTextController = TextEditingController();
 final passwordTextController = TextEditingController();
+final aboutTextController = TextEditingController();
 
 const inactiveColor = Colors.white;
 const activeColor = Color(0xff0962ff);
@@ -53,6 +59,7 @@ class MyStateFull extends StatefulWidget {
 }
 
 class _MyStateFullState extends State<MyStateFull> {
+  final picker = ImagePicker();
   var _currentCitySelected = 'Amman';
   String email;
   String password;
@@ -62,10 +69,16 @@ class _MyStateFullState extends State<MyStateFull> {
   int age;
   String gender;
   String city = 'Amman';
+  String about = '';
+  String imageURL = '';
+  File _selectedImage;
   bool _nameVisibility = false;
   bool _phoneNumberVisibility = false;
   bool _ageVisibility = false;
   bool _genderVisibility = false;
+  bool _imageUploadedVisibility = false;
+  bool _imageVisibility = false;
+
   void checkNullValue() {
     if (name == null || name == "") {
       setState(() {
@@ -103,6 +116,31 @@ class _MyStateFullState extends State<MyStateFull> {
       setState(() {
         _genderVisibility = false;
       });
+
+    if (_selectedImage == null)
+      setState(() {
+        _imageVisibility = true;
+      });
+    else
+      setState(() {
+        _imageVisibility = false;
+      });
+  }
+
+  Future<String> uploadFile(File _image) async {
+    String filename = _image.path;
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('events').child(filename);
+    UploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask;
+    print('File Uploaded');
+    String returnURL;
+    await storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        returnURL = fileURL;
+      });
+    });
+    return returnURL;
   }
 
   @override
@@ -182,27 +220,36 @@ class _MyStateFullState extends State<MyStateFull> {
             ),
             Visibility(
                 child: SizedBox(height: 10), visible: _phoneNumberVisibility),
-            Label(label: 'Age'),
-            Padding(
-              padding: textFieldPadding,
-              child: TextFormField(
-                controller: ageTextController,
-                onChanged: (value) {
-                  age = int.parse(value);
-                  setState(() {
-                    _ageVisibility = false;
-                  });
-                },
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(2),
-                  FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                ],
-                keyboardType: TextInputType.number,
-                style: kTextFieldStyle,
-                decoration: kTextFieldDecoration.copyWith(hintText: 'Your Age'),
+            Visibility(
+                visible: widget.userType == 'volunteer' ? true : false,
+                child: Label(label: 'Age')),
+            Visibility(
+              visible: widget.userType == 'volunteer' ? true : false,
+              child: Padding(
+                padding: textFieldPadding,
+                child: TextFormField(
+                  controller: ageTextController,
+                  onChanged: (value) {
+                    age = int.parse(value);
+                    setState(() {
+                      _ageVisibility = false;
+                    });
+                  },
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(2),
+                    FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                  ],
+                  keyboardType: TextInputType.number,
+                  style: kTextFieldStyle,
+                  decoration:
+                      kTextFieldDecoration.copyWith(hintText: 'Your Age'),
+                ),
               ),
             ),
-            SizedBox(height: 10),
+            Visibility(
+              child: SizedBox(height: 10),
+              visible: widget.userType == 'volunteer' ? true : false,
+            ),
             Visibility(
               child: Text(
                 'You Must Be At Least 13 Years Old',
@@ -212,37 +259,40 @@ class _MyStateFullState extends State<MyStateFull> {
                   fontSize: 10,
                 ),
               ),
-              visible: _ageVisibility,
+              visible: widget.userType == 'volunteer' ? _ageVisibility : false,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      gender = 'Male';
-                      _genderVisibility = false;
-                    });
-                  },
-                  child: RadioButton(
-                      selected: 'Male',
-                      colour: gender == 'Male'
-                          ? activeColor.withOpacity(0.17)
-                          : inactiveColor.withOpacity(0.06)),
-                ),
-                GestureDetector(
+            Visibility(
+              visible: widget.userType == 'volunteer' ? true : false,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
                     onTap: () {
                       setState(() {
-                        gender = 'Female';
+                        gender = 'Male';
                         _genderVisibility = false;
                       });
                     },
                     child: RadioButton(
-                        selected: 'female',
-                        colour: gender == 'Female'
+                        selected: 'Male',
+                        colour: gender == 'Male'
                             ? activeColor.withOpacity(0.17)
-                            : inactiveColor.withOpacity(0.06))),
-              ],
+                            : inactiveColor.withOpacity(0.06)),
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          gender = 'Female';
+                          _genderVisibility = false;
+                        });
+                      },
+                      child: RadioButton(
+                          selected: 'female',
+                          colour: gender == 'Female'
+                              ? activeColor.withOpacity(0.17)
+                              : inactiveColor.withOpacity(0.06))),
+                ],
+              ),
             ),
             SizedBox(height: 10),
             Visibility(
@@ -254,9 +304,14 @@ class _MyStateFullState extends State<MyStateFull> {
                   fontSize: 10,
                 ),
               ),
-              visible: _genderVisibility,
+              visible:
+                  widget.userType == 'volunteer' ? _genderVisibility : false,
             ),
-            Visibility(child: SizedBox(height: 10), visible: _genderVisibility),
+            Visibility(
+              child: SizedBox(height: 10),
+              visible:
+                  widget.userType == 'volunteer' ? _genderVisibility : false,
+            ),
             Container(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
@@ -277,6 +332,101 @@ class _MyStateFullState extends State<MyStateFull> {
                   ),
                 ),
               ),
+            ),
+            SizedBox(height: 13),
+            Label(label: 'About'),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+              child: TextFormField(
+                controller: aboutTextController,
+                onChanged: (value) {
+                  about = value;
+                },
+                textAlign: TextAlign.right,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                style: kArabicTextStyle,
+                decoration: kArabicTextDecoration,
+              ),
+            ),
+            Visibility(
+                visible: widget.userType == 'committee' ? true : false,
+                child: SizedBox(height: 13)),
+            Visibility(
+                visible: widget.userType == 'committee' ? true : false,
+                child: Label(label: 'Verification Documents')),
+            Visibility(
+              visible: widget.userType == 'committee' ? true : false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.white.withOpacity(0.20)),
+                      color: Colors.white.withOpacity(0.06)),
+                  height: 48,
+                  child: GestureDetector(
+                    onTap: () async {
+                      final pickedFile =
+                          await picker.getImage(source: ImageSource.gallery);
+                      if (pickedFile != null) {
+                        _selectedImage = File(pickedFile.path);
+                        setState(() {
+                          _imageUploadedVisibility = true;
+                          _imageVisibility = false;
+                        });
+                      } else {
+                        print('No image selected.');
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Align(
+                          child: Text(
+                            'Upload Image   ',
+                            style: TextStyle(
+                              fontFamily: 'Aclonica',
+                              fontSize: 11,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Icon(Icons.cloud_upload_rounded,
+                            color: Colors.white, size: 30),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Visibility(
+                visible: widget.userType == 'committee' ? true : false,
+                child: SizedBox(height: 5)),
+            Visibility(
+              child: Text(
+                'Image selected',
+                style: TextStyle(color: Colors.white, fontFamily: 'Aclonica'),
+              ),
+              visible: _imageUploadedVisibility,
+            ),
+            Visibility(
+              child: SizedBox(height: 5),
+              visible:
+                  widget.userType == 'committee' ? _genderVisibility : false,
+            ),
+            Visibility(
+              child: Text(
+                'Upload An Verification Document To Sign in AS Committee',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontFamily: 'Aclonica',
+                  fontSize: 10,
+                ),
+              ),
+              visible:
+                  widget.userType == 'committee' ? _imageVisibility : false,
             ),
             SizedBox(height: 13),
             Label(label: 'Email'),
@@ -313,9 +463,11 @@ class _MyStateFullState extends State<MyStateFull> {
               text: 'sign up',
               color: Color(0xff0962ff),
               function: ((name == null || name == "") ||
-                      (phoneNumber.toString().length < 9) ||
-                      (age == null || age <= 12) ||
-                      (gender == null))
+                          (phoneNumber.toString().length < 9) ||
+                          ((age == null || age <= 12) &&
+                              widget.userType == 'volunteer') ||
+                          (gender == null && widget.userType == 'volunteer')) ||
+                      (_selectedImage == null && widget.userType == 'committee')
                   ? () {
                       checkNullValue();
                     }
@@ -342,8 +494,26 @@ class _MyStateFullState extends State<MyStateFull> {
                             'eventCount': 0,
                             'reportedCount': 0,
                             'userType': widget.userType,
+                            'about': about,
+                            'preferredEvents': FieldValue.arrayUnion([]),
+                            'verified': false,
+                            'verificationDocument': '',
                           });
-                          Navigator.pushNamed(context, '/events_screen');
+                          if (_selectedImage != null) {
+                            imageURL = await uploadFile(_selectedImage);
+                          }
+                          await _fireStore
+                              .collection('users')
+                              .doc(newUser.user.uid)
+                              .update({'verificationDocument': imageURL});
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CheckBoxListTileDemo(
+                                  userID: newUser.user.uid),
+                            ),
+                          );
                         }
                         setState(() {
                           showSpinner = false;
@@ -353,6 +523,7 @@ class _MyStateFullState extends State<MyStateFull> {
                         ageTextController.clear();
                         emailTextController.clear();
                         passwordTextController.clear();
+                        aboutTextController.clear();
                       } on FirebaseAuthException catch (e) {
                         setState(() {
                           showSpinner = false;
@@ -387,6 +558,7 @@ class _MyStateFullState extends State<MyStateFull> {
                   ageTextController.clear();
                   emailTextController.clear();
                   passwordTextController.clear();
+                  aboutTextController.clear();
                 });
               },
               child: SubText(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:volunteering/screens/committe_request_screen.dart';
 import 'screens/login_screen.dart';
-import 'screens/registration_screen.dart';
 import 'screens/events_screen.dart';
 import 'screens/create_event_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
       initialRoute: loggedInUser == null ? '/login_screen' : '/events_screen',
       routes: {
         '/login_screen': (context) => LogIn(),
-        '/registration_screen': (context) => RegistrationScreen(),
         '/events_screen': (context) => EventsScreen(),
         '/create_event_screen': (context) => CreateEvent(),
         '/register_type_screen': (context) => RegisterType(),
+        '/committee_request': (context) => CommitteeRequest(),
       },
     );
   }

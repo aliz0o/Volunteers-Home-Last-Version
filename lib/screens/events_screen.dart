@@ -41,6 +41,18 @@ class _EventsScreenState extends State<EventsScreen> {
             automaticallyImplyLeading: false,
             title: Text('Events', style: kAppBarTextStyle),
             actions: [
+              loggedInUser.uid == 'bcz40Yqcb1ch0OBMA6yNPvRHz5V2'
+                  ? TextButton(
+                      child: Text(
+                        'Committee\nRequest',
+                        style: TextStyle(fontSize: 11),
+                        textAlign: TextAlign.center,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/committee_request');
+                      },
+                    )
+                  : Container(),
               IconButton(
                 icon: Icon(Icons.person),
                 onPressed: () {

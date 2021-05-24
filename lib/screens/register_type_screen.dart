@@ -46,7 +46,7 @@ class _MyStateFullState extends State<MyStateFull> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        RegistrationScreen(userType: 'Volunteer')),
+                        RegistrationScreen(userType: 'volunteer')),
               );
             },
             child: RadioButton(

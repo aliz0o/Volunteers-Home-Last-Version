@@ -28,7 +28,7 @@ class _EventStreamState extends State<EventStream> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: widget.tap == 'events'
-            ? loggedInUser.uid == 'bcz40Yqcb1ch0OBMA6yNPvRHz5V2'
+            ? loggedInUser.uid == '7GvxiaHgbqeFmAtSKq6KGs6JSRE2'
                 ? _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: false)
@@ -106,7 +106,7 @@ class _EventStreamState extends State<EventStream> {
                 volunteersCounter: volunteersCounter,
                 attendanceCounter: attendanceCounter,
                 userID: userID,
-                screen: widget.screen,
+                screen: 'events',
                 comingVolunteerID: comingVolunteerID,
                 comingAttendanceID: comingAttendanceID,
                 comment: comment,
@@ -125,7 +125,8 @@ class _EventStreamState extends State<EventStream> {
                 if (formattedDateTime.compareTo(DateTime.now()) >= 0) {
                   calenderCard.add(eventCard);
                 }
-              } else if (widget.tap == 'MyEvent') {
+              } else if (widget.tap == 'MyEvent' ||
+                  formattedDateTime.compareTo(DateTime.now()) >= 0) {
                 myEventCard.add(eventCard);
               }
             }

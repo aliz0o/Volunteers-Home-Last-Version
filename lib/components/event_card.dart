@@ -71,7 +71,7 @@ class _EventCardState extends State<EventCard> {
           children: [
             GetUser(
               userID: widget.userID,
-              screen: 'events',
+              screen: widget.screen,
               createdOn: widget.createdOn,
               eventID: widget.eventID,
             ),
@@ -96,15 +96,21 @@ class _EventCardState extends State<EventCard> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: widget.screen == 'committeeRequest'
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.spaceAround,
                   children: [
-                    Row(
-                      children: [
-                        Icon(Icons.date_range, color: Colors.white, size: 20),
-                        Text(widget.eventDateTime,
-                            style: kEventInfoTextStyle.copyWith(fontSize: 11)),
-                      ],
-                    ),
+                    widget.screen == 'committeeRequest'
+                        ? Container()
+                        : Row(
+                            children: [
+                              Icon(Icons.date_range,
+                                  color: Colors.white, size: 20),
+                              Text(widget.eventDateTime,
+                                  style: kEventInfoTextStyle.copyWith(
+                                      fontSize: 11)),
+                            ],
+                          ),
                     Row(
                       children: [
                         Icon(Icons.location_on, color: Colors.white, size: 20),
@@ -112,28 +118,31 @@ class _EventCardState extends State<EventCard> {
                             style: kEventInfoTextStyle.copyWith(fontSize: 14)),
                       ],
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CommentScreen(
-                                    commentSender: widget.commentSender,
-                                    comment: widget.comment,
-                                    eventID: widget.eventID,
-                                  )),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Icon(Icons.comment_bank,
-                              color: Color(0xff0962ff), size: 20),
-                          Text(' Comments',
-                              style: kEventInfoTextStyle.copyWith(
-                                  fontSize: 14, color: Color(0xff0962ff))),
-                        ],
-                      ),
-                    ),
+                    widget.screen == 'committeeRequest'
+                        ? Container()
+                        : GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CommentScreen(
+                                          commentSender: widget.commentSender,
+                                          comment: widget.comment,
+                                          eventID: widget.eventID,
+                                        )),
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Icon(Icons.comment_bank,
+                                    color: Color(0xff0962ff), size: 20),
+                                Text(' Comments',
+                                    style: kEventInfoTextStyle.copyWith(
+                                        fontSize: 14,
+                                        color: Color(0xff0962ff))),
+                              ],
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -169,15 +178,8 @@ class _EventCardState extends State<EventCard> {
                       userID: widget.userID,
                     )
                   : EventCardButton(
-                      //eventClass: widget.eventClass,
                       eventID: widget.eventID,
-                      //noOfVolunteers: widget.noOfVolunteers,
-                      //noOfAttendance: widget.noOfAttendees,
-                      //volunteersCounter: widget.volunteersCounter,
-                      //attendanceCounter: widget.attendanceCounter,
                       screen: widget.screen,
-                      //comingVolunteerID: widget.comingVolunteerID,
-                      //comingAttendanceID: widget.comingAttendanceID,
                       userID: widget.userID,
                     ),
             ),

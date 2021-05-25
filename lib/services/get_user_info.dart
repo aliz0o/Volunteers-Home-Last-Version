@@ -188,7 +188,8 @@ class GetUser extends StatelessWidget {
                                     'eventCount': FieldValue.increment(-1)
                                   });
                                 } else {
-                                  if (this.screen == 'comingList') {
+                                  if (this.screen == 'comingList' ||
+                                      this.screen == 'committeeRequest') {
                                     _fireStore
                                         .collection('users')
                                         .doc(this.userID)

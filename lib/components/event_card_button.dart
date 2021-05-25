@@ -106,9 +106,9 @@ class _EventCardButtonState extends State<EventCardButton> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.screen == 'events' ||
-            widget.screen == 'committeeRequest' &&
-                loggedInUser.uid == 'bcz40Yqcb1ch0OBMA6yNPvRHz5V2')
+    return ((widget.screen == 'events' ||
+                widget.screen == 'committeeRequest') &&
+            loggedInUser.uid == '7GvxiaHgbqeFmAtSKq6KGs6JSRE2')
         ? GestureDetector(
             onTap: widget.screen == 'events'
                 ? () => {

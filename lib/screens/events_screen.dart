@@ -41,7 +41,7 @@ class _EventsScreenState extends State<EventsScreen> {
             automaticallyImplyLeading: false,
             title: Text('Events', style: kAppBarTextStyle),
             actions: [
-              loggedInUser.uid == 'bcz40Yqcb1ch0OBMA6yNPvRHz5V2'
+              loggedInUser.uid == '7GvxiaHgbqeFmAtSKq6KGs6JSRE2'
                   ? TextButton(
                       child: Text(
                         'Committee\nRequest',

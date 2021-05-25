@@ -24,6 +24,7 @@ class GetUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     return FutureBuilder<DocumentSnapshot>(
       future: users.doc(this.userID).get(),
@@ -38,45 +39,76 @@ class GetUser extends StatelessWidget {
           Map<String, dynamic> data = snapshot.data.data();
           userType = data['userType'];
           return this.screen == 'profile'
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                      CircleAvatar(
-                          radius: 35,
-                          backgroundImage: data['gender'] == 'Male'
-                              ? AssetImage('images/male.png')
-                              : data['gender'] == 'Female'
-                                  ? AssetImage('images/female.png')
-                                  : AssetImage('images/2.png')),
-                      SizedBox(width: 15),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(data['name'],
-                              style: kAppBarTextStyle.copyWith(fontSize: 20)),
-                          Text(data['city'], style: kUserInfoTextStyle),
-                        ],
-                      ),
-                      Expanded(child: SizedBox(width: 20)),
-                      Container(
-                        color: Colors.white.withOpacity(0.70),
-                        height: 70,
-                        width: 0.4,
-                      ),
-                      SizedBox(width: 17.5),
-                      Column(
-                        children: [
-                          Text(
-                            data['eventCount'].toString(),
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
+              ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                          CircleAvatar(
+                              radius: 35,
+                              backgroundImage: data['gender'] == 'Male'
+                                  ? AssetImage('images/male.png')
+                                  : data['gender'] == 'Female'
+                                      ? AssetImage('images/female.png')
+                                      : AssetImage('images/2.png')),
+
+                          SizedBox(width: 15),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                            children: [
+                              Text(data['name'],
+                                  style: kAppBarTextStyle.copyWith(fontSize: 20)),
+                              //Text(data['city'], style: kUserInfoTextStyle),
+                            ],
+
+
                           ),
-                          SizedBox(height: 3),
-                          Text('Events', style: kTapControllerTextStyle),
-                        ],
-                      ),
-                    ])
+
+                          Expanded(child: SizedBox(width: 20)),
+
+                          Container(
+                            color: Colors.white.withOpacity(0.70),
+                            height: 70,
+                            width: 0.4,
+                          ),
+                          SizedBox(width: 17.5),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                data['eventCount'].toString(),
+                                style: TextStyle(
+                                    fontSize: 25, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 3),
+                              Text('Events', style: kTapControllerTextStyle),
+                            ],
+                          ),
+                        ]),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+
+                  Text('Location : '+data['city'], style: kUserInfoTextStyle),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  Text('Email : '+data['email'], style: kUserInfoTextStyle),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  Text('PhoneNO : '+'${data['phoneNumber']}', style: kUserInfoTextStyle),
+                 // TextButton(onPressed: null, child: Text('more Info :',style: TextStyle(color:Colors.white),) ),
+
+                ],
+              )
               : this.screen == 'commentScreen'
                   ? GestureDetector(
                       onTap: () {

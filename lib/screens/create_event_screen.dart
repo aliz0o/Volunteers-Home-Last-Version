@@ -22,7 +22,7 @@ final snackBar = SnackBar(
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 DocumentReference ref = FirebaseFirestore.instance.collection('images').doc();
-User loggedInUser;
+User loggedInUser2;
 
 const inactiveColor = Colors.white;
 const activeColor = Color(0xff0962ff);
@@ -82,7 +82,7 @@ class _MyStateFullState extends State<MyStateFull> {
     try {
       final user = _auth.currentUser;
       if (user != null) {
-        loggedInUser = user;
+        loggedInUser2 = user;
       }
     } catch (e) {
       print(e);
@@ -156,7 +156,7 @@ class _MyStateFullState extends State<MyStateFull> {
       'comingVolunteerID': FieldValue.arrayUnion([]),
       'comingAttendanceID': FieldValue.arrayUnion([]),
       'all': FieldValue.arrayUnion([]),
-      'userID': loggedInUser.uid,
+      'userID': loggedInUser2.uid,
       'approved': false,
       'commentSender': FieldValue.arrayUnion([]),
       'comment': FieldValue.arrayUnion([]),

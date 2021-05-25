@@ -19,7 +19,7 @@ class LogIn extends StatelessWidget {
           automaticallyImplyLeading: false,
           title: Center(
             child: Text(
-              'log in',
+              'Log In',
               style: kAppBarTextStyle,
             ),
           ),

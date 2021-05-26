@@ -7,8 +7,6 @@ import 'package:volunteering/services/events_stream_builder.dart';
 import 'package:volunteering/services/get_user_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:volunteering/screens/events_screen.dart';
-
-
 import 'create_event_screen.dart';
 import 'login_screen.dart';
 
@@ -24,13 +22,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     final drawerHeader = UserAccountsDrawerHeader(
-      accountName: InkWell(
-          child: Text('name')),
+      accountName: InkWell(child: Text('name')),
       accountEmail: Text('Email'),
       currentAccountPicture: CircleAvatar(
         backgroundColor: Colors.white,
@@ -47,19 +42,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           title: const Text('Update Profile page'),
           onTap: () =>
               Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                return EditProfile();
-              })),
+            return EditProfile();
+          })),
         ),
-
-        // ListTile(
-        //   title: const Text('Creat new event'),
-        //   onTap: () {
-        //     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-        //       return CreateEvent();
-        //     }));
-        //   },
-        // ),
-        Divider(thickness: 2,),
+        Divider(
+          thickness: 2,
+        ),
         ListTile(
           title: const Text('preferred Events'),
           onTap: () {
@@ -68,18 +56,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }));
           },
         ),
-        Divider(thickness: 2,),
+        Divider(
+          thickness: 2,
+        ),
         ListTile(
           title: const Text('Log out'),
           onTap: () {
             _auth.signOut();
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) {
+            Navigator.of(context)
+                .pushReplacement(MaterialPageRoute(builder: (ctx) {
               return LogIn();
             }));
-
           },
         ),
-        Divider(thickness: 2,),
+        Divider(
+          thickness: 2,
+        ),
       ],
     );
 
@@ -87,11 +79,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
-         // backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+          // backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
-            toolbarHeight: MediaQuery.of(context).size.height/3.1,
+            toolbarHeight: MediaQuery.of(context).size.height / 3.1,
             title: GetUser(userID: widget.userID, screen: 'profile'),
-           // automaticallyImplyLeading: false,
+            // automaticallyImplyLeading: false,
             bottom: TabBar(
               //labelPadding: EdgeInsets.symmetric(horizontal: 0),
               tabs: [
@@ -104,24 +96,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
 
-          //  backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+            //  backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           ),
           drawer: Drawer(
             child: Container(
-
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Colors.blue[200],
-                        Colors.indigo[600],
-                      ],
-                    )
-                ),
-
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Colors.blue[200],
+                    Colors.indigo[600],
+                  ],
+                )),
                 child: drawerItems),
-
           ),
           // floatingActionButton: FloatingActionButton.extended(
           //   onPressed: () {

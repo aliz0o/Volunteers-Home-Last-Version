@@ -29,10 +29,10 @@ class _EventStreamState extends State<EventStream> {
   @override
   Widget build(BuildContext context) {
     Authentication authentication =
-    Provider.of<Authentication>(context, listen: true);
+        Provider.of<Authentication>(context, listen: true);
     return StreamBuilder<QuerySnapshot>(
         stream: widget.tap == 'events'
-            ? loggedInUser.uid == '7GvxiaHgbqeFmAtSKq6KGs6JSRE2'
+            ? loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2'
                 ? _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: false)
@@ -65,15 +65,8 @@ class _EventStreamState extends State<EventStream> {
             return Center(
                 child: Text("Something went wrong..",
                     style: kUserInfoTextStyle.copyWith(color: Colors.black)));
-          }
-          else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Text(
-                "Loading",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 35, color: Colors.blueAccent),
-              ),
-            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) {
             final documents = snapshot.data.docs;
             List<EventCard> eventsCard = [];
@@ -127,11 +120,17 @@ class _EventStreamState extends State<EventStream> {
               );
 
               if (formattedDateTime.compareTo(DateTime.now()) >= 0) {
-                if (eventClass == 'All' &&(authentication.eventTypes.contains(eventType) || authentication.eventTypes.length == 0 )) {
+                if (eventClass == 'All' &&
+                    (authentication.eventTypes.contains(eventType) ||
+                        authentication.eventTypes.length == 0)) {
                   eventsCard.add(eventCard);
-                } else if (eventClass == 'Volunteering'&&(authentication.eventTypes.contains(eventType) || authentication.eventTypes.length == 0 )) {
+                } else if (eventClass == 'Volunteering' &&
+                    (authentication.eventTypes.contains(eventType) ||
+                        authentication.eventTypes.length == 0)) {
                   volunteeringCard.add(eventCard);
-                } else if (eventClass == 'Attending'&&(authentication.eventTypes.contains(eventType) || authentication.eventTypes.length == 0 )) {
+                } else if (eventClass == 'Attending' &&
+                    (authentication.eventTypes.contains(eventType) ||
+                        authentication.eventTypes.length == 0)) {
                   attendingCard.add(eventCard);
                 }
               }
@@ -139,8 +138,7 @@ class _EventStreamState extends State<EventStream> {
                 if (formattedDateTime.compareTo(DateTime.now()) >= 0) {
                   calenderCard.add(eventCard);
                 }
-              } else if (widget.tap == 'MyEvent' ||
-                  formattedDateTime.compareTo(DateTime.now()) >= 0) {
+              } else if (widget.tap == 'MyEvent') {
                 myEventCard.add(eventCard);
               }
             }

@@ -42,11 +42,15 @@ class _EventsScreenState extends State<EventsScreen> {
             automaticallyImplyLeading: false,
             title: Text('Events', style: kAppBarTextStyle),
             actions: [
-              loggedInUser.uid == '7GvxiaHgbqeFmAtSKq6KGs6JSRE2'
-                  ? TextButton(
+              loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2'
+                  ? FlatButton(
+                      color: Colors.white.withOpacity(0.25),
                       child: Text(
-                        'Committee\nRequest',
-                        style: TextStyle(fontSize: 11),
+                        'Request',
+                        style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontFamily: 'Product Sans'),
                         textAlign: TextAlign.center,
                       ),
                       onPressed: () {
@@ -81,7 +85,6 @@ class _EventsScreenState extends State<EventsScreen> {
                 ),
               ],
             ),
-
           ),
           floatingActionButton:
               GetUser(userID: loggedInUser.uid, screen: 'button'),
@@ -102,7 +105,6 @@ class _EventsScreenState extends State<EventsScreen> {
                 tap: 'events',
                 screen: 'events',
               ),
-
             ],
           ),
         ),

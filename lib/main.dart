@@ -13,11 +13,8 @@ final _auth = FirebaseAuth.instance;
 User loggedInUser;
 
 void main() async {
-
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
 
   final user = _auth.currentUser;
   loggedInUser = user;
@@ -26,8 +23,6 @@ void main() async {
         providers: [ChangeNotifierProvider(create: (_) => Authentication())],
         child: MyApp()),
   );
-
-  // runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

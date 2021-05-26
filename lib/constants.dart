@@ -84,6 +84,16 @@ const kCityList = [
   'al balqa'
 ];
 
+const kEventTypeList = [
+  "Educational",
+  "Medical",
+  "Cultural",
+  "Religious",
+  "Entertaining",
+  "Environmental",
+  "other",
+];
+
 const TextStyle kDateTimeTextStyle = TextStyle(
   fontFamily: 'Product Sans',
   fontSize: 15,

@@ -37,14 +37,6 @@ class _ComingListState extends State<ComingList> {
             ),
             backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            label: Text('Events', style: kTapControllerTextStyle),
-            icon: Icon(Icons.arrow_back_ios_outlined),
-            backgroundColor: Color.fromRGBO(20, 21, 22, 1),
-          ),
           body: TabBarView(
             children: [
               ListView.builder(

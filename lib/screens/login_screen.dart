@@ -14,29 +14,27 @@ class LogIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //  backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+        //  backgroundColor: Color.fromRGBO(16, 17, 18, 1),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Center(
             child: Text(
-              'Volunteer Home',
+              'Log In',
               style: kAppBarTextStyle,
             ),
           ),
-         // backgroundColor: Colors.black,
+          // backgroundColor: Colors.black,
         ),
         body: Container(
-
             decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    Colors.blue[300],
-                    Colors.indigo[900],
-                  ],
-                )
-            ),
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Colors.blue[300],
+                Colors.indigo[900],
+              ],
+            )),
             child: MyStateFull()));
   }
 }
@@ -60,18 +58,22 @@ class _MyStateFullState extends State<MyStateFull>
       inAsyncCall: showSpinner,
       child: Column(
         children: [
-         Flexible(child: SizedBox(height: MediaQuery.of(context).size.height/9)),
-
-          Flexible(child: Image.asset('images/volunteer.png',height: 400,)),
+          Flexible(child: SizedBox(height: 50)),
+          Flexible(
+            flex: 3,
+            child: Image.asset(
+              'images/volunteer.png',
+            ),
+          ),
           Flexible(
             child: Text(
-              'Log In',
+              'Volunteers Home',
               style: TextStyle(
-                  fontFamily: 'Aclonica', fontSize: 50, color: Colors.white),
+                  fontFamily: 'Aclonica', fontSize: 29, color: Colors.white),
               textAlign: TextAlign.center,
             ),
           ),
-         // Flexible(child: SizedBox(height: 150)),
+          Flexible(child: SizedBox(height: 20)),
           Label(label: 'Email'),
           Padding(
             padding: textFieldPadding,

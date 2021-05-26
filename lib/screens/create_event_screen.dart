@@ -41,21 +41,18 @@ class CreateEvent extends StatelessWidget {
             style: kAppBarTextStyle,
           ),
         ),
-      //  backgroundColor: Colors.black,
+        //  backgroundColor: Colors.black,
       ),
       body: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
-                colors: [
-                  Colors.blue[400],
-                  Colors.deepPurple[600],
-                ],
-              )
-          ),
-
-
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
+            colors: [
+              Colors.blue[400],
+              Colors.deepPurple[600],
+            ],
+          )),
           child: MyStateFull()),
     );
   }
@@ -69,6 +66,7 @@ class MyStateFull extends StatefulWidget {
 class _MyStateFullState extends State<MyStateFull> {
   final picker = ImagePicker();
   var _currentCitySelected = 'Amman';
+  var _currentTypeSelected = 'Educational';
   bool _volunteeringVisible = false;
   bool _attendingVisible = false;
   bool _imageUploadedVisibility = false;
@@ -84,18 +82,7 @@ class _MyStateFullState extends State<MyStateFull> {
   Timestamp createdOn;
   String imageURL = '';
   File _selectedImage;
-  String Type_event;
-
-
-  List eventType = [
-    "Educational",
-    "Medical",
-    "Cultural",
-    "Religious",
-    "Entertaining",
-    "Environmental",
-    "other",
-  ];
+  String _eventType = 'Educational';
 
   @override
   void initState() {
@@ -187,7 +174,7 @@ class _MyStateFullState extends State<MyStateFull> {
       'comment': FieldValue.arrayUnion([]),
       'deleted': false,
       'reportedCount': 0,
-      'eventType' :Type_event,
+      'eventType': _eventType,
     });
 
     setState(() {
@@ -264,41 +251,44 @@ class _MyStateFullState extends State<MyStateFull> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1),
-                  borderRadius: BorderRadius.circular(15)),
-              margin: EdgeInsets.only(left: 25, right: 25),
-              padding: EdgeInsets.only(left: 35, right: 35),
-              child: DropdownButton(
-                hint: Text('select event type',style: TextStyle(color: Colors.white),),
-
-                value: Type_event,
-                dropdownColor: Colors.black,
-                icon: Icon(Icons.arrow_drop_down),
-                iconSize: 36,
-                elevation: 16,
-                //isExpanded: true,
-                underline: SizedBox(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                ),
-
-                onChanged: (newValue) {
-                  setState(() {
-                    Type_event = newValue;
-                  });
-                },
-                items: eventType.map((value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ),
+            //SizedBox(height: 10),
+            // Container(
+            //   decoration: BoxDecoration(
+            //       border: Border.all(color: Colors.grey, width: 1),
+            //       borderRadius: BorderRadius.circular(15)),
+            //   margin: EdgeInsets.only(left: 25, right: 25),
+            //   padding: EdgeInsets.only(left: 35, right: 35),
+            //   child: DropdownButton(
+            //     hint: Text(
+            //       'select event type',
+            //       style: TextStyle(color: Colors.white),
+            //     ),
+            //
+            //     value: _eventType,
+            //     dropdownColor: Colors.black,
+            //     icon: Icon(Icons.arrow_drop_down),
+            //     iconSize: 36,
+            //     elevation: 16,
+            //     //isExpanded: true,
+            //     underline: SizedBox(),
+            //     style: TextStyle(
+            //       color: Colors.white,
+            //       fontSize: 22,
+            //     ),
+            //
+            //     onChanged: (newValue) {
+            //       setState(() {
+            //         _eventType = newValue;
+            //       });
+            //     },
+            //     items: eventType.map((value) {
+            //       return DropdownMenuItem(
+            //         value: value,
+            //         child: Text(value),
+            //       );
+            //     }).toList(),
+            //   ),
+            // ),
             SizedBox(height: 5),
             Visibility(
               child: Text(
@@ -400,6 +390,26 @@ class _MyStateFullState extends State<MyStateFull> {
             Visibility(
                 visible: _volunteeringVisible || _attendingVisible,
                 child: SizedBox(height: 13)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButtonFormField<String>(
+                  style: kDropDownTextStyle,
+                  decoration: kDropDownInputDecoration,
+                  dropdownColor: Color.fromRGBO(16, 17, 18, 1),
+                  items: kEventTypeList.map((String dropDownStringItem) {
+                    return DropdownMenuItem<String>(
+                        child: Text(dropDownStringItem),
+                        value: dropDownStringItem);
+                  }).toList(),
+                  onChanged: (String newValueSelected) {
+                    _eventType = newValueSelected;
+                  },
+                  value: _currentTypeSelected,
+                ),
+              ),
+            ),
+            SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               child: DateTimeField(

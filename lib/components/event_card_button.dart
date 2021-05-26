@@ -108,7 +108,7 @@ class _EventCardButtonState extends State<EventCardButton> {
   Widget build(BuildContext context) {
     return ((widget.screen == 'events' ||
                 widget.screen == 'committeeRequest') &&
-            loggedInUser.uid == '7GvxiaHgbqeFmAtSKq6KGs6JSRE2')
+            loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2')
         ? GestureDetector(
             onTap: widget.screen == 'events'
                 ? () => {
@@ -232,6 +232,5 @@ class _EventCardButtonState extends State<EventCardButton> {
                   colour: inactiveColor.withOpacity(0.06),
                 ),
               );
-
   }
 }

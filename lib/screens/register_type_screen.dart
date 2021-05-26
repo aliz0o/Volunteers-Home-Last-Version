@@ -10,7 +10,7 @@ class RegisterType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       // backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+        // backgroundColor: Color.fromRGBO(16, 17, 18, 1),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Center(
@@ -19,21 +19,18 @@ class RegisterType extends StatelessWidget {
               style: kAppBarTextStyle,
             ),
           ),
-         // backgroundColor: Colors.black,
+          // backgroundColor: Colors.black,
         ),
         body: Container(
-
             decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  colors: [
-                    Colors.blue[200],
-                    Colors.blue[800],
-                  ],
-                )
-            ),
-
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                Colors.blue[200],
+                Colors.blue[800],
+              ],
+            )),
             child: MyStateFull()));
   }
 }

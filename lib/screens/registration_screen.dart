@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:volunteering/components/CheckBoxListTileDemo.dart';
 import 'package:volunteering/components/radio_button.dart';
 import 'package:volunteering/components/rounded_button.dart';
 import 'package:volunteering/constants.dart';
@@ -34,7 +33,7 @@ class RegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     // backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+      // backgroundColor: Color.fromRGBO(16, 17, 18, 1),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
@@ -44,22 +43,19 @@ class RegistrationScreen extends StatelessWidget {
           ),
         ),
         //backgroundColor: Color(0xFF2C2C2C),
-       // backgroundColor: Colors.black,
+        // backgroundColor: Colors.black,
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
-                colors: [
-                  Colors.blue[400],
-                  Colors.blue[900],
-                ],
-              )
-          ),
-
-
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: [
+              Colors.blue[400],
+              Colors.blue[900],
+            ],
+          )),
           child: MyStateFull(userType: this.userType)),
     );
   }
@@ -522,13 +518,7 @@ class _MyStateFullState extends State<MyStateFull> {
                               .doc(newUser.user.uid)
                               .update({'verificationDocument': imageURL});
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CheckBoxListTileDemo(
-                                  userID: newUser.user.uid),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/events_screen');
                         }
                         setState(() {
                           showSpinner = false;

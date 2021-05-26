@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:volunteering/backEnd/dataBase.dart';
 import 'package:volunteering/components/event_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +28,8 @@ class EventStream extends StatefulWidget {
 class _EventStreamState extends State<EventStream> {
   @override
   Widget build(BuildContext context) {
+    Authentication authentication =
+    Provider.of<Authentication>(context, listen: true);
     return StreamBuilder<QuerySnapshot>(
         stream: widget.tap == 'events'
             ? loggedInUser.uid == '7GvxiaHgbqeFmAtSKq6KGs6JSRE2'
@@ -60,9 +64,17 @@ class _EventStreamState extends State<EventStream> {
           if (snapshot.hasError) {
             return Center(
                 child: Text("Something went wrong..",
-                    style: kUserInfoTextStyle.copyWith(color: Colors.white)));
+                    style: kUserInfoTextStyle.copyWith(color: Colors.black)));
           }
-          if (snapshot.hasData) {
+          else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Text(
+                "Loading",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 35, color: Colors.blueAccent),
+              ),
+            );
+          } else if (snapshot.hasData) {
             final documents = snapshot.data.docs;
             List<EventCard> eventsCard = [];
             List<EventCard> volunteeringCard = [];
@@ -85,6 +97,7 @@ class _EventStreamState extends State<EventStream> {
               final comingVolunteerID = event['comingVolunteerID'];
               final comingAttendanceID = event['comingAttendanceID'];
               final comment = event['comment'];
+              final eventType = event['eventType'];
               final commentSender = event['commentSender'];
               final DateTime formattedCreatedOn = createdOn.toDate();
               String stringCreatedOn =
@@ -112,12 +125,13 @@ class _EventStreamState extends State<EventStream> {
                 comment: comment,
                 commentSender: commentSender,
               );
+
               if (formattedDateTime.compareTo(DateTime.now()) >= 0) {
-                if (eventClass == 'All') {
+                if (eventClass == 'All' &&(authentication.eventTypes.contains(eventType) || authentication.eventTypes.length == 0 )) {
                   eventsCard.add(eventCard);
-                } else if (eventClass == 'Volunteering') {
+                } else if (eventClass == 'Volunteering'&&(authentication.eventTypes.contains(eventType) || authentication.eventTypes.length == 0 )) {
                   volunteeringCard.add(eventCard);
-                } else if (eventClass == 'Attending') {
+                } else if (eventClass == 'Attending'&&(authentication.eventTypes.contains(eventType) || authentication.eventTypes.length == 0 )) {
                   attendingCard.add(eventCard);
                 }
               }

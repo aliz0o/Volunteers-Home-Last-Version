@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,11 +16,13 @@ class GetUser extends StatelessWidget {
   final String screen;
   final String createdOn;
   final String eventID;
+  File imageUrl;
 
   GetUser({
     @required this.userID,
     @required this.screen,
     this.eventID,
+    this.imageUrl,
     this.createdOn,
   });
 
@@ -33,7 +37,7 @@ class GetUser extends StatelessWidget {
         if (snapshot.hasError) {
           return Center(
               child: Text("Something went wrong",
-                  style: kUserInfoTextStyle.copyWith(color: Colors.white)));
+                  style: kUserInfoTextStyle.copyWith(color: Colors.black)));
         }
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
@@ -47,6 +51,7 @@ class GetUser extends StatelessWidget {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        //SizedBox(width: 15),
                           CircleAvatar(
                               radius: 35,
                               backgroundImage: data['gender'] == 'Male'
@@ -55,13 +60,13 @@ class GetUser extends StatelessWidget {
                                       ? AssetImage('images/female.png')
                                       : AssetImage('images/2.png')),
 
-                          SizedBox(width: 15),
+
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
 
                             children: [
-                              Text(data['name'],
-                                  style: kAppBarTextStyle.copyWith(fontSize: 20)),
+                              // Text(data['name'],
+                              //     style: kAppBarTextStyle.copyWith(fontSize: 15)),
                               //Text(data['city'], style: kUserInfoTextStyle),
                             ],
 
@@ -90,18 +95,22 @@ class GetUser extends StatelessWidget {
                           ),
                         ]),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
 
+                  Text('name : '+data['name'], style: kUserInfoTextStyle),
+                  SizedBox(
+                    height: 5,
+                  ),
 
                   Text('Location : '+data['city'], style: kUserInfoTextStyle),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
 
                   Text('Email : '+data['email'], style: kUserInfoTextStyle),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
 
                   Text('PhoneNO : '+'${data['phoneNumber']}', style: kUserInfoTextStyle),
@@ -120,7 +129,11 @@ class GetUser extends StatelessWidget {
                         );
                       },
                       child: Text(data['name'],
-                          style: kDropDownTextStyle.copyWith(fontSize: 11)),
+                          style: TextStyle(fontSize: 11,color: Colors.black)
+
+
+
+                      ),
                     )
                   : this.screen == 'button'
                       ? userType == 'committee' && data['verified'] == true
@@ -132,7 +145,7 @@ class GetUser extends StatelessWidget {
                               label: Text('Create',
                                   style: kTapControllerTextStyle),
                               icon: Icon(Icons.add),
-                              backgroundColor: Color.fromRGBO(20, 21, 22, 1),
+                             // backgroundColor: Color.fromRGBO(20, 21, 22, 1),
                             )
                           : Visibility(
                               child: Container(),

@@ -40,6 +40,7 @@ dependencies:
   transparent_image: ^1.0.0
   rflutter_alert: ^2.0.2
   shimmer: ^2.0.0
+  provider:
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +60,7 @@ flutter:
 
   assets:
   - images/
+  - images/volunteer.png
 
   fonts:
   - family: Amiri

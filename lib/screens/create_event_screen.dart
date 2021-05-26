@@ -22,17 +22,17 @@ final snackBar = SnackBar(
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 DocumentReference ref = FirebaseFirestore.instance.collection('images').doc();
-User loggedInUser2;
+User loggedInUser;
 
 const inactiveColor = Colors.white;
-const activeColor = Color(0xff0962ff);
+const activeColor = Color(0xff1111ff);
 final format = DateFormat("yyyy-MM-dd HH:mm");
 
 class CreateEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+      //backgroundColor: Color.fromRGBO(16, 17, 18, 1),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
@@ -41,9 +41,22 @@ class CreateEvent extends StatelessWidget {
             style: kAppBarTextStyle,
           ),
         ),
-        backgroundColor: Colors.black,
+      //  backgroundColor: Colors.black,
       ),
-      body: MyStateFull(),
+      body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+                colors: [
+                  Colors.blue[400],
+                  Colors.deepPurple[600],
+                ],
+              )
+          ),
+
+
+          child: MyStateFull()),
     );
   }
 }
@@ -71,6 +84,18 @@ class _MyStateFullState extends State<MyStateFull> {
   Timestamp createdOn;
   String imageURL = '';
   File _selectedImage;
+  String Type_event;
+
+
+  List eventType = [
+    "Educational",
+    "Medical",
+    "Cultural",
+    "Religious",
+    "Entertaining",
+    "Environmental",
+    "other",
+  ];
 
   @override
   void initState() {
@@ -82,7 +107,7 @@ class _MyStateFullState extends State<MyStateFull> {
     try {
       final user = _auth.currentUser;
       if (user != null) {
-        loggedInUser2 = user;
+        loggedInUser = user;
       }
     } catch (e) {
       print(e);
@@ -156,12 +181,13 @@ class _MyStateFullState extends State<MyStateFull> {
       'comingVolunteerID': FieldValue.arrayUnion([]),
       'comingAttendanceID': FieldValue.arrayUnion([]),
       'all': FieldValue.arrayUnion([]),
-      'userID': loggedInUser2.uid,
+      'userID': loggedInUser.uid,
       'approved': false,
       'commentSender': FieldValue.arrayUnion([]),
       'comment': FieldValue.arrayUnion([]),
       'deleted': false,
       'reportedCount': 0,
+      'eventType' :Type_event,
     });
 
     setState(() {
@@ -201,7 +227,7 @@ class _MyStateFullState extends State<MyStateFull> {
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white.withOpacity(0.20)),
+                    border: Border.all(color: Colors.black.withOpacity(0.20)),
                     color: Colors.white.withOpacity(0.06)),
                 height: 180,
                 child: GestureDetector(
@@ -236,6 +262,41 @@ class _MyStateFullState extends State<MyStateFull> {
                     ],
                   ),
                 ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey, width: 1),
+                  borderRadius: BorderRadius.circular(15)),
+              margin: EdgeInsets.only(left: 25, right: 25),
+              padding: EdgeInsets.only(left: 35, right: 35),
+              child: DropdownButton(
+                hint: Text('select event type',style: TextStyle(color: Colors.white),),
+
+                value: Type_event,
+                dropdownColor: Colors.black,
+                icon: Icon(Icons.arrow_drop_down),
+                iconSize: 36,
+                elevation: 16,
+                //isExpanded: true,
+                underline: SizedBox(),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                ),
+
+                onChanged: (newValue) {
+                  setState(() {
+                    Type_event = newValue;
+                  });
+                },
+                items: eventType.map((value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
             ),
             SizedBox(height: 5),

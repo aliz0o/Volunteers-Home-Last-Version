@@ -34,19 +34,33 @@ class RegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+     // backgroundColor: Color.fromRGBO(16, 17, 18, 1),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
           child: Text(
-            'sign in',
+            'Sign Up',
             style: kAppBarTextStyle,
           ),
         ),
         //backgroundColor: Color(0xFF2C2C2C),
-        backgroundColor: Colors.black,
+       // backgroundColor: Colors.black,
       ),
-      body: MyStateFull(userType: this.userType),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [
+                  Colors.blue[400],
+                  Colors.blue[900],
+                ],
+              )
+          ),
+
+
+          child: MyStateFull(userType: this.userType)),
     );
   }
 }
@@ -498,6 +512,7 @@ class _MyStateFullState extends State<MyStateFull> {
                             'preferredEvents': FieldValue.arrayUnion([]),
                             'verified': false,
                             'verificationDocument': '',
+                            'photoUrl': '',
                           });
                           if (_selectedImage != null) {
                             imageURL = await uploadFile(_selectedImage);

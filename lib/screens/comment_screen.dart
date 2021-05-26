@@ -27,15 +27,16 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-          backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+        //  backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
             title: Center(
               child: Text('Comments',
                   style: kAppBarTextStyle.copyWith(fontSize: 21)),
             ),
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.black,
+           //backgroundColor: Colors.black,
           ),
           body: SafeArea(
             child: Column(
@@ -50,12 +51,13 @@ class _CommentScreenState extends State<CommentScreen> {
                     onChanged: (value) {
                       commentText = value;
                     },
-                    style: kArabicTextStyle,
+                    style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.multiline,
                     textAlign: TextAlign.right,
                     maxLines: null,
                     decoration: kArabicTextDecoration.copyWith(
                       hintText: '..اكتب تعليقك هنا',
+                      hintStyle: TextStyle(color: Colors.grey),
                       suffixIcon: GestureDetector(
                         onTap: () {
                           messageTextController.clear();
@@ -98,7 +100,7 @@ class CommentStream extends StatelessWidget {
           if (snapshot.hasError) {
             return Center(
                 child: Text("Something went wrong..",
-                    style: kUserInfoTextStyle.copyWith(color: Colors.white)));
+                    style: kUserInfoTextStyle.copyWith(color: Colors.black)));
           }
           if (!snapshot.hasData) {
             return Center(
@@ -131,7 +133,7 @@ class CommentStream extends StatelessWidget {
                               bottomLeft: Radius.circular(30),
                               bottomRight: Radius.circular(30)),
                           elevation: 5,
-                          color: Color(0xff0962ff),
+                          color: Color(0xff0888ff),
                           child: Padding(
                             padding: EdgeInsets.only(
                                 right: 10, left: 25, top: 10, bottom: 10),
@@ -141,7 +143,8 @@ class CommentStream extends StatelessWidget {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15.0,
-                                  fontFamily: 'Lalezar'),
+                                 // fontFamily: 'Lalezar'
+                              ),
                             ),
                           ),
                         ),

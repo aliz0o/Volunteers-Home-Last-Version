@@ -232,5 +232,6 @@ class _EventCardButtonState extends State<EventCardButton> {
                   colour: inactiveColor.withOpacity(0.06),
                 ),
               );
+
   }
 }

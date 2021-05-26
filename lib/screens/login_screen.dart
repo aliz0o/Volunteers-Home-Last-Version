@@ -14,18 +14,30 @@ class LogIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+      //  backgroundColor: Color.fromRGBO(16, 17, 18, 1),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Center(
             child: Text(
-              'Log In',
+              'Volunteer Home',
               style: kAppBarTextStyle,
             ),
           ),
-          backgroundColor: Colors.black,
+         // backgroundColor: Colors.black,
         ),
-        body: MyStateFull());
+        body: Container(
+
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    Colors.blue[300],
+                    Colors.indigo[900],
+                  ],
+                )
+            ),
+            child: MyStateFull()));
   }
 }
 
@@ -48,16 +60,18 @@ class _MyStateFullState extends State<MyStateFull>
       inAsyncCall: showSpinner,
       child: Column(
         children: [
-          Flexible(child: SizedBox(height: 155)),
+         Flexible(child: SizedBox(height: MediaQuery.of(context).size.height/9)),
+
+          Flexible(child: Image.asset('images/volunteer.png',height: 400,)),
           Flexible(
             child: Text(
-              'Volunteers\nHome',
+              'Log In',
               style: TextStyle(
-                  fontFamily: 'Aclonica', fontSize: 40, color: Colors.white),
+                  fontFamily: 'Aclonica', fontSize: 50, color: Colors.white),
               textAlign: TextAlign.center,
             ),
           ),
-          Flexible(child: SizedBox(height: 150)),
+         // Flexible(child: SizedBox(height: 150)),
           Label(label: 'Email'),
           Padding(
             padding: textFieldPadding,

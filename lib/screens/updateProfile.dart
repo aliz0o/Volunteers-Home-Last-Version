@@ -8,6 +8,8 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
+
+
     TextEditingController _Name = TextEditingController();
     TextEditingController _UserName = TextEditingController();
     TextEditingController _Wepsite = TextEditingController();
@@ -34,7 +36,7 @@ class _EditProfileState extends State<EditProfile> {
   //    backgroundColor: Colors.black87,
       appBar: AppBar(
      //   backgroundColor: Colors.black87,
-        title: Text("EditProfile"),
+        title: Text("Edit  Profile"),
         centerTitle: true,
       ),
       body: ListView(
@@ -43,19 +45,24 @@ class _EditProfileState extends State<EditProfile> {
             key: _formKey,
             child: Column(
               children: [
-                Container(
+                InkWell(
+                  onTap: null,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 120),
-                    child: Center(
-                      child: Container(
-                          width: 130.0,
-                          height: 130.0,
-                          decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: new NetworkImage(
-                                      "https://style.anu.edu.au/_anu/4/images/placeholders/person.png")))),
+                    child: Column(
+                      children: [
+                        Container(
+                            width: 130.0,
+                            height: 130.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: new NetworkImage(
+
+                                        "https://style.anu.edu.au/_anu/4/images/placeholders/person.png")))),
+                        TextButton(onPressed: null, child: Text('Edit profile pic',style: TextStyle(color: Colors.blue),))
+                      ],
                     ),
                   ),
                 ),
@@ -71,43 +78,42 @@ class _EditProfileState extends State<EditProfile> {
                 TextFormField(
                   validator: (val) {
                     return val.isEmpty
-                        ? "Enter UserName"
+                        ? "Enter Email"
                         :null;
                   },
                   controller: _UserName,
                   style: simpleTextStyle(),
-                  decoration: textFieldInputDecoration("   User Name"),
+                  decoration: textFieldInputDecoration("   Email"),
                 ),
                 TextFormField(
                   validator: (val) {
                     return val.isEmpty
-                        ? "Enter Wepsite"
+                        ? "Enter phone number"
                         : null;
                   },
                   controller: _Wepsite,
                   style: simpleTextStyle(),
-                  decoration: textFieldInputDecoration("   Wepsite"),
+                  decoration: textFieldInputDecoration("   phone"),
                 ),
-                TextFormField(
-                  validator: (val) {
-                    return val.isEmpty
-                        ? "Enter Bio"
-                        : null;
-                  },
-                  controller: _Bio,
-                  style: simpleTextStyle(),
-                  decoration: textFieldInputDecoration("   Bio"),
-                ),
+                // TextFormField(
+                //   validator: (val) {
+                //     return val.isEmpty
+                //         ? "Enter Bio"
+                //         : null;
+                //   },
+                //   controller: _Bio,
+                //   style: simpleTextStyle(),
+                //   decoration: textFieldInputDecoration("   Bio"),
+                // ),
                 SizedBox(
                   height: 20,
                 ),
-                TextButton(
-                  onPressed: () {
-                    if (_formKey.currentState.validate())
-                      return ;
-                  },
-                  child: Text("Click "),
-                ),
+                ElevatedButton(
+
+                    onPressed:(){
+
+                    },
+                    child: Text('          Save          ')),
               ],
             ),
           ),

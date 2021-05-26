@@ -36,8 +36,9 @@ class _EventsScreenState extends State<EventsScreen> {
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
-          backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+          //backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
+            centerTitle: true,
             automaticallyImplyLeading: false,
             title: Text('Events', style: kAppBarTextStyle),
             actions: [
@@ -80,7 +81,7 @@ class _EventsScreenState extends State<EventsScreen> {
                 ),
               ],
             ),
-            backgroundColor: Colors.black,
+
           ),
           floatingActionButton:
               GetUser(userID: loggedInUser.uid, screen: 'button'),
@@ -101,6 +102,7 @@ class _EventsScreenState extends State<EventsScreen> {
                 tap: 'events',
                 screen: 'events',
               ),
+
             ],
           ),
         ),

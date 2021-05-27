@@ -28,7 +28,6 @@ class GetUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     return FutureBuilder<DocumentSnapshot>(
       future: users.doc(this.userID).get(),
@@ -44,33 +43,23 @@ class GetUser extends StatelessWidget {
           userType = data['userType'];
           return this.screen == 'profile'
               ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                children: [
-
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        //SizedBox(width: 15),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          //SizedBox(width: 15),
                           CircleAvatar(
                               radius: 35,
-                              backgroundImage: data['gender'] == 'Male'
-                                  ? AssetImage('images/male.png')
-                                  : data['gender'] == 'Female'
-                                      ? AssetImage('images/female.png')
-                                      : AssetImage('images/2.png')),
-
+                              backgroundImage: AssetImage('images/male.png')),
 
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-
                             children: [
                               // Text(data['name'],
                               //     style: kAppBarTextStyle.copyWith(fontSize: 15)),
                               //Text(data['city'], style: kUserInfoTextStyle),
                             ],
-
-
                           ),
 
                           Expanded(child: SizedBox(width: 20)),
@@ -94,30 +83,31 @@ class GetUser extends StatelessWidget {
                             ],
                           ),
                         ]),
-                  SizedBox(
-                    height: 5,
-                  ),
+                    SizedBox(
+                      height: 5,
+                    ),
 
-                  Text('name : '+data['name'], style: kUserInfoTextStyle),
-                  SizedBox(
-                    height: 5,
-                  ),
+                    Text('name : ' + data['name'], style: kUserInfoTextStyle),
+                    SizedBox(
+                      height: 5,
+                    ),
 
-                  Text('Location : '+data['city'], style: kUserInfoTextStyle),
-                  SizedBox(
-                    height: 5,
-                  ),
+                    Text('Location : ' + data['city'],
+                        style: kUserInfoTextStyle),
+                    SizedBox(
+                      height: 5,
+                    ),
 
-                  Text('Email : '+data['email'], style: kUserInfoTextStyle),
-                  SizedBox(
-                    height: 5,
-                  ),
+                    Text('Email : ' + data['email'], style: kUserInfoTextStyle),
+                    SizedBox(
+                      height: 5,
+                    ),
 
-                  Text('PhoneNO : '+'${data['phoneNumber']}', style: kUserInfoTextStyle),
-                 // TextButton(onPressed: null, child: Text('more Info :',style: TextStyle(color:Colors.white),) ),
-
-                ],
-              )
+                    Text('PhoneNO : ' + '${data['phoneNumber']}',
+                        style: kUserInfoTextStyle),
+                    // TextButton(onPressed: null, child: Text('more Info :',style: TextStyle(color:Colors.white),) ),
+                  ],
+                )
               : this.screen == 'commentScreen'
                   ? GestureDetector(
                       onTap: () {
@@ -129,11 +119,7 @@ class GetUser extends StatelessWidget {
                         );
                       },
                       child: Text(data['name'],
-                          style: TextStyle(fontSize: 11,color: Colors.black)
-
-
-
-                      ),
+                          style: TextStyle(fontSize: 11, color: Colors.black)),
                     )
                   : this.screen == 'button'
                       ? userType == 'committee' && data['verified'] == true
@@ -145,7 +131,7 @@ class GetUser extends StatelessWidget {
                               label: Text('Create',
                                   style: kTapControllerTextStyle),
                               icon: Icon(Icons.add),
-                             // backgroundColor: Color.fromRGBO(20, 21, 22, 1),
+                              // backgroundColor: Color.fromRGBO(20, 21, 22, 1),
                             )
                           : Visibility(
                               child: Container(),

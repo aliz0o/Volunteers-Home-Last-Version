@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
@@ -6,7 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:volunteering/services/get_user_info.dart';
 
 final _auth = FirebaseAuth.instance;
+CollectionReference users = FirebaseFirestore.instance.collection('users');
 User loggedInUser;
+String userType;
 
 class EventsScreen extends StatefulWidget {
   @override
@@ -21,6 +24,14 @@ class _EventsScreenState extends State<EventsScreen> {
       final user = _auth.currentUser;
       if (user != null) {
         loggedInUser = user;
+        void getUserType(String val) async {
+          DocumentSnapshot snapshot = await users.doc(loggedInUser.uid).get();
+          var data = snapshot.data();
+          userType = data['userType'];
+          print(userType);
+        }
+
+        getUserType(loggedInUser.uid);
       }
     } catch (e) {
       print(e);
@@ -42,7 +53,8 @@ class _EventsScreenState extends State<EventsScreen> {
             automaticallyImplyLeading: false,
             title: Text('Events', style: kAppBarTextStyle),
             actions: [
-              loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2'
+              //loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2'
+              userType == 'Admin'
                   ? FlatButton(
                       color: Colors.white.withOpacity(0.25),
                       child: Text(

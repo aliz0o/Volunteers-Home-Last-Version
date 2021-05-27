@@ -32,7 +32,8 @@ class _EventStreamState extends State<EventStream> {
         Provider.of<Authentication>(context, listen: true);
     return StreamBuilder<QuerySnapshot>(
         stream: widget.tap == 'events'
-            ? loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2'
+            ? userType == 'Admin'
+                //loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2'
                 ? _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: false)
@@ -98,7 +99,6 @@ class _EventStreamState extends State<EventStream> {
               DateTime formattedDateTime = eventDateTime.toDate();
               String stringDateTime =
                   DateFormat('  kk:mm\n  d MMM').format(formattedDateTime);
-
               final eventCard = EventCard(
                 eventClass: eventClass,
                 noOfVolunteers: noOfVolunteers,

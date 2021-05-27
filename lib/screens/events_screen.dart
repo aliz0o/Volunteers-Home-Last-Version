@@ -38,6 +38,8 @@ class _EventsScreenState extends State<EventsScreen> {
     }
   }
 
+  bool searchState = false;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -51,9 +53,49 @@ class _EventsScreenState extends State<EventsScreen> {
           appBar: AppBar(
             centerTitle: true,
             automaticallyImplyLeading: false,
-            title: Text('Events', style: kAppBarTextStyle),
+            title: !searchState
+                ? Text('Events', style: kAppBarTextStyle)
+                : Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: MediaQuery.of(context).size.width / 10,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: TextField(
+                      onChanged: (text){
+                        SearchMethod(text);
+                      },
+                      cursorColor: Colors.black,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 15),
+                        hintText: 'Search. . .',
+                        helperStyle: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ),
             actions: [
-              //loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2'
+              !searchState
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          searchState = !searchState;
+                        });
+                      })
+                  : IconButton(
+                      icon: Icon(
+                        Icons.cancel,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          searchState = !searchState;
+                        });
+                      }),
               userType == 'Admin'
                   ? FlatButton(
                       color: Colors.white.withOpacity(0.25),
@@ -122,5 +164,12 @@ class _EventsScreenState extends State<EventsScreen> {
         ),
       ),
     );
+  }
+
+  void SearchMethod(String text) {
+
+
+
+
   }
 }

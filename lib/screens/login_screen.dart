@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+import 'events_screen.dart';
+
 final emailTextController = TextEditingController();
 final passwordTextController = TextEditingController();
 
@@ -115,7 +117,8 @@ class _MyStateFullState extends State<MyStateFull>
                 final existUser = await _auth.signInWithEmailAndPassword(
                     email: email, password: password);
                 if (existUser != null) {
-                  Navigator.pushNamed(context, '/events_screen');
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      EventsScreen()), (Route<dynamic> route) => false);
                 }
                 setState(() {
                   showSpinner = false;

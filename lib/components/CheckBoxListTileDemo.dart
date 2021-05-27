@@ -48,7 +48,7 @@ class CheckBoxListTileDemoState extends State<CheckBoxListTileDemo> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.white,
+       // backgroundColor: Colors.white,
         centerTitle: true,
         title: new Text(
           'Preferred Events',
@@ -101,6 +101,7 @@ class CheckBoxListTileDemoState extends State<CheckBoxListTileDemo> {
           if (checkBoxListTileModel != null)
             ElevatedButton(
                 onPressed: () {
+                  print(loggedInUser.uid);
                   List<String> _preferredEvents = [];
                   for (var index = 0;
                       index < checkBoxListTileModel.length;

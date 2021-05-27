@@ -396,7 +396,7 @@ class Authentication with ChangeNotifier {
     }
   }
 
-  Future<void> updateCollectionFields ({@required String collectionName , @required Map<String,String> fields ,@required String document_Id  }) async{
+  Future<void> updateCollectionFields ({@required String collectionName , @required Map<String,dynamic> fields ,@required String document_Id  }) async{
     try {
       _cloudInstance.collection(collectionName).doc(document_Id).update(fields);
     } catch (e) {

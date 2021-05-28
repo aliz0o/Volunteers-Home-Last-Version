@@ -9,7 +9,6 @@ import 'package:volunteering/services/get_user_info.dart';
 final _auth = FirebaseAuth.instance;
 CollectionReference users = FirebaseFirestore.instance.collection('users');
 User loggedInUser;
-String userType;
 
 class EventsScreen extends StatefulWidget {
   @override
@@ -24,14 +23,6 @@ class _EventsScreenState extends State<EventsScreen> {
       final user = _auth.currentUser;
       if (user != null) {
         loggedInUser = user;
-        void getUserType(String val) async {
-          DocumentSnapshot snapshot = await users.doc(loggedInUser.uid).get();
-          var data = snapshot.data();
-          userType = data['userType'];
-          print(userType);
-        }
-
-        getUserType(loggedInUser.uid);
       }
     } catch (e) {
       print(e);
@@ -63,8 +54,8 @@ class _EventsScreenState extends State<EventsScreen> {
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: TextField(
-                      onChanged: (text){
-                        SearchMethod(text);
+                      onChanged: (text) {
+                        searchMethod(text);
                       },
                       cursorColor: Colors.black,
                       decoration: InputDecoration(
@@ -96,22 +87,7 @@ class _EventsScreenState extends State<EventsScreen> {
                           searchState = !searchState;
                         });
                       }),
-              userType == 'Admin'
-                  ? FlatButton(
-                      color: Colors.white.withOpacity(0.25),
-                      child: Text(
-                        'Request',
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
-                            fontFamily: 'Product Sans'),
-                        textAlign: TextAlign.center,
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/committee_request');
-                      },
-                    )
-                  : Container(),
+              GetUser(userID: loggedInUser.uid, screen: 'requestButton'),
               IconButton(
                 icon: Icon(Icons.person),
                 onPressed: () {
@@ -166,10 +142,5 @@ class _EventsScreenState extends State<EventsScreen> {
     );
   }
 
-  void SearchMethod(String text) {
-
-
-
-
-  }
+  void searchMethod(String text) {}
 }

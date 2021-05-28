@@ -46,11 +46,11 @@ class CreateEvent extends StatelessWidget {
       body: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
-            begin: Alignment.centerRight,
-            end: Alignment.centerLeft,
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
             colors: [
-              Colors.blue[400],
-              Colors.deepPurple[600],
+              Colors.blue[300],
+              Colors.indigo[900],
             ],
           )),
           child: MyStateFull()),
@@ -167,7 +167,7 @@ class _MyStateFullState extends State<MyStateFull> {
       'attendanceCounter': 0,
       'comingVolunteerID': FieldValue.arrayUnion([]),
       'comingAttendanceID': FieldValue.arrayUnion([]),
-      'all': FieldValue.arrayUnion([]),
+      'all': FieldValue.arrayUnion([loggedInUser.uid]),
       'userID': loggedInUser.uid,
       'approved': false,
       'commentSender': FieldValue.arrayUnion([]),
@@ -176,7 +176,6 @@ class _MyStateFullState extends State<MyStateFull> {
       'reportedCount': 0,
       'eventType': _eventType,
     });
-
     setState(() {
       showSpinner = false;
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -207,6 +206,7 @@ class _MyStateFullState extends State<MyStateFull> {
       inAsyncCall: showSpinner,
       child: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 20),
             Padding(
@@ -507,7 +507,7 @@ class _MyStateFullState extends State<MyStateFull> {
                   });
                 },
                 child: SubText(last: 'Back')),
-            SizedBox(height: 17),
+            SizedBox(height: 140),
           ],
         ),
       ),

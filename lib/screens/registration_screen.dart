@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:volunteering/components/radio_button.dart';
 import 'package:volunteering/components/rounded_button.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/components/label.dart';
@@ -12,7 +11,6 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
 import 'package:volunteering/screens/events_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
@@ -21,7 +19,6 @@ DocumentReference ref = FirebaseFirestore.instance.collection('images').doc();
 
 final nameTextController = TextEditingController();
 final phoneNumberTextController = TextEditingController();
-final ageTextController = TextEditingController();
 final emailTextController = TextEditingController();
 final passwordTextController = TextEditingController();
 final aboutTextController = TextEditingController();
@@ -86,8 +83,6 @@ class _MyStateFullState extends State<MyStateFull> {
   File _selectedImage;
   bool _nameVisibility = false;
   bool _phoneNumberVisibility = false;
-  bool _ageVisibility = false;
- // bool _genderVisibility = false;
   bool _imageUploadedVisibility = false;
   bool _imageVisibility = false;
 
@@ -110,24 +105,6 @@ class _MyStateFullState extends State<MyStateFull> {
       setState(() {
         _phoneNumberVisibility = false;
       });
-
-    // if (age == null || age <= 12) {
-    //   setState(() {
-    //     _ageVisibility = true;
-    //   });
-    // } else
-    //   setState(() {
-    //     _ageVisibility = false;
-    //   });
-    //
-    // if (gender == null) {
-    //   setState(() {
-    //     _genderVisibility = true;
-    //   });
-    // } else
-    //   setState(() {
-    //     _genderVisibility = false;
-    //   });
 
     if (_selectedImage == null)
       setState(() {
@@ -176,7 +153,7 @@ class _MyStateFullState extends State<MyStateFull> {
                 },
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s")),
-                  LengthLimitingTextInputFormatter(15),
+                  LengthLimitingTextInputFormatter(20),
                 ],
                 keyboardType: TextInputType.text,
                 style: kTextFieldStyle,
@@ -189,7 +166,7 @@ class _MyStateFullState extends State<MyStateFull> {
               child: Text(
                 'You Should Enter Your Name',
                 style: TextStyle(
-                  color: Colors.red,
+                  color: Colors.white,
                   fontFamily: 'Aclonica',
                   fontSize: 10,
                 ),
@@ -223,7 +200,7 @@ class _MyStateFullState extends State<MyStateFull> {
               child: Text(
                 'You Should Enter Enter A Valid 10-Digit Phone Number',
                 style: TextStyle(
-                  color: Colors.red,
+                  color: Colors.white,
                   fontFamily: 'Aclonica',
                   fontSize: 10,
                 ),
@@ -232,98 +209,7 @@ class _MyStateFullState extends State<MyStateFull> {
             ),
             Visibility(
                 child: SizedBox(height: 10), visible: _phoneNumberVisibility),
-            // Visibility(
-            //     visible: widget.userType == 'volunteer' ? true : false,
-            //     child: Label(label: 'Age')),
-            // Visibility(
-            //   visible: widget.userType == 'volunteer' ? true : false,
-            //   child: Padding(
-            //     padding: textFieldPadding,
-            //     child: TextFormField(
-            //       controller: ageTextController,
-            //       onChanged: (value) {
-            //         age = int.parse(value);
-            //         setState(() {
-            //           _ageVisibility = false;
-            //         });
-            //       },
-            //       inputFormatters: [
-            //         LengthLimitingTextInputFormatter(2),
-            //         FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-            //       ],
-            //       keyboardType: TextInputType.number,
-            //       style: kTextFieldStyle,
-            //       decoration:
-            //           kTextFieldDecoration.copyWith(hintText: 'Your Age'),
-            //     ),
-            //   ),
-            // ),
-            Visibility(
-              child: SizedBox(height: 10),
-              visible: widget.userType == 'volunteer' ? true : false,
-            ),
-            // Visibility(
-            //   child: Text(
-            //     'You Must Be At Least 13 Years Old',
-            //     style: TextStyle(
-            //       color: Colors.red,
-            //       fontFamily: 'Aclonica',
-            //       fontSize: 10,
-            //     ),
-            //   ),
-            //   visible: widget.userType == 'volunteer' ? _ageVisibility : false,
-            // ),
-            // Visibility(
-            //   visible: widget.userType == 'volunteer' ? true : false,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       GestureDetector(
-            //         onTap: () {
-            //           setState(() {
-            //             gender = 'Male';
-            //             _genderVisibility = false;
-            //           });
-            //         },
-            //         child: RadioButton(
-            //             selected: 'Male',
-            //             colour: gender == 'Male'
-            //                 ? activeColor.withOpacity(0.17)
-            //                 : inactiveColor.withOpacity(0.06)),
-            //       ),
-            //       GestureDetector(
-            //           onTap: () {
-            //             setState(() {
-            //               gender = 'Female';
-            //               _genderVisibility = false;
-            //             });
-            //           },
-            //           child: RadioButton(
-            //               selected: 'female',
-            //               colour: gender == 'Female'
-            //                   ? activeColor.withOpacity(0.17)
-            //                   : inactiveColor.withOpacity(0.06))),
-            //     ],
-            //   ),
-            // ),
             SizedBox(height: 10),
-            // Visibility(
-            //   child: Text(
-            //     'You Should Enter Your Gender',
-            //     style: TextStyle(
-            //       color: Colors.red,
-            //       fontFamily: 'Aclonica',
-            //       fontSize: 10,
-            //     ),
-            //   ),
-            //   visible:
-            //       widget.userType == 'volunteer' ? _genderVisibility : false,
-            // ),
-            Visibility(
-              child: SizedBox(height: 10),
-              visible:
-                  widget.userType == 'volunteer' ,
-            ),
             Container(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
@@ -414,8 +300,10 @@ class _MyStateFullState extends State<MyStateFull> {
               ),
             ),
             Visibility(
-                visible: widget.userType == 'committee' ? true : false,
-                child: SizedBox(height: 5)),
+                visible: widget.userType == 'committee'
+                    ? _imageUploadedVisibility
+                    : false,
+                child: SizedBox(height: 10)),
             Visibility(
               child: Text(
                 'Image selected',
@@ -424,15 +312,15 @@ class _MyStateFullState extends State<MyStateFull> {
               visible: _imageUploadedVisibility,
             ),
             Visibility(
-              child: SizedBox(height: 5),
+              child: SizedBox(height: 10),
               visible:
-                  widget.userType == 'committee' ,
+                  widget.userType == 'committee' ? _imageVisibility : false,
             ),
             Visibility(
               child: Text(
                 'Upload An Verification Document To Sign in AS Committee',
                 style: TextStyle(
-                  color: Colors.red,
+                  color: Colors.white,
                   fontFamily: 'Aclonica',
                   fontSize: 10,
                 ),
@@ -474,30 +362,26 @@ class _MyStateFullState extends State<MyStateFull> {
             RoundedButton(
               text: 'sign up',
               color: Color(0xff0962ff),
-              function: (
-
-
-                  (name == null || name == "") ||
-                          (phoneNumber.toString().length < 9) ||
-
-
-                      (_selectedImage == null && widget.userType == 'committee'))
+              function: ((name == null || name == "") ||
+                      (phoneNumber.toString().length < 9) ||
+                      (_selectedImage == null &&
+                          widget.userType == 'committee'))
                   ? () {
-                     print ('1');
+                      print('1');
                       checkNullValue();
                     }
                   : () async {
-                     print ('2');
+                      print('2');
                       setState(() {
                         showSpinner = true;
                       });
                       try {
-                        print ('3');
+                        print('3');
                         final newUser =
                             await _auth.createUserWithEmailAndPassword(
                                 email: email, password: password);
                         if (newUser != null) {
-                           print ('4');
+                          print('4');
                           await _fireStore
                               .collection('users')
                               .doc(newUser.user.uid)
@@ -514,31 +398,26 @@ class _MyStateFullState extends State<MyStateFull> {
                             'preferredEvents': FieldValue.arrayUnion([]),
                             'verified': false,
                             'verificationDocument': '',
-                            'photoUrl': '',
+                            'profilePicture': '',
                           });
                           if (_selectedImage != null) {
-                            print('5');
                             imageURL = await uploadFile(_selectedImage);
                           }
                           await _fireStore
                               .collection('users')
                               .doc(newUser.user.uid)
                               .update({'verificationDocument': imageURL});
-                          //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false);
-                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                              EventsScreen()), (Route<dynamic> route) => false);
 
-                          // Navigator.of(context)
-                          //     .pushAndRemoveUntil('/events_screen', (Route<dynamic> route) => false);
-
-                         // Navigator.pushAndRemoveUntil(context, '/events_screen');
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => EventsScreen()),
+                              (Route<dynamic> route) => false);
                         }
                         setState(() {
                           showSpinner = false;
                         });
                         nameTextController.clear();
                         phoneNumberTextController.clear();
-                        ageTextController.clear();
                         emailTextController.clear();
                         passwordTextController.clear();
                         aboutTextController.clear();
@@ -573,7 +452,6 @@ class _MyStateFullState extends State<MyStateFull> {
                   Navigator.pushNamed(context, '/login_screen');
                   nameTextController.clear();
                   phoneNumberTextController.clear();
-                  ageTextController.clear();
                   emailTextController.clear();
                   passwordTextController.clear();
                   aboutTextController.clear();

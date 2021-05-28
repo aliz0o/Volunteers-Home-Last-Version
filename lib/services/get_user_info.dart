@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,22 +5,29 @@ import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:volunteering/screens/events_screen.dart';
+import 'package:volunteering/screens/updateProfile.dart';
+import 'package:volunteering/screens/login_screen.dart';
+import 'package:volunteering/components/CheckBoxListTileDemo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final _fireStore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
 String userType;
+
+String getUserType() {
+  return userType;
+}
 
 class GetUser extends StatelessWidget {
   final String userID;
   final String screen;
   final String createdOn;
   final String eventID;
-  File imageUrl;
 
   GetUser({
     @required this.userID,
     @required this.screen,
     this.eventID,
-    this.imageUrl,
     this.createdOn,
   });
 
@@ -48,22 +53,10 @@ class GetUser extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          //SizedBox(width: 15),
                           CircleAvatar(
                               radius: 35,
                               backgroundImage: AssetImage('images/male.png')),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Text(data['name'],
-                              //     style: kAppBarTextStyle.copyWith(fontSize: 15)),
-                              //Text(data['city'], style: kUserInfoTextStyle),
-                            ],
-                          ),
-
                           Expanded(child: SizedBox(width: 20)),
-
                           Container(
                             color: Colors.white.withOpacity(0.70),
                             height: 70,
@@ -86,23 +79,17 @@ class GetUser extends StatelessWidget {
                     SizedBox(
                       height: 5,
                     ),
-
                     Text('name : ' + data['name'], style: kUserInfoTextStyle),
                     SizedBox(
                       height: 5,
                     ),
-
                     Text('Location : ' + data['city'],
                         style: kUserInfoTextStyle),
                     SizedBox(
                       height: 5,
                     ),
-
                     Text('Email : ' + data['email'], style: kUserInfoTextStyle),
-                    SizedBox(
-                      height: 5,
-                    ),
-
+                    SizedBox(height: 5),
                     Text('PhoneNO : ' + '${data['phoneNumber']}',
                         style: kUserInfoTextStyle),
                     // TextButton(onPressed: null, child: Text('more Info :',style: TextStyle(color:Colors.white),) ),
@@ -119,10 +106,14 @@ class GetUser extends StatelessWidget {
                         );
                       },
                       child: Text(data['name'],
-                          style: TextStyle(fontSize: 11, color: Colors.black)),
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                              fontFamily: 'Aclonica')),
                     )
                   : this.screen == 'button'
-                      ? userType == 'committee' && data['verified'] == true
+                      ? (userType == 'committee' || userType == 'Admin') &&
+                              data['verified'] == true
                           ? FloatingActionButton.extended(
                               onPressed: () {
                                 Navigator.pushNamed(
@@ -137,87 +128,183 @@ class GetUser extends StatelessWidget {
                               child: Container(),
                               visible: false,
                             )
-                      : GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileScreen(
-                                  userID: userID,
-                                ),
-                              ),
-                            );
-                          },
-                          child: ListTile(
-                            leading: CircleAvatar(
-                                backgroundImage: data['gender'] == 'Male'
-                                    ? AssetImage('images/male.png')
-                                    : data['gender'] == 'Female'
-                                        ? AssetImage('images/female.png')
-                                        : AssetImage('images/2.png')),
-                            title: Text(
-                              data['name'],
-                              style: TextStyle(
-                                  fontSize:
-                                      this.screen == 'comingList' ? 20 : 14,
-                                  fontFamily: 'Aclonica',
-                                  color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              this.screen == 'comingList'
-                                  ? data['email']
-                                  : this.createdOn,
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.white.withOpacity(0.50),
-                                fontFamily: 'Product Sans',
-                              ),
-                            ),
-                            trailing: PopupMenuButton(
-                              onSelected: (value) {
-                                if (this.userID == loggedInUser.uid) {
-                                  _fireStore
-                                      .collection('events')
-                                      .doc(this.eventID)
-                                      .update({'deleted': value});
-                                  _fireStore
-                                      .collection('users')
-                                      .doc(this.userID)
-                                      .update({
-                                    'eventCount': FieldValue.increment(-1)
-                                  });
-                                } else {
-                                  if (this.screen == 'comingList' ||
-                                      this.screen == 'committeeRequest') {
-                                    _fireStore
-                                        .collection('users')
-                                        .doc(this.userID)
-                                        .update({
-                                      'reportedCount': FieldValue.increment(1)
-                                    });
-                                  } else {
-                                    _fireStore
-                                        .collection('events')
-                                        .doc(this.eventID)
-                                        .update({
-                                      'reportedCount': FieldValue.increment(1)
-                                    });
-                                  }
-                                }
-                              },
-                              elevation: 5,
-                              color: Color.fromRGBO(16, 17, 18, 1),
-                              icon: Icon(Icons.more_vert, color: Colors.white),
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  value: true,
-                                  child: this.userID == loggedInUser.uid
-                                      ? Text("Delete", style: kNumberTextStyle)
-                                      : Text("Report", style: kNumberTextStyle),
-                                ),
-                              ],
-                            ),
-                          ));
+                      : this.screen == 'requestButton'
+                          ? data['userType'] == 'Admin'
+                              ? IconButton(
+                                  color: Colors.white.withOpacity(0.25),
+                                  icon:
+                                      Icon(Icons.add_box, color: Colors.white),
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, '/committee_request');
+                                  },
+                                )
+                              : Container()
+                          : this.screen == 'Drawer'
+                              ? Drawer(
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [
+                                          Colors.blue[200],
+                                          Colors.indigo[600],
+                                        ],
+                                      )),
+                                      child: ListView(
+                                        children: <Widget>[
+                                          UserAccountsDrawerHeader(
+                                            accountName: InkWell(
+                                                child: Text(data['name'],
+                                                    style: kUserInfoTextStyle)),
+                                            accountEmail: Text(data['email'],
+                                                style: kEventInfoTextStyle),
+                                            currentAccountPicture: CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              child: FlutterLogo(
+                                                size: 50,
+                                              ),
+                                            ),
+                                          ),
+                                          ListTile(
+                                            title: const Text(
+                                                'Update Profile page',
+                                                style: kUserInfoTextStyle),
+                                            onTap: () => Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                    builder: (ctx) {
+                                              return EditProfile();
+                                            })),
+                                          ),
+                                          Divider(
+                                            thickness: 2,
+                                          ),
+                                          ListTile(
+                                            title: const Text(
+                                                'preferred Events',
+                                                style: kUserInfoTextStyle),
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (ctx) {
+                                                return CheckBoxListTileDemo();
+                                              }));
+                                            },
+                                          ),
+                                          Divider(
+                                            thickness: 2,
+                                          ),
+                                          ListTile(
+                                            title: const Text('Log out',
+                                                style: kUserInfoTextStyle),
+                                            onTap: () {
+                                              _auth.signOut();
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (ctx) {
+                                                return LogIn();
+                                              }));
+                                            },
+                                          ),
+                                          Divider(
+                                            thickness: 2,
+                                          ),
+                                        ],
+                                      )),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProfileScreen(
+                                          userID: userID,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                        backgroundImage: data['gender'] ==
+                                                'Male'
+                                            ? AssetImage('images/male.png')
+                                            : data['gender'] == 'Female'
+                                                ? AssetImage(
+                                                    'images/female.png')
+                                                : AssetImage('images/2.png')),
+                                    title: Text(
+                                      data['name'],
+                                      style: TextStyle(
+                                          fontSize: this.screen == 'comingList'
+                                              ? 20
+                                              : 14,
+                                          fontFamily: 'Aclonica',
+                                          color: Colors.white),
+                                    ),
+                                    subtitle: Text(
+                                      this.screen == 'comingList'
+                                          ? data['email']
+                                          : this.createdOn,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.white.withOpacity(0.50),
+                                        fontFamily: 'Product Sans',
+                                      ),
+                                    ),
+                                    trailing: PopupMenuButton(
+                                      onSelected: (value) {
+                                        if (this.userID == loggedInUser.uid) {
+                                          _fireStore
+                                              .collection('events')
+                                              .doc(this.eventID)
+                                              .update({'deleted': value});
+                                          _fireStore
+                                              .collection('users')
+                                              .doc(this.userID)
+                                              .update({
+                                            'eventCount':
+                                                FieldValue.increment(-1)
+                                          });
+                                        } else {
+                                          if (this.screen == 'comingList' ||
+                                              this.screen ==
+                                                  'committeeRequest') {
+                                            _fireStore
+                                                .collection('users')
+                                                .doc(this.userID)
+                                                .update({
+                                              'reportedCount':
+                                                  FieldValue.increment(1)
+                                            });
+                                          } else {
+                                            _fireStore
+                                                .collection('events')
+                                                .doc(this.eventID)
+                                                .update({
+                                              'reportedCount':
+                                                  FieldValue.increment(1)
+                                            });
+                                          }
+                                        }
+                                      },
+                                      elevation: 5,
+                                      color: Color.fromRGBO(16, 17, 18, 1),
+                                      icon: Icon(Icons.more_vert,
+                                          color: Colors.white),
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          value: true,
+                                          child: this.userID == loggedInUser.uid
+                                              ? Text("Delete",
+                                                  style: kNumberTextStyle)
+                                              : Text("Report",
+                                                  style: kNumberTextStyle),
+                                        ),
+                                      ],
+                                    ),
+                                  ));
         }
 
         return this.screen == 'commentScreen'
@@ -232,7 +319,9 @@ class GetUser extends StatelessWidget {
                   ),
                 ),
               )
-            : this.screen == 'button'
+            : this.screen == 'button' ||
+                    this.screen == 'requestButton' ||
+                    this.screen == 'Drawer'
                 ? Visibility(
                     child: Container(),
                     visible: false,

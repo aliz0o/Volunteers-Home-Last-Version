@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:volunteering/backEnd/dataBase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../main.dart';
+import 'package:volunteering/components/rounded_button.dart';
+import 'package:volunteering/constants.dart';
+import 'package:volunteering/screens/events_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
+
+final saveSuccessfullySnackBar = SnackBar(
+  content: Text('Your Preferred Events Updated Successfully',
+      style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
+  elevation: 5,
+  backgroundColor: Color(0xff0962ff),
+);
 
 class CheckBoxListTileDemo extends StatefulWidget {
   @override
@@ -12,7 +19,7 @@ class CheckBoxListTileDemo extends StatefulWidget {
 }
 
 class CheckBoxListTileDemoState extends State<CheckBoxListTileDemo> {
-  List<CheckBoxListTileModel> checkBoxListTileModel;
+  List<CheckBoxListTileModel> checkBoxListTileModel = [];
 
   void getElements() async {
     var data = await _fireStore.collection('users').doc(loggedInUser.uid).get();
@@ -48,84 +55,71 @@ class CheckBoxListTileDemoState extends State<CheckBoxListTileDemo> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-       // backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: new Text(
           'Preferred Events',
-          style: TextStyle(color: Colors.black),
+          style: kAppBarTextStyle.copyWith(fontSize: 22),
         ),
       ),
       body: Column(
         children: [
-          if (checkBoxListTileModel == null)
-            Center(
-              child: CircularProgressIndicator(),
-            ),
-          if (checkBoxListTileModel != null)
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: checkBoxListTileModel == null
-                    ? 0
-                    : checkBoxListTileModel.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return new Card(
-                    child: new Container(
-                      padding: new EdgeInsets.all(10.0),
-                      child: Column(
-                        children: <Widget>[
-                          new CheckboxListTile(
-                              activeColor: Colors.pink[300],
-                              dense: true,
-                              title: new Text(
-                                checkBoxListTileModel[index].title,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 0.5,
-                                    fontFamily: 'Product Sans'),
-                              ),
-                              value: checkBoxListTileModel[index].isCheck,
-                              onChanged: (bool val) {
-                                itemChange(val, index);
-                              })
-                        ],
-                      ),
+          SizedBox(height: 10),
+          ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: checkBoxListTileModel.length,
+              itemBuilder: (BuildContext context, int index) {
+                return new Card(
+                  elevation: 5,
+                  child: new Container(
+                    padding: new EdgeInsets.all(10.0),
+                    child: Column(
+                      children: <Widget>[
+                        new CheckboxListTile(
+                            activeColor: Colors.pink[300],
+                            dense: true,
+                            title: new Text(
+                              checkBoxListTileModel[index].title,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.5,
+                                  fontFamily: 'Product Sans'),
+                            ),
+                            value: checkBoxListTileModel[index].isCheck,
+                            onChanged: (bool val) {
+                              itemChange(val, index);
+                            })
+                      ],
                     ),
-                  );
-                }),
-          if (checkBoxListTileModel != null)
-            SizedBox(
-              height: 20,
-            ),
-          if (checkBoxListTileModel != null)
-            ElevatedButton(
-                onPressed: () {
-                  print(loggedInUser.uid);
-                  List<String> _preferredEvents = [];
-                  for (var index = 0;
-                      index < checkBoxListTileModel.length;
-                      index++) {
-                    if (checkBoxListTileModel[index].isCheck == true) {
-                      print(checkBoxListTileModel[index].title);
-                      _preferredEvents.add(checkBoxListTileModel[index].title);
-                    }
+                  ),
+                );
+              }),
+          SizedBox(
+            height: 20,
+          ),
+          RoundedButton(
+              text: 'Save',
+              function: () {
+                List<String> _preferredEvents = [];
+                for (var index = 0;
+                    index < checkBoxListTileModel.length;
+                    index++) {
+                  if (checkBoxListTileModel[index].isCheck == true) {
+                    print(checkBoxListTileModel[index].title);
+                    _preferredEvents.add(checkBoxListTileModel[index].title);
                   }
-                  _fireStore
-                      .collection('users')
-                      .doc(loggedInUser.uid)
-                      .update({'preferredEvents': _preferredEvents});
-                  Provider.of<Authentication>(context, listen: false)
-                      .eventTypes = _preferredEvents;
-                  Provider.of<Authentication>(context, listen: false)
-                      .notifyListeners();
-                  // preferredEvents = [];
-                  Navigator.pushNamed(context, '/events_screen');
-                },
-                child: Text(
-                  'Save',
-                  textAlign: TextAlign.center,
-                )),
+                }
+                _fireStore
+                    .collection('users')
+                    .doc(loggedInUser.uid)
+                    .update({'preferredEvents': _preferredEvents});
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(saveSuccessfullySnackBar);
+              },
+              color: Color(0xff0962ff)),
         ],
       ),
     );

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteering/screens/coming_list.dart';
 import 'package:volunteering/components/radio_button.dart';
 import 'package:volunteering/screens/events_screen.dart';
-import 'package:volunteering/screens/events_screen.dart';
+import 'package:volunteering/services/events_stream_builder.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 
@@ -109,8 +109,7 @@ class _EventCardButtonState extends State<EventCardButton> {
   Widget build(BuildContext context) {
     return ((widget.screen == 'events' ||
                 widget.screen == 'committeeRequest') &&
-            //        loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2'
-            userType == 'Admin')
+            loggedInUserType == 'Admin')
         ? GestureDetector(
             onTap: widget.screen == 'events'
                 ? () => {

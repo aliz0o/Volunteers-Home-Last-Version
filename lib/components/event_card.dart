@@ -44,8 +44,6 @@ class EventCard extends StatefulWidget {
   final List comment;
   final List commentSender;
 
-
-
   @override
   _EventCardState createState() => _EventCardState();
 }
@@ -68,8 +66,7 @@ class _EventCardState extends State<EventCard> {
     double scrWidth = MediaQuery.of(context).size.width;
     return Card(
       child: Container(
-        decoration: BoxDecoration(
-            color: Color(0xFF1B333E)),
+        decoration: BoxDecoration(color: Color(0xFF1B333E)),
         child: Column(
           children: [
             GetUser(
@@ -160,7 +157,7 @@ class _EventCardState extends State<EventCard> {
                   child: Text(
                     widget.details,
                     style: kArabicTextStyle,
-                    textAlign: TextAlign.left,
+                    textAlign: TextAlign.right,
                   ),
                 ),
               ),

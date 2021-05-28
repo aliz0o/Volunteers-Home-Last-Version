@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:volunteering/backEnd/dataBase.dart';
 import 'package:volunteering/components/event_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +6,8 @@ import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/events_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
+String loggedInUserType;
+List preferredEvent = [];
 
 class EventStream extends StatefulWidget {
   EventStream({
@@ -26,14 +26,21 @@ class EventStream extends StatefulWidget {
 }
 
 class _EventStreamState extends State<EventStream> {
+  void getUserType() async {
+    DocumentSnapshot loggedInUserSnapshot =
+        await users.doc(loggedInUser.uid).get();
+    var data = loggedInUserSnapshot.data();
+    loggedInUserType = data['userType'];
+    preferredEvent = data['preferredEvents'];
+  }
+
   @override
   Widget build(BuildContext context) {
-    Authentication authentication =
-        Provider.of<Authentication>(context, listen: true);
+    getUserType();
+    setState(() {});
     return StreamBuilder<QuerySnapshot>(
         stream: widget.tap == 'events'
-            ? userType == 'Admin'
-                //loggedInUser.uid == 'iNitXHsWf8XB301tM5I58PqJFMD2'
+            ? loggedInUserType == 'Admin'
                 ? _fireStore
                     .collection('events')
                     .where('approved', isEqualTo: false)
@@ -58,7 +65,7 @@ class _EventStreamState extends State<EventStream> {
                     .collection('events')
                     .where('approved', isEqualTo: true)
                     .where('deleted', isEqualTo: false)
-                    .where('userID', isEqualTo: widget.userID)
+                    .where('all', arrayContains: widget.userID)
                     .orderBy('eventDateTime', descending: true)
                     .snapshots(),
         builder: (context, snapshot) {
@@ -118,19 +125,18 @@ class _EventStreamState extends State<EventStream> {
                 comment: comment,
                 commentSender: commentSender,
               );
-
               if (formattedDateTime.compareTo(DateTime.now()) >= 0) {
                 if (eventClass == 'All' &&
-                    (authentication.eventTypes.contains(eventType) ||
-                        authentication.eventTypes.length == 0)) {
+                    (preferredEvent.contains(eventType) ||
+                        preferredEvent.length == 0)) {
                   eventsCard.add(eventCard);
                 } else if (eventClass == 'Volunteering' &&
-                    (authentication.eventTypes.contains(eventType) ||
-                        authentication.eventTypes.length == 0)) {
+                    (preferredEvent.contains(eventType) ||
+                        preferredEvent.length == 0)) {
                   volunteeringCard.add(eventCard);
                 } else if (eventClass == 'Attending' &&
-                    (authentication.eventTypes.contains(eventType) ||
-                        authentication.eventTypes.length == 0)) {
+                    (preferredEvent.contains(eventType) ||
+                        preferredEvent.length == 0)) {
                   attendingCard.add(eventCard);
                 }
               }
@@ -139,13 +145,13 @@ class _EventStreamState extends State<EventStream> {
                   calenderCard.add(eventCard);
                 }
               } else if (widget.tap == 'MyEvent') {
-                myEventCard.add(eventCard);
+                if (formattedDateTime.compareTo(DateTime.now()) < 0) {
+                  myEventCard.add(eventCard);
+                }
               }
             }
             return widget.eventTapClass == 'All'
                 ? ListView.builder(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 3.0, vertical: 3.0),
                     itemCount: eventsCard.length,
                     itemBuilder: (context, index) {
                       return eventsCard[index];
@@ -153,8 +159,6 @@ class _EventStreamState extends State<EventStream> {
                   )
                 : widget.eventTapClass == 'Volunteering'
                     ? ListView.builder(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.0, vertical: 3.0),
                         itemCount: volunteeringCard.length,
                         itemBuilder: (context, index) {
                           return volunteeringCard[index];
@@ -162,24 +166,18 @@ class _EventStreamState extends State<EventStream> {
                       )
                     : widget.eventTapClass == 'Attending'
                         ? ListView.builder(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 3.0, vertical: 3.0),
                             itemCount: attendingCard.length,
                             itemBuilder: (context, index) {
                               return attendingCard[index];
                             })
                         : widget.eventTapClass == 'MyEvent'
                             ? ListView.builder(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 3.0, vertical: 3.0),
                                 itemCount: myEventCard.length,
                                 itemBuilder: (context, index) {
                                   return myEventCard[index];
                                 },
                               )
                             : ListView.builder(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 3.0, vertical: 3.0),
                                 itemCount: calenderCard.length,
                                 itemBuilder: (context, index) {
                                   return calenderCard[index];

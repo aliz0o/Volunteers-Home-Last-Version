@@ -29,14 +29,14 @@ class _CommentScreenState extends State<CommentScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        //  backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+          //  backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
             title: Center(
               child: Text('Comments',
                   style: kAppBarTextStyle.copyWith(fontSize: 21)),
             ),
             automaticallyImplyLeading: false,
-           //backgroundColor: Colors.black,
+            //backgroundColor: Colors.black,
           ),
           body: SafeArea(
             child: Column(
@@ -51,13 +51,16 @@ class _CommentScreenState extends State<CommentScreen> {
                     onChanged: (value) {
                       commentText = value;
                     },
-                    style: TextStyle(color: Colors.black),
+                    style: kArabicTextStyle.copyWith(color: Colors.black),
                     keyboardType: TextInputType.multiline,
                     textAlign: TextAlign.right,
                     maxLines: null,
                     decoration: kArabicTextDecoration.copyWith(
                       hintText: '..اكتب تعليقك هنا',
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintStyle: TextStyle(
+                          color: Colors.black.withOpacity(0.47),
+                          fontSize: 12,
+                          fontFamily: 'Amiri'),
                       suffixIcon: GestureDetector(
                         onTap: () {
                           messageTextController.clear();
@@ -136,15 +139,14 @@ class CommentStream extends StatelessWidget {
                           color: Color(0xff0888ff),
                           child: Padding(
                             padding: EdgeInsets.only(
-                                right: 10, left: 25, top: 10, bottom: 10),
+                                right: 10, left: 30, top: 10, bottom: 10),
                             child: Text(
                               comment[comment.length - index - 1],
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15.0,
-                                 // fontFamily: 'Lalezar'
-                              ),
+                                  fontFamily: 'Lalezar'),
                             ),
                           ),
                         ),

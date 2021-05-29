@@ -146,7 +146,7 @@ class _MyStateFullState extends State<MyStateFull>
                       builder: (ctx) => AlertDialog(
                             title: Text('Alert'),
                             content: Text(
-                                'your account is not verified plz wait Admin approval soon.'),
+                                'Your account is not verified yet\nplz wait for Admin approval soon.'),
                             actions: [
                               ElevatedButton(
                                 onPressed: () {

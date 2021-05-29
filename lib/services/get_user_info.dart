@@ -55,7 +55,9 @@ class GetUser extends StatelessWidget {
                         children: [
                           CircleAvatar(
                               radius: 35,
-                              backgroundImage: AssetImage('images/male.png')),
+                              backgroundImage: data['photoUrl'] == ''
+                                  ? AssetImage('images/male.png')
+                                  : NetworkImage(data['photoUrl'])),
                           Expanded(child: SizedBox(width: 20)),
                           Container(
                             color: Colors.white.withOpacity(0.70),
@@ -180,7 +182,7 @@ class GetUser extends StatelessWidget {
                                                 phoneNumber:
                                                     data['phoneNumber'],
                                                 profilePicture:
-                                                    data['profilePicture'],
+                                                    data['photoUrl'],
                                               );
                                             })),
                                           ),

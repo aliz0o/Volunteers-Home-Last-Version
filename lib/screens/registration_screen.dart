@@ -363,16 +363,13 @@ class _MyStateFullState extends State<MyStateFull> {
                       (_selectedImage == null &&
                           widget.userType == 'committee'))
                   ? () {
-                      print('1');
                       checkNullValue();
                     }
                   : () async {
-                      print('2');
                       setState(() {
                         showSpinner = true;
                       });
                       try {
-                        print('3');
                         final newUser =
                             await _auth.createUserWithEmailAndPassword(
                                 email: email, password: password);
@@ -394,7 +391,7 @@ class _MyStateFullState extends State<MyStateFull> {
                             'preferredEvents': FieldValue.arrayUnion([]),
                             'verified': false,
                             'verificationDocument': '',
-                            'profilePicture': '',
+                            'photoUrl': '',
                           });
                           if (_selectedImage != null) {
                             imageURL = await uploadFile(_selectedImage);
@@ -403,7 +400,6 @@ class _MyStateFullState extends State<MyStateFull> {
                               .collection('users')
                               .doc(newUser.user.uid)
                               .update({'verificationDocument': imageURL});
-
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (context) => EventsScreen()),

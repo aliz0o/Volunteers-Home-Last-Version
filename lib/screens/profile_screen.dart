@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volunteering/screens/events_screen.dart';
 import 'package:volunteering/constants.dart';
-import 'package:volunteering/screens/update_profile_screen.dart';
 import 'package:volunteering/services/events_stream_builder.dart';
 import 'package:volunteering/services/get_user_info.dart';
 

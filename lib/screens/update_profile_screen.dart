@@ -5,8 +5,19 @@ import 'package:volunteering/components/rounded_button.dart';
 import 'package:volunteering/components/label.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteering/screens/events_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 
 final _fireStore = FirebaseFirestore.instance;
+DocumentReference ref = FirebaseFirestore.instance.collection('images').doc();
+String newName;
+int newPhoneNumber;
+String newCity;
+String newProfilePicture;
+
+File selectedImage;
 
 class UpdateProfilePage extends StatelessWidget {
   final String name;
@@ -46,10 +57,10 @@ class UpdateProfilePage extends StatelessWidget {
 }
 
 class MyStateFull extends StatefulWidget {
-  String name;
-  int phoneNumber;
-  String city;
-  String profilePicture;
+  final String name;
+  final int phoneNumber;
+  final String city;
+  final String profilePicture;
   MyStateFull({this.name, this.phoneNumber, this.city, this.profilePicture});
 
   @override
@@ -58,102 +69,199 @@ class MyStateFull extends StatefulWidget {
 
 class _MyStateFullState extends State<MyStateFull> {
   @override
+  void initState() {
+    newName = widget.name;
+    newPhoneNumber = widget.phoneNumber;
+    newCity = widget.city;
+    newProfilePicture = widget.profilePicture;
+    super.initState();
+  }
+
+  Future<String> uploadFile(File _image) async {
+    String filename = _image.path;
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('events').child(filename);
+    UploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask;
+    print('File Uploaded');
+    String returnURL;
+    await storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        returnURL = fileURL;
+      });
+    });
+    return returnURL;
+  }
+
+  bool imageUploadedVisibility = false;
+  @override
   Widget build(BuildContext context) {
+    final picker = ImagePicker();
+    bool showSpinner = false;
     return ModalProgressHUD(
-        inAsyncCall: false,
-        child: Column(
-          children: [
-            SizedBox(height: 50),
-            Center(
-              child: Stack(
-                children: [
-                  Container(
-                    width: 130,
-                    height: 130,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 4,
-                            color: Theme.of(context).scaffoldBackgroundColor),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              color: Colors.black.withOpacity(0.1),
-                              offset: Offset(0, 10))
-                        ],
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: widget.profilePicture == ''
-                              ? AssetImage('images/male.png')
-                              : NetworkImage(widget.profilePicture),
-                        )),
-                  ),
-                  Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        height: 40,
-                        width: 40,
+        inAsyncCall: showSpinner,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 50),
+              GestureDetector(
+                onTap: () async {
+                  final pickedFile =
+                      await picker.getImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    selectedImage = File(pickedFile.path);
+                    setState(() {
+                      imageUploadedVisibility = true;
+                    });
+                  } else {
+                    print('No image selected.');
+                  }
+                },
+                child: Center(
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: 130,
+                        height: 130,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            width: 4,
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                          ),
-                          color: Colors.green,
-                        ),
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
-                      )),
-                ],
+                            border: Border.all(
+                                width: 4,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor),
+                            boxShadow: [
+                              BoxShadow(
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
+                                  color: Colors.black.withOpacity(0.1),
+                                  offset: Offset(0, 10))
+                            ],
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: newProfilePicture == ''
+                                  ? AssetImage('images/male.png')
+                                  : NetworkImage(
+                                      newProfilePicture,
+                                    ),
+                            )),
+                      ),
+                      Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 4,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                              ),
+                              color: Colors.green,
+                            ),
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            Label(label: 'Name'),
-            Padding(
-              padding: textFieldPadding,
-              child: TextFormField(
-                // inputFormatters: [
-                //   FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s")),
-                //   LengthLimitingTextInputFormatter(20),
-                // ],
-                keyboardType: TextInputType.text,
-                controller: TextEditingController()..text = widget.name,
-                onChanged: (value) {
-                  widget.name = value;
-                },
-                style: kTextFieldStyle,
-                decoration: kTextFieldDecoration.copyWith(hintText: ''),
+              Visibility(
+                child: Text(
+                  '\nImage selected',
+                  style: TextStyle(color: Colors.white, fontFamily: 'Aclonica'),
+                ),
+                visible: imageUploadedVisibility,
               ),
-            ),
-            SizedBox(height: 15),
-            Label(label: 'Phone Number'),
-            Padding(
-              padding: textFieldPadding,
-              child: TextFormField(
-                controller: TextEditingController()
-                  ..text = widget.phoneNumber.toString(),
-                onChanged: (value) {
-                  widget.phoneNumber = int.parse(value);
-                },
-                // obscureText: true,
-                style: kTextFieldStyle,
-                decoration: kTextFieldDecoration.copyWith(hintText: ''),
+              SizedBox(height: 50),
+              Label(label: 'Name'),
+              Padding(
+                padding: textFieldPadding,
+                child: TextFormField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s")),
+                    LengthLimitingTextInputFormatter(20),
+                  ],
+                  keyboardType: TextInputType.text,
+                  //controller: TextEditingController()..text = widget.name,
+                  onChanged: (value) {
+                    newName = value;
+                  },
+                  style: kTextFieldStyle,
+                  decoration: kTextFieldDecoration.copyWith(hintText: newName),
+                ),
               ),
-            ),
-            SizedBox(height: 15),
-            RoundedButton(
-                text: 'Update',
-                color: Color(0xff0962ff),
-                function: () {
-                  _fireStore.collection('users').doc(loggedInUser.uid).update({
-                    'name': widget.name,
-                    'phoneNumber': widget.phoneNumber,
-                  });
-                }),
-          ],
+              SizedBox(height: 23),
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButtonFormField<String>(
+                      style: kDropDownTextStyle,
+                      decoration: kDropDownInputDecoration,
+                      dropdownColor: Color.fromRGBO(16, 17, 18, 1),
+                      items: kCityList.map((String dropDownStringItem) {
+                        return DropdownMenuItem<String>(
+                            child: Text(dropDownStringItem),
+                            value: dropDownStringItem);
+                      }).toList(),
+                      value: newCity,
+                      onChanged: (value) {
+                        newCity = value;
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 12),
+              Label(label: 'Phone Number'),
+              Padding(
+                padding: textFieldPadding,
+                child: TextFormField(
+                  // controller: TextEditingController()
+                  //   ..text = widget.phoneNumber.toString(),
+                  onChanged: (value) {
+                    newPhoneNumber = int.parse(value);
+                  },
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(10),
+                    FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                  ],
+                  style: kTextFieldStyle,
+                  decoration: kTextFieldDecoration.copyWith(
+                      hintText: newPhoneNumber.toString()),
+                ),
+              ),
+              SizedBox(height: 15),
+              RoundedButton(
+                  text: 'Update',
+                  color: Color(0xff0962ff),
+                  function: () async {
+                    showSpinner = true;
+                    await _fireStore
+                        .collection('users')
+                        .doc(loggedInUser.uid)
+                        .update({
+                      'name': newName,
+                      'phoneNumber': newPhoneNumber,
+                      'city': newCity,
+                    });
+                    if (selectedImage != null) {
+                      newProfilePicture = await uploadFile(selectedImage);
+                    }
+                    await _fireStore
+                        .collection('users')
+                        .doc(loggedInUser.uid)
+                        .update({'photoUrl': newProfilePicture});
+                    showSpinner = false;
+                    //Navigator.pop(context);
+                  }),
+              SizedBox(height: 215),
+            ],
+          ),
         ));
   }
 }

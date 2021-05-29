@@ -220,9 +220,12 @@ class _GetUserState extends State<GetUser> {
                                                 style: kEventInfoTextStyle),
                                             currentAccountPicture: CircleAvatar(
                                               backgroundColor: Colors.white,
-                                              child: FlutterLogo(
-                                                size: 50,
-                                              ),
+                                              child:    CircleAvatar(
+
+                                                  radius: 35,
+                                                  backgroundImage: data['photoUrl'] == ''||data['photoUrl']==null
+                                                      ? AssetImage('images/male.png')
+                                                      : NetworkImage(data['photoUrl'])),
                                             ),
                                           ),
                                           ListTile(

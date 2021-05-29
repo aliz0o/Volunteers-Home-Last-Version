@@ -110,29 +110,72 @@ class _EventCardButtonState extends State<EventCardButton> {
     return ((widget.screen == 'events' ||
                 widget.screen == 'committeeRequest') &&
             loggedInUserType == 'Admin')
-        ? GestureDetector(
-            onTap: widget.screen == 'events'
-                ? () => {
-                      _fireStore
-                          .collection('events')
-                          .doc(widget.eventID)
-                          .update({
-                        'approved': true,
-                      }),
-                      _fireStore.collection('users').doc(widget.userID).update({
-                        'eventCount': FieldValue.increment(1),
-                      }),
-                    }
-                : () {
-                    _fireStore.collection('users').doc(widget.userID).update({
-                      'verified': true,
-                    });
-                  },
-            child: RadioButton(
-              selected: 'Approve',
-              screen: 'events',
-              colour: inactiveColor.withOpacity(0.06),
-            ),
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: widget.screen == 'events'
+                      ? () => {
+                            _fireStore
+                                .collection('events')
+                                .doc(widget.eventID)
+                                .update({
+                              'approved': true,
+                            }),
+                            _fireStore
+                                .collection('users')
+                                .doc(widget.userID)
+                                .update({
+                              'eventCount': FieldValue.increment(1),
+                            }),
+                          }
+                      : () {
+                          _fireStore
+                              .collection('users')
+                              .doc(widget.userID)
+                              .update({
+                            'verified': true,
+                          });
+                        },
+                  child: RadioButton(
+                    selected: 'Approve',
+                    screen: 'events',
+                    colour: inactiveColor.withOpacity(0.06),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: widget.screen == 'events'
+                      ? () => {
+                            _fireStore
+                                .collection('events')
+                                .doc(widget.eventID)
+                                .update({
+                              'deleted': true,
+                            }),
+                            _fireStore
+                                .collection('users')
+                                .doc(widget.userID)
+                                .update({
+                              'eventCount': FieldValue.increment(-1),
+                            }),
+                          }
+                      : () {
+                          _fireStore
+                              .collection('users')
+                              .doc(widget.userID)
+                              .delete();
+                        },
+                  child: RadioButton(
+                    selected: 'Reject',
+                    screen: 'events',
+                    colour: inactiveColor.withOpacity(0.06),
+                  ),
+                ),
+              ),
+            ],
           )
         : ((widget.screen == 'events' && widget.userID != loggedInUser.uid) ||
                 (widget.screen == 'comingList' &&

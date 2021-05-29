@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:volunteering/screens/committe_request_screen.dart';
-import 'backEnd/dataBase.dart';
+import 'package:volunteering/screens/committee_request_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/events_screen.dart';
 import 'screens/create_event_screen.dart';
@@ -18,11 +16,7 @@ void main() async {
 
   final user = _auth.currentUser;
   loggedInUser = user;
-  runApp(
-    MultiProvider(
-        providers: [ChangeNotifierProvider(create: (_) => Authentication())],
-        child: MyApp()),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: _auth.currentUser==null  ? '/login_screen' : '/events_screen',
+      initialRoute:
+          _auth.currentUser == null ? '/login_screen' : '/events_screen',
       routes: {
         '/login_screen': (context) => LogIn(),
         '/events_screen': (context) => EventsScreen(),

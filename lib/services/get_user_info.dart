@@ -10,6 +10,7 @@ import 'package:volunteering/screens/login_screen.dart';
 import 'package:volunteering/components/CheckBoxListTileDemo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:volunteering/screens/update_profile_screen.dart';
+import 'package:volunteering/screens/committee_request_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -19,7 +20,8 @@ bool verifiedUser;
 String getUserType() {
   return userType;
 }
-bool getverifieduser() {
+
+bool getVerifiedUser() {
   return verifiedUser;
 }
 
@@ -43,28 +45,24 @@ class GetUser extends StatefulWidget {
 }
 
 class _GetUserState extends State<GetUser> {
-  void customLaunch(command) async{
-    if(await canLaunch(command)){
+  void customLaunch(command) async {
+    if (await canLaunch(command)) {
       await launch(command);
-    }else
+    } else
       print('could not launch');
   }
-    _send_Emai(){
+
+  _send_Emai() {
     final Uri _emailLaunchUri = Uri(
-      scheme: 'mailto',
-      path: 'mahmoud_sleem44@hotmail.com',
+        scheme: 'mailto',
+        path: 'mahmoud_sleem44@hotmail.com',
         queryParameters: {
           'subject': 'Ask to be admin in Volunteers Home',
-          'body' : 'why you want to be Admin??'
+          'body': 'why you want to be Admin??'
               '\n\n\n write 200 words describe your self',
-
-        }
-
-    );
-
+        });
 
     launch(_emailLaunchUri.toString());
-
   }
 
   @override
@@ -82,7 +80,7 @@ class _GetUserState extends State<GetUser> {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
           userType = data['userType'];
-          verifiedUser=data['verified'];
+          verifiedUser = data['verified'];
           return this.widget.screen == 'profile'
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,12 +89,11 @@ class _GetUserState extends State<GetUser> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           CircleAvatar(
-
                               radius: 35,
-                              backgroundImage: data['photoUrl'] == ''||data['photoUrl']==null
+                              backgroundImage: data['photoUrl'] == '' ||
+                                      data['photoUrl'] == null
                                   ? AssetImage('images/male.png')
                                   : NetworkImage(data['photoUrl'])),
-
                           Expanded(child: SizedBox(width: 20)),
                           Container(
                             color: Colors.white.withOpacity(0.70),
@@ -118,36 +115,53 @@ class _GetUserState extends State<GetUser> {
                           ),
                         ]),
                     SizedBox(height: 10),
-                    Text( data['name'], style: kUserInfoTextStyle),
+                    Text(data['name'], style: kUserInfoTextStyle),
                     SizedBox(height: 10),
                     InkWell(
-                        onTap: ()=> null,
-                        child:Row(children: [
-                          Icon(Icons.location_on),
-                          SizedBox(width: 5,),
-                          Text(": "+'${data['city']}',style:  kUserInfoTextStyle,),
-                        ],)
-                    ),
+                        onTap: () => null,
+                        child: Row(
+                          children: [
+                            Icon(Icons.location_on),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              ": " + '${data['city']}',
+                              style: kUserInfoTextStyle,
+                            ),
+                          ],
+                        )),
 
-
                     SizedBox(height: 10),
                     InkWell(
-                        onTap: ()=> customLaunch('mailto:${data['email']}'),
-                        child:Row(children: [
-                          Icon(Icons.email),
-                          SizedBox(width: 5,),
-                          Text(": "+'${data['email']}',style:  kUserInfoTextStyle,),
-                        ],)
-                    ),
+                        onTap: () => customLaunch('mailto:${data['email']}'),
+                        child: Row(
+                          children: [
+                            Icon(Icons.email),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              ": " + '${data['email']}',
+                              style: kUserInfoTextStyle,
+                            ),
+                          ],
+                        )),
                     SizedBox(height: 10),
                     InkWell(
-                        onTap: ()=> customLaunch('tel:${data['phoneNumber']}'),
-                        child:Row(children: [
-                          Icon(Icons.phone),
-                          SizedBox(width: 5,),
-                          Text(": "+'${data['phoneNumber']}',style:  kUserInfoTextStyle,),
-                        ],)
-                    ),
+                        onTap: () => customLaunch('tel:${data['phoneNumber']}'),
+                        child: Row(
+                          children: [
+                            Icon(Icons.phone),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              ": " + '${data['phoneNumber']}',
+                              style: kUserInfoTextStyle,
+                            ),
+                          ],
+                        )),
 
                     // TextButton(onPressed: null, child: Text('more Info :',style: TextStyle(color:Colors.white),) ),
                   ],
@@ -158,7 +172,8 @@ class _GetUserState extends State<GetUser> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProfileScreen(userID: widget.userID),
+                            builder: (context) =>
+                                ProfileScreen(userID: widget.userID),
                           ),
                         );
                       },
@@ -192,9 +207,10 @@ class _GetUserState extends State<GetUser> {
                                   icon:
                                       Icon(Icons.add_box, color: Colors.white),
                                   onPressed: () {
-
-                                    Navigator.pushNamed(
-                                        context, '/committee_request');
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(builder: (ctx) {
+                                      return CommitteeRequest();
+                                    }));
                                   },
                                 )
                               : Container()
@@ -220,12 +236,17 @@ class _GetUserState extends State<GetUser> {
                                                 style: kEventInfoTextStyle),
                                             currentAccountPicture: CircleAvatar(
                                               backgroundColor: Colors.white,
-                                              child:    CircleAvatar(
-
+                                              child: CircleAvatar(
                                                   radius: 35,
-                                                  backgroundImage: data['photoUrl'] == ''||data['photoUrl']==null
-                                                      ? AssetImage('images/male.png')
-                                                      : NetworkImage(data['photoUrl'])),
+                                                  backgroundImage: data[
+                                                                  'photoUrl'] ==
+                                                              '' ||
+                                                          data['photoUrl'] ==
+                                                              null
+                                                      ? AssetImage(
+                                                          'images/male.png')
+                                                      : NetworkImage(
+                                                          data['photoUrl'])),
                                             ),
                                           ),
                                           ListTile(
@@ -263,26 +284,39 @@ class _GetUserState extends State<GetUser> {
                                           Divider(
                                             thickness: 2,
                                           ),
-
-                                          getUserType()=='committee'?ListTile(
-                                            title: const Text('Aske to be Admin',
-                                                style: kUserInfoTextStyle),
-                                            onTap: () {
-                                             _send_Emai();
-                                            },
-                                          ):Container(child: null,),
-                                          getUserType()=='committee'? Divider(
-                                            thickness: 2,
-                                          ):Container(child: null,),
+                                          getUserType() == 'committee'
+                                              ? ListTile(
+                                                  title: const Text(
+                                                      'Aske to be Admin',
+                                                      style:
+                                                          kUserInfoTextStyle),
+                                                  onTap: () {
+                                                    _send_Emai();
+                                                  },
+                                                )
+                                              : Container(
+                                                  child: null,
+                                                ),
+                                          getUserType() == 'committee'
+                                              ? Divider(
+                                                  thickness: 2,
+                                                )
+                                              : Container(
+                                                  child: null,
+                                                ),
                                           ListTile(
                                             title: const Text('Log out',
                                                 style: kUserInfoTextStyle),
                                             onTap: () {
                                               _auth.signOut();
 
-                                              Navigator.of(context).pushAndRemoveUntil(
-                                                  MaterialPageRoute(builder: (context) => LogIn()),
-                                                      (Route<dynamic> route) => false);
+                                              Navigator.of(context)
+                                                  .pushAndRemoveUntil(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              LogIn()),
+                                                      (Route<dynamic> route) =>
+                                                          false);
                                             },
                                           ),
                                           Divider(
@@ -313,9 +347,10 @@ class _GetUserState extends State<GetUser> {
                                     title: Text(
                                       data['name'],
                                       style: TextStyle(
-                                          fontSize: this.widget.screen == 'comingList'
-                                              ? 20
-                                              : 14,
+                                          fontSize:
+                                              this.widget.screen == 'comingList'
+                                                  ? 20
+                                                  : 14,
                                           fontFamily: 'Aclonica',
                                           color: Colors.white),
                                     ),
@@ -331,7 +366,8 @@ class _GetUserState extends State<GetUser> {
                                     ),
                                     trailing: PopupMenuButton(
                                       onSelected: (value) {
-                                        if (this.widget.userID == loggedInUser.uid) {
+                                        if (this.widget.userID ==
+                                            loggedInUser.uid) {
                                           _fireStore
                                               .collection('events')
                                               .doc(this.widget.eventID)
@@ -344,7 +380,8 @@ class _GetUserState extends State<GetUser> {
                                                 FieldValue.increment(-1)
                                           });
                                         } else {
-                                          if (this.widget.screen == 'comingList' ||
+                                          if (this.widget.screen ==
+                                                  'comingList' ||
                                               this.widget.screen ==
                                                   'committeeRequest') {
                                             _fireStore
@@ -372,7 +409,8 @@ class _GetUserState extends State<GetUser> {
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
                                           value: true,
-                                          child: this.widget.userID == loggedInUser.uid
+                                          child: this.widget.userID ==
+                                                  loggedInUser.uid
                                               ? Text("Delete",
                                                   style: kNumberTextStyle)
                                               : Text("Report",

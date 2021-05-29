@@ -11,6 +11,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
 final _fireStore = FirebaseFirestore.instance;
+
 DocumentReference ref = FirebaseFirestore.instance.collection('images').doc();
 String newName;
 int newPhoneNumber;
@@ -39,7 +40,7 @@ class UpdateProfilePage extends StatelessWidget {
           ),
         ),
         body: Container(
-           height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
               begin: Alignment.topRight,
@@ -139,7 +140,8 @@ class _MyStateFullState extends State<MyStateFull> {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: newProfilePicture == ''||newProfilePicture==null
+                              image: newProfilePicture == '' ||
+                                      newProfilePicture == null
                                   ? AssetImage('images/male.png')
                                   : NetworkImage(
                                       newProfilePicture,
@@ -261,15 +263,13 @@ class _MyStateFullState extends State<MyStateFull> {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(saveSuccessfullySnackBar);
                     //Navigator.pop(context);
-                  }
-
-
-                  ),
+                  }),
               SizedBox(height: 215),
             ],
           ),
         ));
   }
+
   final saveSuccessfullySnackBar = SnackBar(
     content: Text('Your information  Updated Successfully',
         style: TextStyle(fontSize: 20, fontFamily: 'Aclonica')),

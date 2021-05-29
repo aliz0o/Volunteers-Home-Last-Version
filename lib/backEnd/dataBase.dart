@@ -4,8 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Authentication with ChangeNotifier {
@@ -26,8 +24,6 @@ class Authentication with ChangeNotifier {
     return _auth.currentUser != null;
   }
 
-
-
   String get getUserId {
     return user_id;
   }
@@ -46,20 +42,19 @@ class Authentication with ChangeNotifier {
     }
     return 0;
   }
-  Future<bool>  tv (String Email2)async {
+
+  Future<bool> tv(String Email2) async {
     var querySnapshotData = await _cloudInstance.collection('users').get();
-    var userData =
-    querySnapshotData.docs.where((element) => element['email'] == Email2&&element['userType']&&element['verified']==true);
+    var userData = querySnapshotData.docs.where((element) =>
+        element['email'] == Email2 &&
+        element['userType'] &&
+        element['verified'] == true);
     // var userData = querySnapshotData.docs;
     if (userData != null) {
-
       return true;
     }
     return false;
   }
-
-
-
 
   final String _collection = 'collectionName';
 
@@ -372,37 +367,37 @@ class Authentication with ChangeNotifier {
     }
     return false;
   }
-  Future<bool>  getverfieduser() async {
+
+  Future<bool> getverfieduser() async {
     print('getverfieduser******************');
     var querySnapshotData = await _cloudInstance.collection('users').get();
-    var userData =
-    querySnapshotData.docs.where((element) => element['userId'] == 'Ip5Ul4FEE1YaZhDrJM6IqFxkRey1'&&element['verified'] == true);
+    var userData = querySnapshotData.docs.where((element) =>
+        element['userId'] == 'Ip5Ul4FEE1YaZhDrJM6IqFxkRey1' &&
+        element['verified'] == true);
     // var userData = querySnapshotData.docs;
     if (userData != null) {
       print('yyyyyyyyesssss');
       return true;
-    }
-    else{
+    } else {
       print('yyyyyyyyesssss');
       return false;
     }
-
   }
-  Future<String>  userType() async {
+
+  Future<String> userType() async {
     print('userType***************');
     var querySnapshotData = await _cloudInstance.collection('users').get();
-    var userData =
-    querySnapshotData.docs.where((element) => element['userId'] == 'Ip5Ul4FEE1YaZhDrJM6IqFxkRey1'&&element['userType'] == 'committee');
+    var userData = querySnapshotData.docs.where((element) =>
+        element['userId'] == 'Ip5Ul4FEE1YaZhDrJM6IqFxkRey1' &&
+        element['userType'] == 'committee');
     // var userData = querySnapshotData.docs;
     if (userData != null) {
       print('yyyyyyyyesssss committee');
       return 'committee';
-    }
-    else{
+    } else {
       print('yyyyyyyyesssss volunteer');
       return 'volunteer';
     }
-
   }
 
   Future<void> updateCollectionField(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:volunteering/components/rounded_button.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/components/label.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:volunteering/screens/events_screen.dart';
+import 'package:volunteering/services/get_user_info.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -115,6 +117,13 @@ class _MyStateFullState extends State<MyStateFull> {
         _imageVisibility = false;
       });
   }
+  void customLaunch(command) async{
+    if(await canLaunch(command)){
+      await launch(command);
+    }else
+      print('could not launch');
+  }
+
 
   Future<String> uploadFile(File _image) async {
     String filename = _image.path;
@@ -130,6 +139,25 @@ class _MyStateFullState extends State<MyStateFull> {
       });
     });
     return returnURL;
+  }
+  alert(){
+    _auth.signOut();
+    return showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('Alert'),
+          content: Text(
+              'your account is no verified plz wait Admin approval soon'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: Center(child: Text("okay")),
+            )
+          ],
+        ));
+
   }
 
   @override
@@ -408,10 +436,10 @@ class _MyStateFullState extends State<MyStateFull> {
                               .doc(newUser.user.uid)
                               .update({'verificationDocument': imageURL});
 
-                          Navigator.of(context).pushAndRemoveUntil(
+                          userType=='volunteer'?Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (context) => EventsScreen()),
-                              (Route<dynamic> route) => false);
+                              (Route<dynamic> route) => false):alert();
                         }
                         setState(() {
                           showSpinner = false;

@@ -21,56 +21,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    // final drawerHeader = UserAccountsDrawerHeader(
-    //   accountName: InkWell(child: Text('name')),
-    //   accountEmail: Text('Email'),
-    //   currentAccountPicture: CircleAvatar(
-    //     backgroundColor: Colors.white,
-    //     child: FlutterLogo(
-    //       size: 50,
-    //     ),
-    //   ),
-    // );
 
-    // final drawerItems = ListView(
-    //   children: <Widget>[
-    //     drawerHeader,
-    //     ListTile(
-    //       title: const Text('Update Profile page'),
-    //       onTap: () =>
-    //           Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-    //         return EditProfile();
-    //       })),
-    //     ),
-    //     Divider(
-    //       thickness: 2,
-    //     ),
-    //     ListTile(
-    //       title: const Text('preferred Events'),
-    //       onTap: () {
-    //         Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-    //           return CheckBoxListTileDemo();
-    //         }));
-    //       },
-    //     ),
-    //     Divider(
-    //       thickness: 2,
-    //     ),
-    //     ListTile(
-    //       title: const Text('Log out'),
-    //       onTap: () {
-    //         _auth.signOut();
-    //         Navigator.of(context)
-    //             .pushReplacement(MaterialPageRoute(builder: (ctx) {
-    //           return LogIn();
-    //         }));
-    //       },
-    //     ),
-    //     Divider(
-    //       thickness: 2,
-    //     ),
-    //   ],
-    // );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

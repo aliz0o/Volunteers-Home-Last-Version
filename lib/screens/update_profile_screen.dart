@@ -39,6 +39,7 @@ class UpdateProfilePage extends StatelessWidget {
           ),
         ),
         body: Container(
+           height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
               begin: Alignment.topRight,
@@ -138,7 +139,7 @@ class _MyStateFullState extends State<MyStateFull> {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: newProfilePicture == ''
+                              image: newProfilePicture == ''||newProfilePicture==null
                                   ? AssetImage('images/male.png')
                                   : NetworkImage(
                                       newProfilePicture,
@@ -257,11 +258,22 @@ class _MyStateFullState extends State<MyStateFull> {
                         .doc(loggedInUser.uid)
                         .update({'photoUrl': newProfilePicture});
                     showSpinner = false;
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(saveSuccessfullySnackBar);
                     //Navigator.pop(context);
-                  }),
+                  }
+
+
+                  ),
               SizedBox(height: 215),
             ],
           ),
         ));
   }
+  final saveSuccessfullySnackBar = SnackBar(
+    content: Text('Your information  Updated Successfully',
+        style: TextStyle(fontSize: 20, fontFamily: 'Aclonica')),
+    elevation: 5,
+    backgroundColor: Color(0xff0962ff),
+  );
 }

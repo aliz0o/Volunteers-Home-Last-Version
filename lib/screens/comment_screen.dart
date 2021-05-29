@@ -61,6 +61,17 @@ class _CommentScreenState extends State<CommentScreen> {
                           color: Colors.black.withOpacity(0.47),
                           fontSize: 12,
                           fontFamily: 'Amiri'),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: Color(0xff0962ff),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            BorderSide(color: Colors.black.withOpacity(0.20)),
+                      ),
                       suffixIcon: GestureDetector(
                         onTap: () {
                           messageTextController.clear();

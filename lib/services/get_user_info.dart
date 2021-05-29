@@ -5,10 +5,10 @@ import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:volunteering/screens/events_screen.dart';
-import 'package:volunteering/screens/updateProfile.dart';
 import 'package:volunteering/screens/login_screen.dart';
 import 'package:volunteering/components/CheckBoxListTileDemo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:volunteering/screens/update_profile_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -174,7 +174,14 @@ class GetUser extends StatelessWidget {
                                             onTap: () => Navigator.of(context)
                                                 .push(MaterialPageRoute(
                                                     builder: (ctx) {
-                                              return EditProfile();
+                                              return UpdateProfilePage(
+                                                name: data['name'],
+                                                city: data['city'],
+                                                phoneNumber:
+                                                    data['phoneNumber'],
+                                                profilePicture:
+                                                    data['profilePicture'],
+                                              );
                                             })),
                                           ),
                                           Divider(
@@ -227,13 +234,12 @@ class GetUser extends StatelessWidget {
                                   },
                                   child: ListTile(
                                     leading: CircleAvatar(
-                                        backgroundImage: data['gender'] ==
-                                                'Male'
-                                            ? AssetImage('images/male.png')
-                                            : data['gender'] == 'Female'
-                                                ? AssetImage(
-                                                    'images/female.png')
-                                                : AssetImage('images/2.png')),
+                                      backgroundImage:
+                                          data['profilePicture'] == ''
+                                              ? AssetImage('images/male.png')
+                                              : NetworkImage(
+                                                  data['profilePicture']),
+                                    ),
                                     title: Text(
                                       data['name'],
                                       style: TextStyle(

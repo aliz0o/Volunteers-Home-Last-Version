@@ -32,7 +32,6 @@ class RegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color.fromRGBO(16, 17, 18, 1),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
@@ -41,8 +40,6 @@ class RegistrationScreen extends StatelessWidget {
             style: kAppBarTextStyle,
           ),
         ),
-        //backgroundColor: Color(0xFF2C2C2C),
-        // backgroundColor: Colors.black,
       ),
       body: Container(
           height: MediaQuery.of(context).size.height,
@@ -76,7 +73,6 @@ class _MyStateFullState extends State<MyStateFull> {
   String name;
   int phoneNumber;
   int age;
-  //String gender;
   String city = 'Amman';
   String about = '';
   String imageURL = '';

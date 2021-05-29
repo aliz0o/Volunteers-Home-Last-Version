@@ -118,6 +118,7 @@ class CheckBoxListTileDemoState extends State<CheckBoxListTileDemo> {
                     .update({'preferredEvents': _preferredEvents});
                 ScaffoldMessenger.of(context)
                     .showSnackBar(saveSuccessfullySnackBar);
+                Navigator.pop(context);
               },
               color: Color(0xff0962ff)),
         ],

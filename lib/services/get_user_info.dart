@@ -6,11 +6,11 @@ import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:volunteering/screens/events_screen.dart';
-import 'package:volunteering/screens/login_screen.dart';
 import 'package:volunteering/components/CheckBoxListTileDemo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:volunteering/screens/update_profile_screen.dart';
 import 'package:volunteering/screens/committee_request_screen.dart';
+import 'package:volunteering/screens/login_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -131,7 +131,6 @@ class _GetUserState extends State<GetUser> {
                             ),
                           ],
                         )),
-
                     SizedBox(height: 10),
                     InkWell(
                         onTap: () => customLaunch('mailto:${data['email']}'),
@@ -162,8 +161,6 @@ class _GetUserState extends State<GetUser> {
                             ),
                           ],
                         )),
-
-                    // TextButton(onPressed: null, child: Text('more Info :',style: TextStyle(color:Colors.white),) ),
                   ],
                 )
               : this.widget.screen == 'commentScreen'
@@ -309,7 +306,6 @@ class _GetUserState extends State<GetUser> {
                                                 style: kUserInfoTextStyle),
                                             onTap: () {
                                               _auth.signOut();
-
                                               Navigator.of(context)
                                                   .pushAndRemoveUntil(
                                                       MaterialPageRoute(

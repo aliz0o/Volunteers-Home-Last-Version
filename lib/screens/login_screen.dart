@@ -115,7 +115,7 @@ class _MyStateFullState extends State<MyStateFull>
                 showSpinner = true;
               });
               try {
-                final existUser = await _auth.signInWithEmailAndPassword(
+                await _auth.signInWithEmailAndPassword(
                     email: email, password: password);
                 var querySnapshotData =
                     await _cloudInstance.collection('users').get();

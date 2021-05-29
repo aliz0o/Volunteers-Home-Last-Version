@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+
 import 'package:volunteering/components/rounded_button.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/components/label.dart';
@@ -7,6 +9,7 @@ import 'package:volunteering/components/sub_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:volunteering/services/get_user_info.dart';
 import 'events_screen.dart';
 
 final emailTextController = TextEditingController();
@@ -115,38 +118,32 @@ class _MyStateFullState extends State<MyStateFull>
                 showSpinner = true;
               });
               try {
-                await _auth.signInWithEmailAndPassword(
+                final existUser = await _auth.signInWithEmailAndPassword(
                     email: email, password: password);
-                var querySnapshotData =
-                    await _cloudInstance.collection('users').get();
-                var userData1 = querySnapshotData.docs.where((element) =>
-                    element['email'] == email &&
-                    (element['userType'] == 'committee') &&
-                    element['verified'] == true);
-                var userData2 = querySnapshotData.docs.where((element) =>
-                    element['email'] == email &&
-                    element['userType'] == 'volunteer' &&
-                    element['verified'] == false);
-                var userData3 = querySnapshotData.docs.where((element) =>
-                    element['email'] == email &&
-                    element['userType'] == 'Admin' &&
-                    element['verified'] == true);
+                var querySnapshotData = await _cloudInstance.collection('users').get();
+                var userData1 =
+                querySnapshotData.docs.where((element) => element['email'] == email&&(element['userType']=='committee')&&element['verified']==true);
+                var userData2 =
+                querySnapshotData.docs.where((element) => element['email'] == email&&element['userType']=='volunteer'&&element['verified']==false);
+                var userData3 =
+                querySnapshotData.docs.where((element) => element['email'] == email&&element['userType']=='Admin'&&element['verified']==true);
 
-                print('userData.length1' + userData1.length.toString());
+                print('userData.length1'+userData1.length.toString());
 
-                if (userData1.length > 0 ||
-                    userData3.length > 0 && userData2.length == 0) {
-                  print('userData.length1' + userData1.length.toString());
+                if ( userData1.length>0||userData3.length>0&&userData2.length==0) {
+
+
+                 print('userData.length1'+userData1.length.toString());
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => EventsScreen()),
                       (Route<dynamic> route) => false);
-                } else if (userData1.length <= 0 && userData2.length == 0) {
+                } else if (userData1.length<=0&&userData2.length==0) {
                   showDialog(
                       context: context,
                       builder: (ctx) => AlertDialog(
                             title: Text('Alert'),
                             content: Text(
-                                'Your account is not verified yet\nplz wait for Admin approval soon.'),
+                                'your account is no verified plz wait Admin approval soon'),
                             actions: [
                               ElevatedButton(
                                 onPressed: () {
@@ -157,10 +154,11 @@ class _MyStateFullState extends State<MyStateFull>
                             ],
                           ));
                   _auth.signOut();
-                } else
+                }
+                else
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => EventsScreen()),
-                      (Route<dynamic> route) => false);
+                          (Route<dynamic> route) => false);
 
                 setState(() {
                   showSpinner = false;

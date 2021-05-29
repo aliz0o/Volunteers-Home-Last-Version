@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:volunteering/screens/profile_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 
@@ -244,24 +245,34 @@ class _MyStateFullState extends State<MyStateFull> {
                   color: Color(0xff0962ff),
                   function: () async {
                     showSpinner = true;
-                    await _fireStore
-                        .collection('users')
-                        .doc(loggedInUser.uid)
-                        .update({
-                      'name': newName,
-                      'phoneNumber': newPhoneNumber,
-                      'city': newCity,
-                    });
-                    if (selectedImage != null) {
-                      newProfilePicture = await uploadFile(selectedImage);
-                    }
-                    await _fireStore
-                        .collection('users')
-                        .doc(loggedInUser.uid)
-                        .update({'photoUrl': newProfilePicture});
-                    showSpinner = false;
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(saveSuccessfullySnackBar);
+
+                      await _fireStore
+                          .collection('users')
+                          .doc(loggedInUser.uid)
+                          .update({
+                        'name': newName,
+                        'phoneNumber': newPhoneNumber,
+                        'city': newCity,
+                      });
+                      if (selectedImage != null) {
+                        newProfilePicture = await uploadFile(selectedImage);
+                        await _fireStore
+                            .collection('users')
+                            .doc(loggedInUser.uid)
+                            .update({'photoUrl': newProfilePicture});
+                        showSpinner = false;
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(saveSuccessfullySnackBar);
+
+
+                      }
+
+
+
+
+
+
+
                     //Navigator.pop(context);
                   }),
               SizedBox(height: 215),
@@ -272,8 +283,21 @@ class _MyStateFullState extends State<MyStateFull> {
 
   final saveSuccessfullySnackBar = SnackBar(
     content: Text('Your information  Updated Successfully',
-        style: TextStyle(fontSize: 20, fontFamily: 'Aclonica')),
+        style: TextStyle(fontSize: 15, fontFamily: 'Aclonica')),
     elevation: 5,
-    backgroundColor: Color(0xff0962ff),
+    backgroundColor: Colors.black,
+  );
+
+  final saveSuccessfullySnackBar2 = SnackBar(
+    content: Text('Your must fill your new information',
+        style: TextStyle(fontSize: 15, fontFamily: 'Aclonica')),
+    elevation: 5,
+    backgroundColor: Colors.black,
+  );
+  final saveSuccessfullySnackBar3 = SnackBar(
+    content: Text('Your must fill your new information and new image',
+        style: TextStyle(fontSize: 15, fontFamily: 'Aclonica')),
+    elevation: 5,
+    backgroundColor: Colors.black,
   );
 }

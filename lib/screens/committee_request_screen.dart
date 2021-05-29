@@ -15,9 +15,9 @@ class _CommitteeRequestState extends State<CommitteeRequest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+
       appBar: AppBar(
-        backgroundColor: Colors.black,
+       centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text('Committee Request', style: kAppBarTextStyle),
       ),

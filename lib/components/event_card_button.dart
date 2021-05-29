@@ -18,20 +18,20 @@ final volunteerSnackBar = SnackBar(
   content: Text('You have already registered as volunteer..',
       style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
   elevation: 5,
-  backgroundColor: Color(0xff0962ff),
+  backgroundColor: Colors.black,
 );
 
 final reachedVolunteersNumber = SnackBar(
   content: Text('This event has reached the required volunteers Number..',
       style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
   elevation: 5,
-  backgroundColor: Color(0xff0962ff),
+  backgroundColor: Colors.black,
 );
 final reachedAttendanceNumber = SnackBar(
   content: Text('This event has reached the required attendance Number..',
       style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
   elevation: 5,
-  backgroundColor: Color(0xff0962ff),
+  backgroundColor: Colors.black,
 );
 
 const inactiveColor = Colors.white;

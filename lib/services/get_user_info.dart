@@ -52,7 +52,7 @@ class _GetUserState extends State<GetUser> {
       print('could not launch');
   }
 
-  _send_Emai() {
+  sendEmail() {
     final Uri _emailLaunchUri = Uri(
         scheme: 'mailto',
         path: 'mahmoud_sleem44@hotmail.com',
@@ -287,11 +287,11 @@ class _GetUserState extends State<GetUser> {
                                           getUserType() == 'committee'
                                               ? ListTile(
                                                   title: const Text(
-                                                      'Aske to be Admin',
+                                                      'Ask to be Admin',
                                                       style:
                                                           kUserInfoTextStyle),
                                                   onTap: () {
-                                                    _send_Emai();
+                                                    sendEmail();
                                                   },
                                                 )
                                               : Container(

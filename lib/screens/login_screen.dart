@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:volunteering/backEnd/dataBase.dart';
 import 'package:volunteering/components/rounded_button.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/components/label.dart';
@@ -9,7 +7,6 @@ import 'package:volunteering/components/sub_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:volunteering/services/get_user_info.dart';
 import 'events_screen.dart';
 
 final emailTextController = TextEditingController();

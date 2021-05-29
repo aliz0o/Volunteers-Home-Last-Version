@@ -40,7 +40,6 @@ class _CommitteeRequestState extends State<CommitteeRequest> {
             for (var user in documents) {
               final userID = user.id;
               final createdOn = user['createdOn'];
-              final name = user['name'];
               final about = user['about'];
               final city = user['city'];
               final verificationDocument = user['verificationDocument'];

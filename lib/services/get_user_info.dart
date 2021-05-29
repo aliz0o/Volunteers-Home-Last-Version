@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/screens/profile_screen.dart';
 import 'package:shimmer/shimmer.dart';
@@ -13,18 +14,24 @@ import 'package:volunteering/screens/update_profile_screen.dart';
 final _fireStore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 String userType;
+bool verifiedUser;
 
 String getUserType() {
   return userType;
 }
+bool getverifieduser() {
+  return verifiedUser;
+}
 
-class GetUser extends StatelessWidget {
+class GetUser extends StatefulWidget {
   final String userID;
   final String screen;
   final String createdOn;
   final String eventID;
+  final String email;
 
   GetUser({
+    this.email,
     @required this.userID,
     @required this.screen,
     this.eventID,
@@ -32,10 +39,39 @@ class GetUser extends StatelessWidget {
   });
 
   @override
+  _GetUserState createState() => _GetUserState();
+}
+
+class _GetUserState extends State<GetUser> {
+  void customLaunch(command) async{
+    if(await canLaunch(command)){
+      await launch(command);
+    }else
+      print('could not launch');
+  }
+    _send_Emai(){
+    final Uri _emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: 'mahmoud_sleem44@hotmail.com',
+        queryParameters: {
+          'subject': 'Ask to be admin in Volunteers Home',
+          'body' : 'why you want to be Admin??'
+              '\n\n\n write 200 words describe your self',
+
+        }
+
+    );
+
+
+    launch(_emailLaunchUri.toString());
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     return FutureBuilder<DocumentSnapshot>(
-      future: users.doc(this.userID).get(),
+      future: users.doc(this.widget.userID).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -46,7 +82,8 @@ class GetUser extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
           userType = data['userType'];
-          return this.screen == 'profile'
+          verifiedUser=data['verified'];
+          return this.widget.screen == 'profile'
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -54,10 +91,12 @@ class GetUser extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           CircleAvatar(
+
                               radius: 35,
                               backgroundImage: data['photoUrl'] == ''
                                   ? AssetImage('images/male.png')
                                   : NetworkImage(data['photoUrl'])),
+
                           Expanded(child: SizedBox(width: 20)),
                           Container(
                             color: Colors.white.withOpacity(0.70),
@@ -78,32 +117,48 @@ class GetUser extends StatelessWidget {
                             ],
                           ),
                         ]),
-                    SizedBox(
-                      height: 5,
+                    SizedBox(height: 10),
+                    Text( data['name'], style: kUserInfoTextStyle),
+                    SizedBox(height: 10),
+                    InkWell(
+                        onTap: ()=> null,
+                        child:Row(children: [
+                          Icon(Icons.location_on),
+                          SizedBox(width: 5,),
+                          Text(": "+'${data['city']}',style:  kUserInfoTextStyle,),
+                        ],)
                     ),
-                    Text('name : ' + data['name'], style: kUserInfoTextStyle),
-                    SizedBox(
-                      height: 5,
+
+
+                    SizedBox(height: 10),
+                    InkWell(
+                        onTap: ()=> customLaunch('mailto:${data['email']}'),
+                        child:Row(children: [
+                          Icon(Icons.email),
+                          SizedBox(width: 5,),
+                          Text(": "+'${data['email']}',style:  kUserInfoTextStyle,),
+                        ],)
                     ),
-                    Text('Location : ' + data['city'],
-                        style: kUserInfoTextStyle),
-                    SizedBox(
-                      height: 5,
+                    SizedBox(height: 10),
+                    InkWell(
+                        onTap: ()=> customLaunch('tel:${data['phoneNumber']}'),
+                        child:Row(children: [
+                          Icon(Icons.phone),
+                          SizedBox(width: 5,),
+                          Text(": "+'${data['phoneNumber']}',style:  kUserInfoTextStyle,),
+                        ],)
                     ),
-                    Text('Email : ' + data['email'], style: kUserInfoTextStyle),
-                    SizedBox(height: 5),
-                    Text('PhoneNO : ' + '${data['phoneNumber']}',
-                        style: kUserInfoTextStyle),
+
                     // TextButton(onPressed: null, child: Text('more Info :',style: TextStyle(color:Colors.white),) ),
                   ],
                 )
-              : this.screen == 'commentScreen'
+              : this.widget.screen == 'commentScreen'
                   ? GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProfileScreen(userID: userID),
+                            builder: (context) => ProfileScreen(userID: widget.userID),
                           ),
                         );
                       },
@@ -113,7 +168,7 @@ class GetUser extends StatelessWidget {
                               color: Colors.black,
                               fontFamily: 'Aclonica')),
                     )
-                  : this.screen == 'button'
+                  : this.widget.screen == 'button'
                       ? (userType == 'committee' || userType == 'Admin') &&
                               data['verified'] == true
                           ? FloatingActionButton.extended(
@@ -130,19 +185,20 @@ class GetUser extends StatelessWidget {
                               child: Container(),
                               visible: false,
                             )
-                      : this.screen == 'requestButton'
+                      : this.widget.screen == 'requestButton'
                           ? data['userType'] == 'Admin'
                               ? IconButton(
                                   color: Colors.white.withOpacity(0.25),
                                   icon:
                                       Icon(Icons.add_box, color: Colors.white),
                                   onPressed: () {
+
                                     Navigator.pushNamed(
                                         context, '/committee_request');
                                   },
                                 )
                               : Container()
-                          : this.screen == 'Drawer'
+                          : this.widget.screen == 'Drawer'
                               ? Drawer(
                                   child: Container(
                                       decoration: BoxDecoration(
@@ -204,17 +260,26 @@ class GetUser extends StatelessWidget {
                                           Divider(
                                             thickness: 2,
                                           ),
+
+                                          getUserType()=='committee'?ListTile(
+                                            title: const Text('Aske to be Admin',
+                                                style: kUserInfoTextStyle),
+                                            onTap: () {
+                                             _send_Emai();
+                                            },
+                                          ):Container(child: null,),
+                                          getUserType()=='committee'? Divider(
+                                            thickness: 2,
+                                          ):Container(child: null,),
                                           ListTile(
                                             title: const Text('Log out',
                                                 style: kUserInfoTextStyle),
                                             onTap: () {
                                               _auth.signOut();
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                      MaterialPageRoute(
-                                                          builder: (ctx) {
-                                                return LogIn();
-                                              }));
+
+                                              Navigator.of(context).pushAndRemoveUntil(
+                                                  MaterialPageRoute(builder: (context) => LogIn()),
+                                                      (Route<dynamic> route) => false);
                                             },
                                           ),
                                           Divider(
@@ -229,7 +294,7 @@ class GetUser extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => ProfileScreen(
-                                          userID: userID,
+                                          userID: widget.userID,
                                         ),
                                       ),
                                     );
@@ -245,16 +310,16 @@ class GetUser extends StatelessWidget {
                                     title: Text(
                                       data['name'],
                                       style: TextStyle(
-                                          fontSize: this.screen == 'comingList'
+                                          fontSize: this.widget.screen == 'comingList'
                                               ? 20
                                               : 14,
                                           fontFamily: 'Aclonica',
                                           color: Colors.white),
                                     ),
                                     subtitle: Text(
-                                      this.screen == 'comingList'
+                                      this.widget.screen == 'comingList'
                                           ? data['email']
-                                          : this.createdOn,
+                                          : this.widget.createdOn,
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: Colors.white.withOpacity(0.50),
@@ -263,25 +328,25 @@ class GetUser extends StatelessWidget {
                                     ),
                                     trailing: PopupMenuButton(
                                       onSelected: (value) {
-                                        if (this.userID == loggedInUser.uid) {
+                                        if (this.widget.userID == loggedInUser.uid) {
                                           _fireStore
                                               .collection('events')
-                                              .doc(this.eventID)
+                                              .doc(this.widget.eventID)
                                               .update({'deleted': value});
                                           _fireStore
                                               .collection('users')
-                                              .doc(this.userID)
+                                              .doc(this.widget.userID)
                                               .update({
                                             'eventCount':
                                                 FieldValue.increment(-1)
                                           });
                                         } else {
-                                          if (this.screen == 'comingList' ||
-                                              this.screen ==
+                                          if (this.widget.screen == 'comingList' ||
+                                              this.widget.screen ==
                                                   'committeeRequest') {
                                             _fireStore
                                                 .collection('users')
-                                                .doc(this.userID)
+                                                .doc(this.widget.userID)
                                                 .update({
                                               'reportedCount':
                                                   FieldValue.increment(1)
@@ -289,7 +354,7 @@ class GetUser extends StatelessWidget {
                                           } else {
                                             _fireStore
                                                 .collection('events')
-                                                .doc(this.eventID)
+                                                .doc(this.widget.eventID)
                                                 .update({
                                               'reportedCount':
                                                   FieldValue.increment(1)
@@ -304,7 +369,7 @@ class GetUser extends StatelessWidget {
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
                                           value: true,
-                                          child: this.userID == loggedInUser.uid
+                                          child: this.widget.userID == loggedInUser.uid
                                               ? Text("Delete",
                                                   style: kNumberTextStyle)
                                               : Text("Report",
@@ -315,7 +380,7 @@ class GetUser extends StatelessWidget {
                                   ));
         }
 
-        return this.screen == 'commentScreen'
+        return this.widget.screen == 'commentScreen'
             ? Shimmer.fromColors(
                 baseColor: Colors.white.withOpacity(0.5),
                 highlightColor: Colors.blueGrey.withOpacity(0.5),
@@ -327,9 +392,9 @@ class GetUser extends StatelessWidget {
                   ),
                 ),
               )
-            : this.screen == 'button' ||
-                    this.screen == 'requestButton' ||
-                    this.screen == 'Drawer'
+            : this.widget.screen == 'button' ||
+                    this.widget.screen == 'requestButton' ||
+                    this.widget.screen == 'Drawer'
                 ? Visibility(
                     child: Container(),
                     visible: false,

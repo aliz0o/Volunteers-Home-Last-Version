@@ -26,6 +26,8 @@ class Authentication with ChangeNotifier {
     return _auth.currentUser != null;
   }
 
+
+
   String get getUserId {
     return user_id;
   }
@@ -44,6 +46,20 @@ class Authentication with ChangeNotifier {
     }
     return 0;
   }
+  Future<bool>  tv (String Email2)async {
+    var querySnapshotData = await _cloudInstance.collection('users').get();
+    var userData =
+    querySnapshotData.docs.where((element) => element['email'] == Email2&&element['userType']&&element['verified']==true);
+    // var userData = querySnapshotData.docs;
+    if (userData != null) {
+
+      return true;
+    }
+    return false;
+  }
+
+
+
 
   final String _collection = 'collectionName';
 
@@ -355,6 +371,38 @@ class Authentication with ChangeNotifier {
       ).show();
     }
     return false;
+  }
+  Future<bool>  getverfieduser() async {
+    print('getverfieduser******************');
+    var querySnapshotData = await _cloudInstance.collection('users').get();
+    var userData =
+    querySnapshotData.docs.where((element) => element['userId'] == 'Ip5Ul4FEE1YaZhDrJM6IqFxkRey1'&&element['verified'] == true);
+    // var userData = querySnapshotData.docs;
+    if (userData != null) {
+      print('yyyyyyyyesssss');
+      return true;
+    }
+    else{
+      print('yyyyyyyyesssss');
+      return false;
+    }
+
+  }
+  Future<String>  userType() async {
+    print('userType***************');
+    var querySnapshotData = await _cloudInstance.collection('users').get();
+    var userData =
+    querySnapshotData.docs.where((element) => element['userId'] == 'Ip5Ul4FEE1YaZhDrJM6IqFxkRey1'&&element['userType'] == 'committee');
+    // var userData = querySnapshotData.docs;
+    if (userData != null) {
+      print('yyyyyyyyesssss committee');
+      return 'committee';
+    }
+    else{
+      print('yyyyyyyyesssss volunteer');
+      return 'volunteer';
+    }
+
   }
 
   Future<void> updateCollectionField(

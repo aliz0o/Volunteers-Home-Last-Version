@@ -32,6 +32,7 @@ class RegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Color.fromRGBO(16, 17, 18, 1),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
@@ -40,6 +41,8 @@ class RegistrationScreen extends StatelessWidget {
             style: kAppBarTextStyle,
           ),
         ),
+        //backgroundColor: Color(0xFF2C2C2C),
+        // backgroundColor: Colors.black,
       ),
       body: Container(
           height: MediaQuery.of(context).size.height,
@@ -73,6 +76,7 @@ class _MyStateFullState extends State<MyStateFull> {
   String name;
   int phoneNumber;
   int age;
+  //String gender;
   String city = 'Amman';
   String about = '';
   String imageURL = '';
@@ -363,13 +367,16 @@ class _MyStateFullState extends State<MyStateFull> {
                       (_selectedImage == null &&
                           widget.userType == 'committee'))
                   ? () {
+                      print('1');
                       checkNullValue();
                     }
                   : () async {
+                      print('2');
                       setState(() {
                         showSpinner = true;
                       });
                       try {
+                        print('3');
                         final newUser =
                             await _auth.createUserWithEmailAndPassword(
                                 email: email, password: password);
@@ -391,7 +398,7 @@ class _MyStateFullState extends State<MyStateFull> {
                             'preferredEvents': FieldValue.arrayUnion([]),
                             'verified': false,
                             'verificationDocument': '',
-                            'photoUrl': '',
+                            'profilePicture': '',
                           });
                           if (_selectedImage != null) {
                             imageURL = await uploadFile(_selectedImage);
@@ -400,6 +407,7 @@ class _MyStateFullState extends State<MyStateFull> {
                               .collection('users')
                               .doc(newUser.user.uid)
                               .update({'verificationDocument': imageURL});
+
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (context) => EventsScreen()),

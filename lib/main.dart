@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: loggedInUser == null ? '/login_screen' : '/events_screen',
+      initialRoute: _auth.currentUser==null  ? '/login_screen' : '/events_screen',
       routes: {
         '/login_screen': (context) => LogIn(),
         '/events_screen': (context) => EventsScreen(),

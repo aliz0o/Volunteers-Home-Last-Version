@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:volunteering/components/CheckBoxListTileDemo.dart';
 import 'package:volunteering/screens/events_screen.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/services/events_stream_builder.dart';
 import 'package:volunteering/services/get_user_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'login_screen.dart';
+
+final _auth = FirebaseAuth.instance;
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({
@@ -16,6 +21,57 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    // final drawerHeader = UserAccountsDrawerHeader(
+    //   accountName: InkWell(child: Text('name')),
+    //   accountEmail: Text('Email'),
+    //   currentAccountPicture: CircleAvatar(
+    //     backgroundColor: Colors.white,
+    //     child: FlutterLogo(
+    //       size: 50,
+    //     ),
+    //   ),
+    // );
+
+    // final drawerItems = ListView(
+    //   children: <Widget>[
+    //     drawerHeader,
+    //     ListTile(
+    //       title: const Text('Update Profile page'),
+    //       onTap: () =>
+    //           Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+    //         return EditProfile();
+    //       })),
+    //     ),
+    //     Divider(
+    //       thickness: 2,
+    //     ),
+    //     ListTile(
+    //       title: const Text('preferred Events'),
+    //       onTap: () {
+    //         Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+    //           return CheckBoxListTileDemo();
+    //         }));
+    //       },
+    //     ),
+    //     Divider(
+    //       thickness: 2,
+    //     ),
+    //     ListTile(
+    //       title: const Text('Log out'),
+    //       onTap: () {
+    //         _auth.signOut();
+    //         Navigator.of(context)
+    //             .pushReplacement(MaterialPageRoute(builder: (ctx) {
+    //           return LogIn();
+    //         }));
+    //       },
+    //     ),
+    //     Divider(
+    //       thickness: 2,
+    //     ),
+    //   ],
+    // );
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
@@ -35,6 +91,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
+
+            //  backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           ),
           drawer: loggedInUser.uid == widget.userID
               ? GetUser(userID: loggedInUser.uid, screen: 'Drawer')

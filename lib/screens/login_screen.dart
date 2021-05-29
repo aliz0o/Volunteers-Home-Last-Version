@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:volunteering/backEnd/dataBase.dart';
 import 'package:volunteering/components/rounded_button.dart';
 import 'package:volunteering/constants.dart';
 import 'package:volunteering/components/label.dart';
@@ -6,6 +9,7 @@ import 'package:volunteering/components/sub_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:volunteering/services/get_user_info.dart';
 import 'events_screen.dart';
 
 final emailTextController = TextEditingController();
@@ -48,6 +52,7 @@ class MyStateFull extends StatefulWidget {
 class _MyStateFullState extends State<MyStateFull>
     with SingleTickerProviderStateMixin {
   final _auth = FirebaseAuth.instance;
+  final _cloudInstance = FirebaseFirestore.instance;
   String email;
   String password;
   bool showSpinner = false;
@@ -115,11 +120,46 @@ class _MyStateFullState extends State<MyStateFull>
               try {
                 final existUser = await _auth.signInWithEmailAndPassword(
                     email: email, password: password);
-                if (existUser != null) {
+                var querySnapshotData = await _cloudInstance.collection('users').get();
+                var userData1 =
+                querySnapshotData.docs.where((element) => element['email'] == email&&(element['userType']=='committee')&&element['verified']==true);
+                var userData2 =
+                querySnapshotData.docs.where((element) => element['email'] == email&&element['userType']=='volunteer'&&element['verified']==false);
+                var userData3 =
+                querySnapshotData.docs.where((element) => element['email'] == email&&element['userType']=='Admin'&&element['verified']==true);
+
+                print('userData.length1'+userData1.length.toString());
+
+                if ( userData1.length>0||userData3.length>0&&userData2.length==0) {
+
+
+                 print('userData.length1'+userData1.length.toString());
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => EventsScreen()),
                       (Route<dynamic> route) => false);
+                } else if (userData1.length<=0&&userData2.length==0) {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                            title: Text('Alert'),
+                            content: Text(
+                                'your account is no verified plz wait Admin approval soon'),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(ctx).pop();
+                                },
+                                child: Center(child: Text("okay")),
+                              )
+                            ],
+                          ));
+                  _auth.signOut();
                 }
+                else
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => EventsScreen()),
+                          (Route<dynamic> route) => false);
+
                 setState(() {
                   showSpinner = false;
                 });

@@ -41,6 +41,7 @@ class _CommitteeRequestState extends State<CommitteeRequest> {
               final userID = user.id;
               final createdOn = user['createdOn'];
               final about = user['about'];
+              final userEmail = user['UserEmail'];
               final city = user['city'];
               final verificationDocument = user['verificationDocument'];
               final DateTime formattedCreatedOn = createdOn.toDate();
@@ -48,6 +49,7 @@ class _CommitteeRequestState extends State<CommitteeRequest> {
                   DateFormat('kk:mm  EEE d MMM').format(formattedCreatedOn);
 
               final eventCard = EventCard(
+                userEmail: userEmail,
                 userID: userID,
                 eventID: userID,
                 city: city,

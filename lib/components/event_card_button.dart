@@ -145,7 +145,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                               'eventCount': FieldValue.increment(1),
                             }),
 
-                                 sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your event has been approved you can check your account . All the best wishes for success \n We hope you enjoy using our app')
+                                 sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your event has been approved you can check your account .\n All the best wishes for success \n We hope you enjoy using our app')
                           }
                       : () {
                           _fireStore

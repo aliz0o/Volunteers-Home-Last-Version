@@ -436,7 +436,7 @@ class _MyStateFullState extends State<MyStateFull> {
                               .doc(newUser.user.uid)
                               .update({'verificationDocument': imageURL});
 
-                          userType=='volunteer'?Navigator.of(context).pushAndRemoveUntil(
+                          widget.userType=='volunteer'?Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (context) => EventsScreen()),
                               (Route<dynamic> route) => false):alert();

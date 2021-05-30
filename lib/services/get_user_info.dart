@@ -55,7 +55,7 @@ class _GetUserState extends State<GetUser> {
   sendEmail() {
     final Uri _emailLaunchUri = Uri(
         scheme: 'mailto',
-        path: 'mahmoud_sleem44@hotmail.com',
+        path: 'ali.ama.99.ah@gamil.com',
         queryParameters: {
           'subject': 'Ask to be admin in Volunteers Home',
           'body': 'why you want to be Admin??'

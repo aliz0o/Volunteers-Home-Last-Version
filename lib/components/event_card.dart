@@ -167,7 +167,7 @@ class _EventCardState extends State<EventCard> {
             Container(
               child: widget.screen == 'events'
                   ? EventCardButton(
-                        userEmail: widget.userEmail,
+                      userEmail: widget.userEmail,
                       eventClass: widget.eventClass,
                       eventID: widget.eventID,
                       noOfVolunteers: widget.noOfVolunteers,
@@ -183,6 +183,7 @@ class _EventCardState extends State<EventCard> {
                       eventID: widget.eventID,
                       screen: widget.screen,
                       userID: widget.userID,
+                      userEmail: widget.userEmail,
                     ),
             ),
           ],

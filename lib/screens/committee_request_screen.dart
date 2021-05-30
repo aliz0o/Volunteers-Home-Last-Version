@@ -15,9 +15,8 @@ class _CommitteeRequestState extends State<CommitteeRequest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
-       centerTitle: true,
+        centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text('Committee Request', style: kAppBarTextStyle),
       ),

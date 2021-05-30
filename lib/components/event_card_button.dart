@@ -149,7 +149,6 @@ class _EventCardButtonState extends State<EventCardButton> {
                                  sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your event has been approved you can check your account . All the best wishes for success \n We hope you enjoy using our app')
                           }
                       : () {
-                             sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your account has been approved as a committee. All the best wishes for success \n We hope you enjoy using our app');
 
                     _fireStore
                               .collection('users')
@@ -157,7 +156,9 @@ class _EventCardButtonState extends State<EventCardButton> {
                               .update({
                             'verified': true,
                           });
-                        },
+                    sendEmail("mahmood-sleem44@hotmail.com", "Volunteers Home", 'Thank you for trusting us. Your account has been approved as a committee. All the best wishes for success \n We hope you enjoy using our app');
+
+                  },
                   child: RadioButton(
                     selected: 'Approve',
                     screen: 'events',

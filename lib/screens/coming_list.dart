@@ -17,7 +17,7 @@ class _ComingListState extends State<ComingList> {
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
-          backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+          //backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           appBar: AppBar(
             title: Center(
               child: Text('Coming List',
@@ -35,7 +35,7 @@ class _ComingListState extends State<ComingList> {
                 ),
               ],
             ),
-            backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+        //    backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           ),
           body: TabBarView(
             children: [

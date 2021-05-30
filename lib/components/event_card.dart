@@ -54,7 +54,7 @@ class _EventCardState extends State<EventCard> {
   Widget build(BuildContext context) {
     bool imageVisibility = false;
     bool textVisibility = false;
-    if (widget.imageURL != '') {
+    if (widget.imageURL != '' || widget.imageURL != null) {
       setState(() {
         imageVisibility = true;
       });

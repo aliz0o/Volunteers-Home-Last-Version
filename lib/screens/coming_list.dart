@@ -35,25 +35,36 @@ class _ComingListState extends State<ComingList> {
                 ),
               ],
             ),
-        //    backgroundColor: Color.fromRGBO(16, 17, 18, 1),
+            //    backgroundColor: Color.fromRGBO(16, 17, 18, 1),
           ),
-          body: TabBarView(
-            children: [
-              ListView.builder(
-                  itemCount: widget.volunteersList.length,
-                  itemBuilder: (context, index) {
-                    return GetUser(
-                        userID: widget.volunteersList[index],
-                        screen: 'comingList');
-                  }),
-              ListView.builder(
-                  itemCount: widget.attendanceList.length,
-                  itemBuilder: (context, index) {
-                    return GetUser(
-                        userID: widget.attendanceList[index],
-                        screen: 'comingList');
-                  }),
-            ],
+          body: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Colors.blue[300],
+                Colors.indigo[900],
+              ],
+            )),
+            child: TabBarView(
+              children: [
+                ListView.builder(
+                    itemCount: widget.volunteersList.length,
+                    itemBuilder: (context, index) {
+                      return GetUser(
+                          userID: widget.volunteersList[index],
+                          screen: 'comingList');
+                    }),
+                ListView.builder(
+                    itemCount: widget.attendanceList.length,
+                    itemBuilder: (context, index) {
+                      return GetUser(
+                          userID: widget.attendanceList[index],
+                          screen: 'comingList');
+                    }),
+              ],
+            ),
           ),
         ),
       ),

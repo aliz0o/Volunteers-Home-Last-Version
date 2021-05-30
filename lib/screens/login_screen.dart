@@ -6,8 +6,8 @@ import 'package:volunteering/components/label.dart';
 import 'package:volunteering/components/sub_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'events_screen.dart';
+import 'package:volunteering/screens/register_type_screen.dart';
 
 final emailTextController = TextEditingController();
 final passwordTextController = TextEditingController();
@@ -50,8 +50,8 @@ class _MyStateFullState extends State<MyStateFull>
     with SingleTickerProviderStateMixin {
   final _auth = FirebaseAuth.instance;
   final _cloudInstance = FirebaseFirestore.instance;
-  String email;
-  String password;
+  String email = '';
+  String password = '';
   bool showSpinner = false;
   String errorMessage;
 
@@ -146,7 +146,7 @@ class _MyStateFullState extends State<MyStateFull>
                       builder: (ctx) => AlertDialog(
                             title: Text('Alert'),
                             content: Text(
-                                'your account is no verified plz wait Admin approval soon'),
+                                'your account is not verified yet plz wait Admin approval soon'),
                             actions: [
                               ElevatedButton(
                                 onPressed: () {
@@ -177,17 +177,19 @@ class _MyStateFullState extends State<MyStateFull>
                 return showDialog(
                     context: context,
                     builder: (ctx) => AlertDialog(
-                      title: Text(e.code +  'Error'),
-                      content: Text(e.message,),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(ctx).pop();
-                          },
-                          child: Center(child: Text("Try Again")),
-                        )
-                      ],
-                    ));
+                          title: Text(e.code + 'Error'),
+                          content: Text(
+                            e.message,
+                          ),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                              child: Center(child: Text("Try Again")),
+                            )
+                          ],
+                        ));
                 //   Alert(
                 //   context: context,
                 //   title: e.code + ' Error',
@@ -209,7 +211,9 @@ class _MyStateFullState extends State<MyStateFull>
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/register_type_screen');
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                return RegisterType();
+              }));
               emailTextController.clear();
               passwordTextController.clear();
             },

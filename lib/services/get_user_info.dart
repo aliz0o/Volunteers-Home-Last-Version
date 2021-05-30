@@ -64,14 +64,13 @@ class _GetUserState extends State<GetUser> {
 
     launch(_emailLaunchUri.toString());
   }
-  sendEmail2(email,subject,body) {
-    final Uri _emailLaunchUri = Uri(
-        scheme: 'mailto',
-        path: email,
-        queryParameters: {
-          'subject': subject,
-          'body': body,
-        });
+
+  sendEmail2(email, subject, body) {
+    final Uri _emailLaunchUri =
+        Uri(scheme: 'mailto', path: email, queryParameters: {
+      'subject': subject,
+      'body': body,
+    });
 
     launch(_emailLaunchUri.toString());
   }
@@ -345,11 +344,9 @@ class _GetUserState extends State<GetUser> {
                                   },
                                   child: ListTile(
                                     leading: CircleAvatar(
-                                      backgroundImage:
-                                          data['profilePicture'] == ''
-                                              ? AssetImage('images/male.png')
-                                              : NetworkImage(
-                                                  data['profilePicture']),
+                                      backgroundImage: data['photoUrl'] == ''
+                                          ? AssetImage('images/male.png')
+                                          : NetworkImage(data['photoUrl']),
                                     ),
                                     title: Text(
                                       data['name'],
@@ -373,10 +370,11 @@ class _GetUserState extends State<GetUser> {
                                     ),
                                     trailing: PopupMenuButton(
                                       onSelected: (value) {
-
                                         if (widget.screen == 'comingList') {
-                                          sendEmail2(data['UserEmail'], "Volunteers Home", 'Thank you for trusting us. Your request to join our event has been approved by committee. All the best wishes for success ');
-
+                                          sendEmail2(
+                                              data['UserEmail'],
+                                              "Volunteers Home",
+                                              'Thank you for trusting us. Your request to join our event has been approved by committee. All the best wishes for success ');
                                         } else if (this.widget.userID ==
                                             loggedInUser.uid) {
                                           _fireStore
@@ -391,7 +389,8 @@ class _GetUserState extends State<GetUser> {
                                                 FieldValue.increment(-1)
                                           });
                                         } else {
-                                          if (this.widget.screen == 'committeeRequest') {
+                                          if (this.widget.screen ==
+                                              'committeeRequest') {
                                             _fireStore
                                                 .collection('users')
                                                 .doc(this.widget.userID)

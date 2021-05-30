@@ -117,13 +117,13 @@ class _MyStateFullState extends State<MyStateFull> {
         _imageVisibility = false;
       });
   }
-  void customLaunch(command) async{
-    if(await canLaunch(command)){
+
+  void customLaunch(command) async {
+    if (await canLaunch(command)) {
       await launch(command);
-    }else
+    } else
       print('could not launch');
   }
-
 
   Future<String> uploadFile(File _image) async {
     String filename = _image.path;
@@ -140,24 +140,24 @@ class _MyStateFullState extends State<MyStateFull> {
     });
     return returnURL;
   }
-  alert(){
+
+  alert() {
     _auth.signOut();
     return showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text('Alert'),
-          content: Text(
-              'your account is no verified plz wait Admin approval soon'),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: Center(child: Text("okay")),
-            )
-          ],
-        ));
-
+              title: Text('Alert'),
+              content: Text(
+                  'your account is no verified plz wait Admin approval soon'),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: Center(child: Text("okay")),
+                )
+              ],
+            ));
   }
 
   @override
@@ -426,7 +426,7 @@ class _MyStateFullState extends State<MyStateFull> {
                             'preferredEvents': FieldValue.arrayUnion([]),
                             'verified': false,
                             'verificationDocument': '',
-                            'profilePicture': '',
+                            'photoUrl': '',
                           });
                           if (_selectedImage != null) {
                             imageURL = await uploadFile(_selectedImage);
@@ -436,10 +436,12 @@ class _MyStateFullState extends State<MyStateFull> {
                               .doc(newUser.user.uid)
                               .update({'verificationDocument': imageURL});
 
-                          widget.userType=='volunteer'?Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => EventsScreen()),
-                              (Route<dynamic> route) => false):alert();
+                          widget.userType == 'volunteer'
+                              ? Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => EventsScreen()),
+                                  (Route<dynamic> route) => false)
+                              : alert();
                         }
                         setState(() {
                           showSpinner = false;
@@ -458,18 +460,22 @@ class _MyStateFullState extends State<MyStateFull> {
                         return showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
-
-                              title: Text(e.code +  'Error'),
-                              content: Text(e.message,),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(ctx).pop();
-                                  },
-                                  child: Center(child: Text("Try Again", )),
-                                )
-                              ],
-                            ));
+                                  title: Text(e.code + 'Error'),
+                                  content: Text(
+                                    e.message,
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(ctx).pop();
+                                      },
+                                      child: Center(
+                                          child: Text(
+                                        "Try Again",
+                                      )),
+                                    )
+                                  ],
+                                ));
                         //   Alert(
                         //   context: context,
                         //   title: e.code + ' Error',

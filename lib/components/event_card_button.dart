@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:volunteering/screens/coming_list.dart';
 import 'package:volunteering/components/radio_button.dart';
 import 'package:volunteering/screens/events_screen.dart';
@@ -14,12 +15,24 @@ final attendSnackBar = SnackBar(
   backgroundColor: Color(0xff0962ff),
 );
 
+
 final volunteerSnackBar = SnackBar(
   content: Text('You have already registered as volunteer..',
       style: TextStyle(fontSize: 10, fontFamily: 'Aclonica')),
   elevation: 5,
   backgroundColor: Colors.black,
 );
+sendEmail(email ,subject,body) {
+  final Uri _emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      queryParameters: {
+        'subject': subject,
+        'body': body,
+      });
+
+  launch(_emailLaunchUri.toString());
+}
 
 final reachedVolunteersNumber = SnackBar(
   content: Text('This event has reached the required volunteers Number..',
@@ -38,6 +51,7 @@ const inactiveColor = Colors.white;
 const activeColor = Color(0xff0962ff);
 
 class EventCardButton extends StatefulWidget {
+  final String userEmail;
   final eventClass;
   final String eventID;
   final int volunteersCounter;
@@ -49,6 +63,7 @@ class EventCardButton extends StatefulWidget {
   final String screen;
   final userID;
   EventCardButton({
+    this.userEmail,
     this.eventClass,
     @required this.eventID,
     this.volunteersCounter,
@@ -129,6 +144,8 @@ class _EventCardButtonState extends State<EventCardButton> {
                                 .update({
                               'eventCount': FieldValue.increment(1),
                             }),
+
+                                 sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your event has been approved you can check your account . All the best wishes for success \n We hope you enjoy using our app')
                           }
                       : () {
                           _fireStore
@@ -137,6 +154,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                               .update({
                             'verified': true,
                           });
+                          sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your account has been approved as a committee. All the best wishes for success \n We hope you enjoy using our app');
                         },
                   child: RadioButton(
                     selected: 'Approve',

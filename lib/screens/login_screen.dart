@@ -173,22 +173,37 @@ class _MyStateFullState extends State<MyStateFull>
                 });
                 print('Failed with error code: ${e.code}');
                 print(e.message);
-                return Alert(
-                  context: context,
-                  title: e.code + ' Error',
-                  desc: e.message,
-                  buttons: [
-                    DialogButton(
-                      child: Text(
-                        "Try Again",
-                        style: kAlertButtonStyle,
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      width: 120,
-                    )
-                  ],
-                  style: kAlertStyle,
-                ).show();
+
+                return showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text(e.code +  'Error'),
+                      content: Text(e.message,),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          child: Center(child: Text("Try Again")),
+                        )
+                      ],
+                    ));
+                //   Alert(
+                //   context: context,
+                //   title: e.code + ' Error',
+                //   desc: e.message,
+                //   buttons: [
+                //     DialogButton(
+                //       child: Text(
+                //         "Try Again",
+                //         style: kAlertButtonStyle,
+                //       ),
+                //       onPressed: () => Navigator.pop(context),
+                //       width: 120,
+                //     )
+                //   ],
+                //   style: kAlertStyle,
+                // ).show();
               }
             },
           ),

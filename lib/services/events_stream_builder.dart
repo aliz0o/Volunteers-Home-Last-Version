@@ -99,6 +99,7 @@ class _EventStreamState extends State<EventStream> {
               final comingAttendanceID = event['comingAttendanceID'];
               final comment = event['comment'];
               final eventType = event['eventType'];
+              final userEmail = event['UserEmail'];
               final commentSender = event['commentSender'];
               final DateTime formattedCreatedOn = createdOn.toDate();
               String stringCreatedOn =
@@ -107,6 +108,7 @@ class _EventStreamState extends State<EventStream> {
               String stringDateTime =
                   DateFormat('  kk:mm\n  d MMM').format(formattedDateTime);
               final eventCard = EventCard(
+                userEmail: userEmail,
                 eventClass: eventClass,
                 noOfVolunteers: noOfVolunteers,
                 noOfAttendees: noOfAttendees,

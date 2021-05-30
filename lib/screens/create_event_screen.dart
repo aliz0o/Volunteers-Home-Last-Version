@@ -83,6 +83,7 @@ class _MyStateFullState extends State<MyStateFull> {
   String imageURL = '';
   File _selectedImage;
   String _eventType = 'Educational';
+  String email;
 
   @override
   void initState() {
@@ -175,6 +176,7 @@ class _MyStateFullState extends State<MyStateFull> {
       'deleted': false,
       'reportedCount': 0,
       'eventType': _eventType,
+      'UserEmail':loggedInUser.email,
     });
     setState(() {
       showSpinner = false;

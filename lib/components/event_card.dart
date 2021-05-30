@@ -7,6 +7,7 @@ import 'package:volunteering/components/event_card_button.dart';
 
 class EventCard extends StatefulWidget {
   const EventCard({
+    this.userEmail,
     this.eventClass,
     this.noOfVolunteers,
     this.noOfAttendees,
@@ -25,7 +26,7 @@ class EventCard extends StatefulWidget {
     this.comment,
     this.commentSender,
   });
-
+  final String userEmail;
   final String eventClass;
   final int noOfAttendees;
   final int noOfVolunteers;
@@ -166,6 +167,7 @@ class _EventCardState extends State<EventCard> {
             Container(
               child: widget.screen == 'events'
                   ? EventCardButton(
+                        userEmail: widget.userEmail,
                       eventClass: widget.eventClass,
                       eventID: widget.eventID,
                       noOfVolunteers: widget.noOfVolunteers,

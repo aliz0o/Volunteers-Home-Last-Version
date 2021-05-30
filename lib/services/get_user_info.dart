@@ -64,6 +64,17 @@ class _GetUserState extends State<GetUser> {
 
     launch(_emailLaunchUri.toString());
   }
+  sendEmail2(email,subject,body) {
+    final Uri _emailLaunchUri = Uri(
+        scheme: 'mailto',
+        path: email,
+        queryParameters: {
+          'subject': subject,
+          'body': body,
+        });
+
+    launch(_emailLaunchUri.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -362,7 +373,10 @@ class _GetUserState extends State<GetUser> {
                                     ),
                                     trailing: PopupMenuButton(
                                       onSelected: (value) {
+
                                         if (widget.screen == 'comingList') {
+                                          sendEmail2(data['UserEmail'], "Volunteers Home", 'Thank you for trusting us. Your request to join our event has been approved by committee. All the best wishes for success ');
+
                                         } else if (this.widget.userID ==
                                             loggedInUser.uid) {
                                           _fireStore
@@ -377,10 +391,7 @@ class _GetUserState extends State<GetUser> {
                                                 FieldValue.increment(-1)
                                           });
                                         } else {
-                                          if (this.widget.screen ==
-                                                  'comingList' ||
-                                              this.widget.screen ==
-                                                  'committeeRequest') {
+                                          if (this.widget.screen == 'committeeRequest') {
                                             _fireStore
                                                 .collection('users')
                                                 .doc(this.widget.userID)

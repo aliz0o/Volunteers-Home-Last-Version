@@ -132,6 +132,7 @@ class _EventCardButtonState extends State<EventCardButton> {
                 child: GestureDetector(
                   onTap: widget.screen == 'events'
                       ? () => {
+
                             _fireStore
                                 .collection('events')
                                 .doc(widget.eventID)
@@ -145,16 +146,17 @@ class _EventCardButtonState extends State<EventCardButton> {
                               'eventCount': FieldValue.increment(1),
                             }),
 
-                                 sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your event has been approved you can check your account .\n All the best wishes for success \n We hope you enjoy using our app')
+                                 sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your event has been approved you can check your account . All the best wishes for success \n We hope you enjoy using our app')
                           }
                       : () {
-                          _fireStore
+                             sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your account has been approved as a committee. All the best wishes for success \n We hope you enjoy using our app');
+
+                    _fireStore
                               .collection('users')
                               .doc(widget.userID)
                               .update({
                             'verified': true,
                           });
-                          sendEmail(widget.userEmail, "Volunteers Home", 'Thank you for trusting us. Your account has been approved as a committee. All the best wishes for success \n We hope you enjoy using our app');
                         },
                   child: RadioButton(
                     selected: 'Approve',

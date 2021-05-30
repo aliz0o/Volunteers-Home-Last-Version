@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:volunteering/constants.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:volunteering/components/rounded_button.dart';
 import 'package:volunteering/components/label.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:volunteering/screens/profile_screen.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 
@@ -100,203 +98,170 @@ class _MyStateFullState extends State<MyStateFull> {
   @override
   Widget build(BuildContext context) {
     final picker = ImagePicker();
-    bool showSpinner = false;
-    return ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 50),
-              GestureDetector(
-                onTap: () async {
-                  final pickedFile =
-                      await picker.getImage(source: ImageSource.gallery);
-                  if (pickedFile != null) {
-                    selectedImage = File(pickedFile.path);
-                    setState(() {
-                      imageUploadedVisibility = true;
-                    });
-                  } else {
-                    print('No image selected.');
-                  }
-                },
-                child: Center(
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 130,
-                        height: 130,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 50),
+          GestureDetector(
+            onTap: () async {
+              final pickedFile =
+                  await picker.getImage(source: ImageSource.gallery);
+              if (pickedFile != null) {
+                selectedImage = File(pickedFile.path);
+                setState(() {
+                  imageUploadedVisibility = true;
+                });
+              } else {
+                print('No image selected.');
+              }
+            },
+            child: Center(
+              child: Stack(
+                children: [
+                  Container(
+                    width: 130,
+                    height: 130,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 4,
+                            color: Theme.of(context).scaffoldBackgroundColor),
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              color: Colors.black.withOpacity(0.1),
+                              offset: Offset(0, 10))
+                        ],
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: newProfilePicture == '' ||
+                                  newProfilePicture == null
+                              ? AssetImage('images/male.png')
+                              : NetworkImage(
+                                  newProfilePicture,
+                                ),
+                        )),
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        height: 40,
+                        width: 40,
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 4,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor),
-                            boxShadow: [
-                              BoxShadow(
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  color: Colors.black.withOpacity(0.1),
-                                  offset: Offset(0, 10))
-                            ],
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: newProfilePicture == '' ||
-                                      newProfilePicture == null
-                                  ? AssetImage('images/male.png')
-                                  : NetworkImage(
-                                      newProfilePicture,
-                                    ),
-                            )),
-                      ),
-                      Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                width: 4,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                              color: Colors.green,
-                            ),
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
-                          )),
-                    ],
-                  ),
-                ),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            width: 4,
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                          ),
+                          color: Colors.green,
+                        ),
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                      )),
+                ],
               ),
-              Visibility(
-                child: Text(
-                  '\nImage selected',
-                  style: TextStyle(color: Colors.white, fontFamily: 'Aclonica'),
-                ),
-                visible: imageUploadedVisibility,
-              ),
-              SizedBox(height: 50),
-              Label(label: 'Name'),
-              Padding(
-                padding: textFieldPadding,
-                child: TextFormField(
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s")),
-                    LengthLimitingTextInputFormatter(20),
-                  ],
-                  keyboardType: TextInputType.text,
-                  //controller: TextEditingController()..text = widget.name,
-                  onChanged: (value) {
-                    newName = value;
-                  },
-                  style: kTextFieldStyle,
-                  decoration: kTextFieldDecoration.copyWith(hintText: newName),
-                ),
-              ),
-              SizedBox(height: 23),
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButtonFormField<String>(
-                      style: kDropDownTextStyle,
-                      decoration: kDropDownInputDecoration,
-                      dropdownColor: Color.fromRGBO(16, 17, 18, 1),
-                      items: kCityList.map((String dropDownStringItem) {
-                        return DropdownMenuItem<String>(
-                            child: Text(dropDownStringItem),
-                            value: dropDownStringItem);
-                      }).toList(),
-                      value: newCity,
-                      onChanged: (value) {
-                        newCity = value;
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 12),
-              Label(label: 'Phone Number'),
-              Padding(
-                padding: textFieldPadding,
-                child: TextFormField(
-                  // controller: TextEditingController()
-                  //   ..text = widget.phoneNumber.toString(),
-                  onChanged: (value) {
-                    newPhoneNumber = int.parse(value);
-                  },
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(10),
-                    FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                  ],
-                  style: kTextFieldStyle,
-                  decoration: kTextFieldDecoration.copyWith(
-                      hintText: newPhoneNumber.toString()),
-                ),
-              ),
-              SizedBox(height: 15),
-              RoundedButton(
-                  text: 'Update',
-                  color: Color(0xff0962ff),
-                  function: () async {
-                    showSpinner = true;
-
-                      await _fireStore
-                          .collection('users')
-                          .doc(loggedInUser.uid)
-                          .update({
-                        'name': newName,
-                        'phoneNumber': newPhoneNumber,
-                        'city': newCity,
-                      });
-                      if (selectedImage != null) {
-                        newProfilePicture = await uploadFile(selectedImage);
-                        await _fireStore
-                            .collection('users')
-                            .doc(loggedInUser.uid)
-                            .update({'photoUrl': newProfilePicture});
-                        showSpinner = false;
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(saveSuccessfullySnackBar);
-
-
-                      }
-
-
-
-
-
-
-
-                    //Navigator.pop(context);
-                  }),
-              SizedBox(height: 215),
-            ],
+            ),
           ),
-        ));
+          Visibility(
+            child: Text(
+              '\nImage selected',
+              style: TextStyle(color: Colors.white, fontFamily: 'Aclonica'),
+            ),
+            visible: imageUploadedVisibility,
+          ),
+          SizedBox(height: 50),
+          Label(label: 'Name'),
+          Padding(
+            padding: textFieldPadding,
+            child: TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s")),
+                LengthLimitingTextInputFormatter(20),
+              ],
+              keyboardType: TextInputType.text,
+              //controller: TextEditingController()..text = widget.name,
+              onChanged: (value) {
+                newName = value;
+              },
+              style: kTextFieldStyle,
+              decoration: kTextFieldDecoration.copyWith(hintText: newName),
+            ),
+          ),
+          SizedBox(height: 23),
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButtonFormField<String>(
+                  style: kDropDownTextStyle,
+                  decoration: kDropDownInputDecoration,
+                  dropdownColor: Color.fromRGBO(16, 17, 18, 1),
+                  items: kCityList.map((String dropDownStringItem) {
+                    return DropdownMenuItem<String>(
+                        child: Text(dropDownStringItem),
+                        value: dropDownStringItem);
+                  }).toList(),
+                  value: newCity,
+                  onChanged: (value) {
+                    newCity = value;
+                  },
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 12),
+          Label(label: 'Phone Number'),
+          Padding(
+            padding: textFieldPadding,
+            child: TextFormField(
+              onChanged: (value) {
+                newPhoneNumber = int.parse(value);
+              },
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(10),
+                FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+              ],
+              style: kTextFieldStyle,
+              decoration: kTextFieldDecoration.copyWith(
+                  hintText: newPhoneNumber.toString()),
+            ),
+          ),
+          SizedBox(height: 15),
+          RoundedButton(
+              text: 'Update',
+              color: Color(0xff0962ff),
+              function: () async {
+                await _fireStore
+                    .collection('users')
+                    .doc(loggedInUser.uid)
+                    .update({
+                  'name': newName,
+                  'phoneNumber': newPhoneNumber,
+                  'city': newCity,
+                });
+                if (selectedImage != null) {
+                  newProfilePicture = await uploadFile(selectedImage);
+                  await _fireStore
+                      .collection('users')
+                      .doc(loggedInUser.uid)
+                      .update({'photoUrl': newProfilePicture});
+                }
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(saveSuccessfullySnackBar);
+              }),
+          SizedBox(height: 215),
+        ],
+      ),
+    );
   }
 
   final saveSuccessfullySnackBar = SnackBar(
-    content: Text('Your information  Updated Successfully',
-        style: TextStyle(fontSize: 15, fontFamily: 'Aclonica')),
-    elevation: 5,
-    backgroundColor: Colors.black,
-  );
-
-  final saveSuccessfullySnackBar2 = SnackBar(
-    content: Text('Your must fill your new information',
-        style: TextStyle(fontSize: 15, fontFamily: 'Aclonica')),
-    elevation: 5,
-    backgroundColor: Colors.black,
-  );
-  final saveSuccessfullySnackBar3 = SnackBar(
-    content: Text('Your must fill your new information and new image',
-        style: TextStyle(fontSize: 15, fontFamily: 'Aclonica')),
+    content: Text('Your information updated Successfully',
+        style: TextStyle(fontSize: 12, fontFamily: 'Aclonica')),
     elevation: 5,
     backgroundColor: Colors.black,
   );

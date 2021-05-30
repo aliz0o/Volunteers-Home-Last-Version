@@ -362,7 +362,8 @@ class _GetUserState extends State<GetUser> {
                                     ),
                                     trailing: PopupMenuButton(
                                       onSelected: (value) {
-                                        if (this.widget.userID ==
+                                        if (widget.screen == 'comingList') {
+                                        } else if (this.widget.userID ==
                                             loggedInUser.uid) {
                                           _fireStore
                                               .collection('events')
@@ -405,12 +406,15 @@ class _GetUserState extends State<GetUser> {
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
                                           value: true,
-                                          child: this.widget.userID ==
-                                                  loggedInUser.uid
-                                              ? Text("Delete",
+                                          child: widget.screen == 'comingList'
+                                              ? Text("Send Email",
                                                   style: kNumberTextStyle)
-                                              : Text("Report",
-                                                  style: kNumberTextStyle),
+                                              : this.widget.userID ==
+                                                      loggedInUser.uid
+                                                  ? Text("Delete",
+                                                      style: kNumberTextStyle)
+                                                  : Text("Report",
+                                                      style: kNumberTextStyle),
                                         ),
                                       ],
                                     ),

@@ -344,7 +344,8 @@ class _GetUserState extends State<GetUser> {
                                   },
                                   child: ListTile(
                                     leading: CircleAvatar(
-                                      backgroundImage: data['photoUrl'] == ''
+                                      backgroundImage: data['photoUrl'] == '' ||
+                                              data['photoUrl'] == null
                                           ? AssetImage('images/male.png')
                                           : NetworkImage(data['photoUrl']),
                                     ),
